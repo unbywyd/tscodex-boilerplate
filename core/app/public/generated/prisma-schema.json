@@ -1,0 +1,8 @@
+{
+  "schema": "// Prisma schema file\r\n// https://pris.ly/d/prisma-schema\r\n\r\ngenerator client {\r\n  provider = \"prisma-client-js\"\r\n}\r\n\r\ndatasource db {\r\n  provider = \"sqlite\"\r\n}\r\n\r\n// Note: MVP Generator is file-driven and doesn't require a database by default.\r\n// This schema is provided as a template for projects that need persistence.\r\n// Set DATABASE_URL in .env file, e.g.: DATABASE_URL=\"file:./dev.db\"\r\n\r\n// Example models - customize for your project:\r\n\r\nmodel User {\r\n  id        String   @id @default(cuid())\r\n  email     String   @unique\r\n  name      String?\r\n  role      String   @default(\"user\")\r\n  createdAt DateTime @default(now())\r\n  updatedAt DateTime @updatedAt\r\n}\r\n\r\nmodel Project {\r\n  id          String   @id @default(cuid())\r\n  name        String\r\n  slug        String   @unique\r\n  description String?\r\n  createdAt   DateTime @default(now())\r\n  updatedAt   DateTime @updatedAt\r\n}\r\n",
+  "metadata": {
+    "path": "src/prisma/schema.prisma",
+    "size": 887,
+    "modified": "2025-12-08T17:59:59.485Z"
+  }
+}

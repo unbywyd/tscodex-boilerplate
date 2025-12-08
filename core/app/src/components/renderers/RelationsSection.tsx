@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { getRouteFromPath } from '@/lib/docs-loader'
 
 interface RelationEntry {
   path: string
@@ -92,7 +93,7 @@ export default function RelationsSection({ entityId, relations }: RelationsSecti
     return (
       <Link
         key={id}
-        to={`/docs/${entry.path.replace(/\.toml$/, '')}`}
+        to={getRouteFromPath(entry.path)}
         className={`inline-block ${colors.bg} ${colors.text} px-2 py-1 rounded text-sm hover:opacity-80 transition-opacity`}
       >
         {entry.title || id}

@@ -33,6 +33,10 @@
         "public"
       ]
     },
+    "mermaid": {
+      "title": "Documentation Flow",
+      "code": "graph LR\n    A((Start)) --> B[Navigate to /docs]\n    B --> C[Load TOML/MD files]\n    C --> D{Valid?}\n    D -->|Yes| E[Parse content]\n    D -->|No| F[Show error]\n    E --> G[Render UI]\n    G --> H((End))\n    F --> H\n"
+    },
     "flow": [
       {
         "id": "navigate",
@@ -62,7 +66,7 @@
     ]
   },
   "metadata": {
-    "size": 1021,
-    "modified": "2025-12-08T19:09:10.579Z"
+    "size": 1347,
+    "modified": "2025-12-08T20:57:23.345Z"
   }
 }

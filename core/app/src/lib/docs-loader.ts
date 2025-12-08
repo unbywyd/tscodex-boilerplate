@@ -48,8 +48,15 @@ export async function loadDocFile(filePath: string): Promise<DocFile> {
     }
     return response.json()
   } else {
-    // In production, load from generated static JSON via fetch
-    const jsonPath = filePath.replace(/\.(md|toml)$/, '.json')
+    // In production, load from generated static JSON
+    // File path may or may not have extension
+    let jsonPath = filePath
+    if (filePath.endsWith('.md') || filePath.endsWith('.toml')) {
+      jsonPath = filePath.replace(/\.(md|toml)$/, '.json')
+    } else {
+      // No extension - add .json directly
+      jsonPath = filePath + '.json'
+    }
     const response = await fetch(`/generated/docs/${jsonPath}`)
     if (!response.ok) {
       throw new Error(`Failed to load file: ${filePath}`)
@@ -61,7 +68,11 @@ export async function loadDocFile(filePath: string): Promise<DocFile> {
 // Get route path from file path
 export function getRouteFromPath(filePath: string): string {
   // Remove file extension
-  const route = filePath.replace(/\.(md|toml)$/, '')
+  let route = filePath.replace(/\.(md|toml)$/, '')
+  // Avoid double /docs/ - if path starts with docs/, don't add another
+  if (route.startsWith('docs/')) {
+    return `/${route}`
+  }
   return `/docs/${route}`
 }
 

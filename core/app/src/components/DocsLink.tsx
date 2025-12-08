@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText } from 'lucide-react'
+import { getRouteFromPath } from '@/lib/docs-loader'
 
 const isDev = import.meta.env.DEV
 
@@ -40,8 +41,8 @@ export function DocsLink() {
   // Don't render if no docs for this route
   if (!docsPath) return null
 
-  // Convert file path to docs route (remove extension)
-  const docsRoute = `/docs/${docsPath.replace(/\.(md|toml)$/, '')}`
+  // Convert file path to docs route
+  const docsRoute = getRouteFromPath(docsPath)
 
   return (
     <Link
