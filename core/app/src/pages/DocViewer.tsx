@@ -45,7 +45,13 @@ export default function DocViewer() {
         setError(null);
 
         // Convert route to file path (remove leading slash if present)
-        const filePath = docPath.startsWith('/') ? docPath.slice(1) : docPath;
+        let filePath = docPath.startsWith('/') ? docPath.slice(1) : docPath;
+
+        // If path doesn't start with known folders, it's likely from /docs/ route
+        // and refers to files in src/spec/docs/ folder
+        if (!filePath.startsWith('layers/') && !filePath.startsWith('docs/') && !filePath.startsWith('status')) {
+          filePath = `docs/${filePath}`;
+        }
 
         // Load file and docs tree in parallel
         const [loadedFile, docsTree] = await Promise.all([
