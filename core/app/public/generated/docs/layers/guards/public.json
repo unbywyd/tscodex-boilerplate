@@ -1,0 +1,20 @@
+{
+  "path": "layers/guards/public.toml",
+  "name": "public.toml",
+  "type": "toml",
+  "content": {
+    "guard": {
+      "id": "public",
+      "name": "Public Access",
+      "description": "No authentication required, publicly accessible"
+    },
+    "access": {
+      "authenticated": false,
+      "roles": []
+    }
+  },
+  "metadata": {
+    "size": 175,
+    "modified": "2025-12-08T18:39:24.636Z"
+  }
+}

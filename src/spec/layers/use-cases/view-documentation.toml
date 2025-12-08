@@ -1,0 +1,68 @@
+# View Project Documentation
+
+[useCase]
+id = "uc_view_documentation"
+name = "View Project Documentation"
+asRole = "visitor"
+iWant = "view project documentation"
+soThat = "I can understand the project structure and requirements"
+
+[useCase.meta]
+isActive = true
+priority = 1
+
+[useCase.conditions]
+pre = [
+  "Documentation server is running",
+  "Project manifests are available"
+]
+post = [
+  "User has viewed documentation",
+  "Documentation is displayed correctly"
+]
+
+# Relations - keys match folder names in layers/
+[relations]
+roles = ["visitor", "user"]
+guards = ["public"]
+
+# Mermaid diagram - automatically rendered as ReactFlow
+[mermaid]
+title = "Documentation Flow"
+code = """
+graph LR
+    A((Start)) --> B[Navigate to /docs]
+    B --> C[Load TOML/MD files]
+    C --> D{Valid?}
+    D -->|Yes| E[Parse content]
+    D -->|No| F[Show error]
+    E --> G[Render UI]
+    G --> H((End))
+    F --> H
+"""
+
+# Flow diagram - visual representation of how the use case works
+[[flow]]
+id = "navigate"
+type = "start"
+label = "User navigates to /docs"
+
+[[flow]]
+id = "read_files"
+type = "action"
+label = "Server reads TOML/MD files"
+
+[[flow]]
+id = "parse"
+type = "action"
+label = "Parse and validate structure"
+
+[[flow]]
+id = "render"
+type = "action"
+label = "Render documentation UI"
+
+[[flow]]
+id = "display"
+type = "end"
+label = "User views documentation"

@@ -1,0 +1,133 @@
+{
+  "path": "layers/components/button.toml",
+  "name": "button.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "button",
+      "name": "Button",
+      "description": "Primary action button with variants",
+      "category": "ui"
+    },
+    "props": [
+      {
+        "name": "variant",
+        "type": "enum",
+        "values": [
+          "default",
+          "primary",
+          "secondary",
+          "outline",
+          "ghost",
+          "destructive"
+        ],
+        "default": "default",
+        "description": "Visual style variant"
+      },
+      {
+        "name": "size",
+        "type": "enum",
+        "values": [
+          "sm",
+          "md",
+          "lg"
+        ],
+        "default": "md",
+        "description": "Button size"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": false,
+        "description": "Disabled state"
+      },
+      {
+        "name": "loading",
+        "type": "boolean",
+        "default": false,
+        "description": "Loading state with spinner"
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Button content"
+      }
+    ],
+    "variants": [
+      {
+        "name": "Default",
+        "props": {
+          "variant": "default",
+          "children": "Button"
+        }
+      },
+      {
+        "name": "Primary",
+        "props": {
+          "variant": "primary",
+          "children": "Primary"
+        }
+      },
+      {
+        "name": "Secondary",
+        "props": {
+          "variant": "secondary",
+          "children": "Secondary"
+        }
+      },
+      {
+        "name": "Outline",
+        "props": {
+          "variant": "outline",
+          "children": "Outline"
+        }
+      },
+      {
+        "name": "Ghost",
+        "props": {
+          "variant": "ghost",
+          "children": "Ghost"
+        }
+      },
+      {
+        "name": "Destructive",
+        "props": {
+          "variant": "destructive",
+          "children": "Delete"
+        }
+      },
+      {
+        "name": "Small",
+        "props": {
+          "variant": "default",
+          "size": "sm",
+          "children": "Small"
+        }
+      },
+      {
+        "name": "Large",
+        "props": {
+          "variant": "default",
+          "size": "lg",
+          "children": "Large"
+        }
+      },
+      {
+        "name": "Disabled",
+        "props": {
+          "variant": "default",
+          "disabled": true,
+          "children": "Disabled"
+        }
+      }
+    ],
+    "usage": {
+      "code": "import { Button } from '@prototype/components/ui/Button'\n\n<Button variant=\"primary\" size=\"md\">\n  Click me\n</Button>\n"
+    }
+  },
+  "metadata": {
+    "size": 1718,
+    "modified": "2025-12-08T19:43:26.202Z"
+  }
+}

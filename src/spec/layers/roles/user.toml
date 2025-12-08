@@ -1,0 +1,14 @@
+# User Role
+
+[role]
+id = "user"
+name = "User"
+description = "Authenticated user with standard access"
+level = 1
+
+[permissions]
+list = [
+  "view:docs",
+  "view:prototype",
+  "edit:profile"
+]

@@ -1,0 +1,90 @@
+# Product Entity
+
+[entity]
+id = "product"
+name = "Product"
+description = "Catalog product item"
+table = "products"
+
+[[fields]]
+name = "id"
+type = "string"
+format = "uuid"
+primary = true
+description = "Unique product identifier"
+
+[[fields]]
+name = "name"
+type = "string"
+required = true
+minLength = 1
+maxLength = 200
+description = "Product name"
+
+[[fields]]
+name = "slug"
+type = "string"
+unique = true
+required = true
+description = "URL-friendly identifier"
+
+[[fields]]
+name = "description"
+type = "text"
+required = false
+description = "Product description"
+
+[[fields]]
+name = "price"
+type = "number"
+format = "decimal"
+min = 0
+required = true
+description = "Product price"
+
+[[fields]]
+name = "currency"
+type = "enum"
+values = ["USD", "EUR", "RUB"]
+default = "USD"
+description = "Price currency"
+
+[[fields]]
+name = "stock"
+type = "integer"
+min = 0
+default = 0
+description = "Available quantity"
+
+[[fields]]
+name = "images"
+type = "array"
+items = "string"
+format = "url"
+description = "Product image URLs"
+
+[[fields]]
+name = "category"
+type = "relation"
+target = "category"
+required = false
+description = "Product category"
+
+[[fields]]
+name = "isPublished"
+type = "boolean"
+default = false
+description = "Visibility status"
+
+[[fields]]
+name = "createdAt"
+type = "datetime"
+auto = "create"
+
+[[fields]]
+name = "updatedAt"
+type = "datetime"
+auto = "update"
+
+[relations]
+entities = ["category"]

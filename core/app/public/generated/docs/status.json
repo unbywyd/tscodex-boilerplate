@@ -1,0 +1,109 @@
+{
+  "path": "status.toml",
+  "name": "status.toml",
+  "type": "toml",
+  "content": {
+    "status": {
+      "id": "status",
+      "name": "Project Status",
+      "profile": "medium",
+      "currentPhase": "assessment",
+      "lastUpdated": "2024-01-01"
+    },
+    "phases": {
+      "assessment": {
+        "status": "pending",
+        "description": "Determine project scope and profile",
+        "checklist": {
+          "typeIdentified": false,
+          "rolesCount": false,
+          "dataComplexity": false,
+          "profileSelected": false
+        }
+      },
+      "discovery": {
+        "status": "pending",
+        "description": "Understanding the project",
+        "checklist": {
+          "projectDefined": false,
+          "targetAudience": false,
+          "coreValue": false,
+          "keyFeatures": false
+        }
+      },
+      "design": {
+        "status": "pending",
+        "skip": false,
+        "description": "Visual and UX requirements",
+        "checklist": {
+          "designApproach": false,
+          "colorScheme": false,
+          "responsiveStrategy": false
+        }
+      },
+      "access": {
+        "status": "pending",
+        "skip": false,
+        "description": "User roles and permissions",
+        "checklist": {
+          "rolesIdentified": false,
+          "permissionsDefined": false,
+          "guardsCreated": false
+        }
+      },
+      "data": {
+        "status": "pending",
+        "description": "Entities and relationships",
+        "checklist": {
+          "entitiesListed": false,
+          "fieldsDefined": false,
+          "relationsMapped": false
+        }
+      },
+      "features": {
+        "status": "pending",
+        "description": "Use cases, routes, components",
+        "checklist": {
+          "useCasesDefined": false,
+          "routesCreated": false,
+          "pageComponents": false,
+          "compositions": false
+        }
+      },
+      "modules": {
+        "status": "pending",
+        "skip": true,
+        "description": "Domain decomposition",
+        "checklist": {
+          "domainsIdentified": false,
+          "modulesDefined": false,
+          "interfacesSet": false
+        }
+      },
+      "prototype": {
+        "status": "pending",
+        "description": "Working React screens",
+        "checklist": {
+          "mocksGenerated": false,
+          "pagesCreated": false,
+          "navigationWorks": false,
+          "formsWired": false
+        }
+      },
+      "schema": {
+        "status": "pending",
+        "skip": false,
+        "description": "Database schema",
+        "checklist": {
+          "prismaGenerated": false,
+          "relationsValid": false,
+          "indexesAdded": false
+        }
+      }
+    }
+  },
+  "metadata": {
+    "size": 2341,
+    "modified": "2025-12-08T19:51:21.812Z"
+  }
+}

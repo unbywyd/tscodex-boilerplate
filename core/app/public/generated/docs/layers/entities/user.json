@@ -1,0 +1,92 @@
+{
+  "path": "layers/entities/user.toml",
+  "name": "user.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "user",
+      "name": "User",
+      "description": "Application user account",
+      "table": "users"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "primary": true,
+        "description": "Unique user identifier"
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "format": "email",
+        "unique": true,
+        "required": true,
+        "description": "User email address"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "minLength": 2,
+        "maxLength": 100,
+        "description": "Display name"
+      },
+      {
+        "name": "password",
+        "type": "string",
+        "format": "password",
+        "required": true,
+        "hidden": true,
+        "description": "Hashed password"
+      },
+      {
+        "name": "avatar",
+        "type": "string",
+        "format": "url",
+        "required": false,
+        "description": "Profile picture URL"
+      },
+      {
+        "name": "role",
+        "type": "enum",
+        "values": [
+          "visitor",
+          "user",
+          "admin"
+        ],
+        "default": "user",
+        "description": "User role in the system"
+      },
+      {
+        "name": "isActive",
+        "type": "boolean",
+        "default": true,
+        "description": "Account active status"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "auto": "create",
+        "description": "Account creation timestamp"
+      },
+      {
+        "name": "updatedAt",
+        "type": "datetime",
+        "auto": "update",
+        "description": "Last update timestamp"
+      }
+    ],
+    "relations": {
+      "roles": [
+        "user",
+        "admin"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 1234,
+    "modified": "2025-12-08T19:24:28.425Z"
+  }
+}

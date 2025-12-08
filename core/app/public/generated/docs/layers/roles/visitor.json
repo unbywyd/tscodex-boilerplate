@@ -1,0 +1,23 @@
+{
+  "path": "layers/roles/visitor.toml",
+  "name": "visitor.toml",
+  "type": "toml",
+  "content": {
+    "role": {
+      "id": "visitor",
+      "name": "Visitor",
+      "description": "Unauthenticated user viewing documentation and prototype",
+      "level": 0
+    },
+    "permissions": {
+      "list": [
+        "view:docs",
+        "view:prototype"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 198,
+    "modified": "2025-12-08T18:39:39.747Z"
+  }
+}

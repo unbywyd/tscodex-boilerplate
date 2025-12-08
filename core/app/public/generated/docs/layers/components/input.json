@@ -1,0 +1,114 @@
+{
+  "path": "layers/components/input.toml",
+  "name": "input.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "input",
+      "name": "Input",
+      "description": "Text input field with validation",
+      "category": "ui"
+    },
+    "props": [
+      {
+        "name": "type",
+        "type": "enum",
+        "values": [
+          "text",
+          "email",
+          "password",
+          "number",
+          "tel",
+          "url"
+        ],
+        "default": "text",
+        "description": "Input type"
+      },
+      {
+        "name": "placeholder",
+        "type": "string",
+        "required": false,
+        "description": "Placeholder text"
+      },
+      {
+        "name": "label",
+        "type": "string",
+        "required": false,
+        "description": "Field label"
+      },
+      {
+        "name": "error",
+        "type": "string",
+        "required": false,
+        "description": "Error message"
+      },
+      {
+        "name": "disabled",
+        "type": "boolean",
+        "default": false,
+        "description": "Disabled state"
+      },
+      {
+        "name": "required",
+        "type": "boolean",
+        "default": false,
+        "description": "Required field"
+      }
+    ],
+    "variants": [
+      {
+        "name": "Default",
+        "props": {
+          "placeholder": "Enter text..."
+        }
+      },
+      {
+        "name": "With Label",
+        "props": {
+          "label": "Email",
+          "type": "email",
+          "placeholder": "you@example.com"
+        }
+      },
+      {
+        "name": "With Error",
+        "props": {
+          "label": "Email",
+          "value": "invalid",
+          "error": "Please enter a valid email"
+        }
+      },
+      {
+        "name": "Password",
+        "props": {
+          "label": "Password",
+          "type": "password",
+          "placeholder": "••••••••"
+        }
+      },
+      {
+        "name": "Disabled",
+        "props": {
+          "label": "Disabled",
+          "placeholder": "Cannot edit",
+          "disabled": true
+        }
+      },
+      {
+        "name": "Required",
+        "props": {
+          "label": "Required Field",
+          "placeholder": "This is required",
+          "required": true
+        }
+      }
+    ],
+    "usage": {
+      "code": "import { Input } from '@prototype/components/ui/Input'\n\n<Input\n  label=\"Email\"\n  type=\"email\"\n  placeholder=\"you@example.com\"\n  error={errors.email?.message}\n/>\n"
+    }
+  },
+  "metadata": {
+    "size": 1571,
+    "modified": "2025-12-08T19:43:31.983Z"
+  }
+}

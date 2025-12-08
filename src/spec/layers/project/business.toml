@@ -1,0 +1,19 @@
+# Business Idea
+
+[idea]
+name = "MVP Generator"
+tagline = "From documentation to working prototype"
+description = """
+A system that allows teams to document their MVP ideas using simple files
+(TOML for structured data, Markdown for content) and automatically
+generates a browsable documentation portal with a working React prototype.
+"""
+
+[target]
+audience = "Developers and product teams"
+problem = "Disconnect between documentation and actual prototype"
+solution = "File-driven approach where docs and prototype share same source"
+
+[value]
+primary = "Single source of truth for MVP specification"
+secondary = "Instant prototype from documentation"

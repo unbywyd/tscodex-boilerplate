@@ -1,0 +1,88 @@
+{
+  "path": "layers/entities/category.toml",
+  "name": "category.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "category",
+      "name": "Category",
+      "description": "Product category for organizing catalog",
+      "table": "categories"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "primary": true,
+        "description": "Unique category identifier"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 100,
+        "description": "Category name"
+      },
+      {
+        "name": "slug",
+        "type": "string",
+        "unique": true,
+        "required": true,
+        "description": "URL-friendly identifier"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "required": false,
+        "description": "Category description"
+      },
+      {
+        "name": "parent",
+        "type": "relation",
+        "target": "category",
+        "required": false,
+        "description": "Parent category for nesting"
+      },
+      {
+        "name": "image",
+        "type": "string",
+        "format": "url",
+        "required": false,
+        "description": "Category image"
+      },
+      {
+        "name": "sortOrder",
+        "type": "integer",
+        "default": 0,
+        "description": "Display order"
+      },
+      {
+        "name": "isActive",
+        "type": "boolean",
+        "default": true,
+        "description": "Category visibility"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "auto": "create"
+      },
+      {
+        "name": "updatedAt",
+        "type": "datetime",
+        "auto": "update"
+      }
+    ],
+    "relations": {
+      "entities": [
+        "category"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 1172,
+    "modified": "2025-12-08T19:24:32.638Z"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "path": "layers/components/card.toml",
+  "name": "card.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "card",
+      "name": "Card",
+      "description": "Container for grouped content",
+      "category": "ui"
+    },
+    "props": [
+      {
+        "name": "title",
+        "type": "string",
+        "required": false,
+        "description": "Card header title"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "required": false,
+        "description": "Card header description"
+      },
+      {
+        "name": "footer",
+        "type": "ReactNode",
+        "required": false,
+        "description": "Card footer content"
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Card body content"
+      }
+    ],
+    "variants": [
+      {
+        "name": "Simple",
+        "props": {
+          "children": "Card content goes here"
+        }
+      },
+      {
+        "name": "With Title",
+        "props": {
+          "title": "Card Title",
+          "children": "Card content with a title"
+        }
+      },
+      {
+        "name": "With Description",
+        "props": {
+          "title": "Card Title",
+          "description": "A brief description",
+          "children": "Card content"
+        }
+      },
+      {
+        "name": "With Footer",
+        "props": {
+          "title": "Card Title",
+          "children": "Card content",
+          "footer": "Footer actions"
+        }
+      }
+    ],
+    "usage": {
+      "code": "import { Card } from '@prototype/components/ui/Card'\n\n<Card title=\"My Card\" description=\"Description here\">\n  <p>Content goes here</p>\n</Card>\n"
+    }
+  },
+  "metadata": {
+    "size": 1124,
+    "modified": "2025-12-08T19:43:30.063Z"
+  }
+}

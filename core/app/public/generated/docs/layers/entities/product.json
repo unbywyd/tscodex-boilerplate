@@ -1,0 +1,108 @@
+{
+  "path": "layers/entities/product.toml",
+  "name": "product.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "product",
+      "name": "Product",
+      "description": "Catalog product item",
+      "table": "products"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "primary": true,
+        "description": "Unique product identifier"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "minLength": 1,
+        "maxLength": 200,
+        "description": "Product name"
+      },
+      {
+        "name": "slug",
+        "type": "string",
+        "unique": true,
+        "required": true,
+        "description": "URL-friendly identifier"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "required": false,
+        "description": "Product description"
+      },
+      {
+        "name": "price",
+        "type": "number",
+        "format": "decimal",
+        "min": 0,
+        "required": true,
+        "description": "Product price"
+      },
+      {
+        "name": "currency",
+        "type": "enum",
+        "values": [
+          "USD",
+          "EUR",
+          "RUB"
+        ],
+        "default": "USD",
+        "description": "Price currency"
+      },
+      {
+        "name": "stock",
+        "type": "integer",
+        "min": 0,
+        "default": 0,
+        "description": "Available quantity"
+      },
+      {
+        "name": "images",
+        "type": "array",
+        "items": "string",
+        "format": "url",
+        "description": "Product image URLs"
+      },
+      {
+        "name": "category",
+        "type": "relation",
+        "target": "category",
+        "required": false,
+        "description": "Product category"
+      },
+      {
+        "name": "isPublished",
+        "type": "boolean",
+        "default": false,
+        "description": "Visibility status"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "auto": "create"
+      },
+      {
+        "name": "updatedAt",
+        "type": "datetime",
+        "auto": "update"
+      }
+    ],
+    "relations": {
+      "entities": [
+        "category"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 1389,
+    "modified": "2025-12-08T19:24:30.588Z"
+  }
+}

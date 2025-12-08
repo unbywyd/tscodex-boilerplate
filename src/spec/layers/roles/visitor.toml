@@ -1,0 +1,13 @@
+# Visitor Role
+
+[role]
+id = "visitor"
+name = "Visitor"
+description = "Unauthenticated user viewing documentation and prototype"
+level = 0
+
+[permissions]
+list = [
+  "view:docs",
+  "view:prototype"
+]

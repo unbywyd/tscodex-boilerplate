@@ -1,0 +1,341 @@
+{
+  "path": "docs",
+  "name": "spec",
+  "files": [
+    {
+      "path": "status.toml",
+      "name": "status.toml",
+      "type": "toml",
+      "metadata": {
+        "size": 2341,
+        "modified": "2025-12-08T19:51:21.812Z"
+      }
+    }
+  ],
+  "folders": [
+    {
+      "path": "docs",
+      "name": "docs",
+      "files": [],
+      "folders": [
+        {
+          "path": "docs/features",
+          "name": "features",
+          "files": [
+            {
+              "path": "docs/features/auth.md",
+              "name": "auth.md",
+              "type": "markdown",
+              "metadata": {
+                "size": 546,
+                "modified": "2025-12-08T18:45:08.476Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "docs/getting-started",
+          "name": "getting-started",
+          "files": [
+            {
+              "path": "docs/getting-started/intro.md",
+              "name": "intro.md",
+              "type": "markdown",
+              "metadata": {
+                "size": 494,
+                "modified": "2025-12-08T18:45:04.487Z"
+              }
+            },
+            {
+              "path": "docs/getting-started/setup.md",
+              "name": "setup.md",
+              "type": "markdown",
+              "metadata": {
+                "size": 311,
+                "modified": "2025-12-08T18:45:06.488Z"
+              }
+            }
+          ],
+          "folders": []
+        }
+      ]
+    },
+    {
+      "path": "layers",
+      "name": "layers",
+      "files": [],
+      "folders": [
+        {
+          "path": "layers/components",
+          "name": "components",
+          "files": [
+            {
+              "path": "layers/components/badge.toml",
+              "name": "badge.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1071,
+                "modified": "2025-12-08T19:43:28.178Z"
+              }
+            },
+            {
+              "path": "layers/components/button.toml",
+              "name": "button.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1718,
+                "modified": "2025-12-08T19:43:26.202Z"
+              }
+            },
+            {
+              "path": "layers/components/card.toml",
+              "name": "card.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1124,
+                "modified": "2025-12-08T19:43:30.063Z"
+              }
+            },
+            {
+              "path": "layers/components/input.toml",
+              "name": "input.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1571,
+                "modified": "2025-12-08T19:43:31.983Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/entities",
+          "name": "entities",
+          "files": [
+            {
+              "path": "layers/entities/category.toml",
+              "name": "category.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1172,
+                "modified": "2025-12-08T19:24:32.638Z"
+              }
+            },
+            {
+              "path": "layers/entities/product.toml",
+              "name": "product.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1389,
+                "modified": "2025-12-08T19:24:30.588Z"
+              }
+            },
+            {
+              "path": "layers/entities/user.toml",
+              "name": "user.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1234,
+                "modified": "2025-12-08T19:24:28.425Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/guards",
+          "name": "guards",
+          "files": [
+            {
+              "path": "layers/guards/admin.toml",
+              "name": "admin.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 176,
+                "modified": "2025-12-08T19:13:44.550Z"
+              }
+            },
+            {
+              "path": "layers/guards/authenticated.toml",
+              "name": "authenticated.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 190,
+                "modified": "2025-12-08T18:39:26.516Z"
+              }
+            },
+            {
+              "path": "layers/guards/public.toml",
+              "name": "public.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 175,
+                "modified": "2025-12-08T18:39:24.636Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/knowledge",
+          "name": "knowledge",
+          "files": [
+            {
+              "path": "layers/knowledge/architecture.toml",
+              "name": "architecture.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1302,
+                "modified": "2025-12-08T18:53:51.660Z"
+              }
+            },
+            {
+              "path": "layers/knowledge/auth.toml",
+              "name": "auth.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1333,
+                "modified": "2025-12-08T18:53:49.375Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/modules",
+          "name": "modules",
+          "files": [],
+          "folders": []
+        },
+        {
+          "path": "layers/project",
+          "name": "project",
+          "files": [
+            {
+              "path": "layers/project/about.toml",
+              "name": "about.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 302,
+                "modified": "2025-12-08T18:39:07.828Z"
+              }
+            },
+            {
+              "path": "layers/project/business.toml",
+              "name": "business.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 649,
+                "modified": "2025-12-08T18:39:11.613Z"
+              }
+            },
+            {
+              "path": "layers/project/design.toml",
+              "name": "design.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1108,
+                "modified": "2025-12-08T18:54:05.971Z"
+              }
+            },
+            {
+              "path": "layers/project/tech.toml",
+              "name": "tech.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 790,
+                "modified": "2025-12-08T18:39:09.706Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/roles",
+          "name": "roles",
+          "files": [
+            {
+              "path": "layers/roles/admin.toml",
+              "name": "admin.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 248,
+                "modified": "2025-12-08T18:39:43.504Z"
+              }
+            },
+            {
+              "path": "layers/roles/user.toml",
+              "name": "user.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 190,
+                "modified": "2025-12-08T18:39:41.634Z"
+              }
+            },
+            {
+              "path": "layers/roles/visitor.toml",
+              "name": "visitor.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 198,
+                "modified": "2025-12-08T18:39:39.747Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/routes",
+          "name": "routes",
+          "files": [
+            {
+              "path": "layers/routes/dashboard.toml",
+              "name": "dashboard.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 610,
+                "modified": "2025-12-08T19:09:32.382Z"
+              }
+            },
+            {
+              "path": "layers/routes/prototype-home.toml",
+              "name": "prototype-home.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 608,
+                "modified": "2025-12-08T19:09:34.723Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/use-cases",
+          "name": "use-cases",
+          "files": [
+            {
+              "path": "layers/use-cases/view-documentation.toml",
+              "name": "view-documentation.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 1021,
+                "modified": "2025-12-08T19:09:10.579Z"
+              }
+            },
+            {
+              "path": "layers/use-cases/view-prototype.toml",
+              "name": "view-prototype.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 902,
+                "modified": "2025-12-08T19:09:12.908Z"
+              }
+            }
+          ],
+          "folders": []
+        }
+      ]
+    }
+  ]
+}

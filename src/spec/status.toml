@@ -1,0 +1,107 @@
+# Project Status
+# LLM updates this file as phases complete
+
+[status]
+id = "status"
+name = "Project Status"
+profile = "medium"  # simple | medium | complex
+currentPhase = "assessment"
+lastUpdated = "2024-01-01"
+
+# Phase 0: Assessment
+[phases.assessment]
+status = "pending"  # pending | in_progress | completed
+description = "Determine project scope and profile"
+
+[phases.assessment.checklist]
+typeIdentified = false
+rolesCount = false
+dataComplexity = false
+profileSelected = false
+
+# Phase 1: Discovery
+[phases.discovery]
+status = "pending"
+description = "Understanding the project"
+
+[phases.discovery.checklist]
+projectDefined = false
+targetAudience = false
+coreValue = false
+keyFeatures = false
+
+# Phase 2: Design (optional for simple)
+[phases.design]
+status = "pending"
+skip = false  # set true for simple projects
+description = "Visual and UX requirements"
+
+[phases.design.checklist]
+designApproach = false
+colorScheme = false
+responsiveStrategy = false
+
+# Phase 3: Access Control (skip if single role)
+[phases.access]
+status = "pending"
+skip = false  # set true if single role
+description = "User roles and permissions"
+
+[phases.access.checklist]
+rolesIdentified = false
+permissionsDefined = false
+guardsCreated = false
+
+# Phase 4: Data Model
+[phases.data]
+status = "pending"
+description = "Entities and relationships"
+
+[phases.data.checklist]
+entitiesListed = false
+fieldsDefined = false
+relationsMapped = false
+
+# Phase 5: Features & Screens
+[phases.features]
+status = "pending"
+description = "Use cases, routes, components"
+
+[phases.features.checklist]
+useCasesDefined = false
+routesCreated = false
+pageComponents = false
+compositions = false
+
+# Phase 6: Modules (complex only)
+[phases.modules]
+status = "pending"
+skip = true  # only for complex profile
+description = "Domain decomposition"
+
+[phases.modules.checklist]
+domainsIdentified = false
+modulesDefined = false
+interfacesSet = false
+
+# Phase 7: Prototype
+[phases.prototype]
+status = "pending"
+description = "Working React screens"
+
+[phases.prototype.checklist]
+mocksGenerated = false
+pagesCreated = false
+navigationWorks = false
+formsWired = false
+
+# Phase 8: Schema
+[phases.schema]
+status = "pending"
+skip = false  # skip for simple if no backend
+description = "Database schema"
+
+[phases.schema.checklist]
+prismaGenerated = false
+relationsValid = false
+indexesAdded = false

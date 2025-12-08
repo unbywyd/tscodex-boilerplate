@@ -1,0 +1,50 @@
+{
+  "path": "layers/routes/dashboard.toml",
+  "name": "dashboard.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "route_dashboard",
+      "path": "/prototype/dashboard",
+      "title": "Dashboard",
+      "description": "Main dashboard with overview metrics and statistics"
+    },
+    "page": {
+      "type": "authenticated",
+      "role": "user"
+    },
+    "relations": {
+      "guards": [
+        "authenticated"
+      ],
+      "roles": [
+        "user"
+      ]
+    },
+    "features": {
+      "list": [
+        "Display key metrics and KPIs",
+        "Recent activity feed",
+        "Quick action buttons",
+        "Notifications summary"
+      ]
+    },
+    "components": {
+      "used": [
+        "MetricCard",
+        "ActivityFeed",
+        "QuickActions"
+      ]
+    },
+    "api": {
+      "endpoints": [
+        "GET /api/metrics",
+        "GET /api/activity"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 610,
+    "modified": "2025-12-08T19:09:32.382Z"
+  }
+}

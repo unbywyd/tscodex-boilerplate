@@ -1,0 +1,43 @@
+{
+  "path": "layers/project/tech.toml",
+  "name": "tech.toml",
+  "type": "toml",
+  "content": {
+    "stack": {
+      "runtime": "Node.js 20+",
+      "language": "TypeScript 5.x",
+      "framework": "React 19",
+      "styling": "Tailwind CSS 4",
+      "bundler": "Vite 6",
+      "orm": "Prisma 7 (schema validation only)"
+    },
+    "architecture": {
+      "type": "Single Page Application",
+      "pattern": "File-driven",
+      "description": "Single SPA combining documentation portal and MVP prototype.\nSource files (TOML/Markdown) are converted to JSON at build time.\n"
+    },
+    "folders": {
+      "core": "Engine code (app, builder, dev-server)",
+      "src": "Content (docs, prototype)",
+      "instructions": "LLM instructions (root level)"
+    },
+    "dependencies": {
+      "state": {
+        "name": "zustand",
+        "purpose": "Simple state management"
+      },
+      "forms": {
+        "name": "react-hook-form + zod",
+        "purpose": "Form validation"
+      },
+      "routing": {
+        "name": "react-router-dom",
+        "purpose": "Client-side routing"
+      }
+    }
+  },
+  "metadata": {
+    "size": 790,
+    "modified": "2025-12-08T18:39:09.706Z"
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "path": "layers/routes/prototype-home.toml",
+  "name": "prototype-home.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "route_prototype_home",
+      "path": "/prototype",
+      "title": "Prototype Home",
+      "description": "Landing page for the prototype section"
+    },
+    "page": {
+      "type": "public",
+      "layout": "default"
+    },
+    "relations": {
+      "guards": [
+        "public"
+      ],
+      "roles": [
+        "visitor"
+      ]
+    },
+    "content": {
+      "sections": [
+        "Hero with overview",
+        "Feature cards grid",
+        "Quick navigation links"
+      ]
+    },
+    "navigation": {
+      "links": [
+        {
+          "label": "Dashboard",
+          "path": "/prototype/dashboard"
+        },
+        {
+          "label": "Users",
+          "path": "/prototype/users"
+        },
+        {
+          "label": "Products",
+          "path": "/prototype/products"
+        }
+      ]
+    }
+  },
+  "metadata": {
+    "size": 608,
+    "modified": "2025-12-08T19:09:34.723Z"
+  }
+}

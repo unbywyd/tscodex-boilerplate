@@ -1,0 +1,22 @@
+{
+  "path": "layers/guards/admin.toml",
+  "name": "admin.toml",
+  "type": "toml",
+  "content": {
+    "guard": {
+      "id": "admin-only",
+      "name": "Admin Only",
+      "description": "Only administrators can access this resource"
+    },
+    "access": {
+      "authenticated": true,
+      "roles": [
+        "admin"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 176,
+    "modified": "2025-12-08T19:13:44.550Z"
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "path": "layers/use-cases/view-documentation.toml",
+  "name": "view-documentation.toml",
+  "type": "toml",
+  "content": {
+    "useCase": {
+      "id": "uc_view_documentation",
+      "name": "View Project Documentation",
+      "asRole": "visitor",
+      "iWant": "view project documentation",
+      "soThat": "I can understand the project structure and requirements",
+      "meta": {
+        "isActive": true,
+        "priority": 1
+      },
+      "conditions": {
+        "pre": [
+          "Documentation server is running",
+          "Project manifests are available"
+        ],
+        "post": [
+          "User has viewed documentation",
+          "Documentation is displayed correctly"
+        ]
+      }
+    },
+    "relations": {
+      "roles": [
+        "visitor",
+        "user"
+      ],
+      "guards": [
+        "public"
+      ]
+    },
+    "flow": [
+      {
+        "id": "navigate",
+        "type": "start",
+        "label": "User navigates to /docs"
+      },
+      {
+        "id": "read_files",
+        "type": "action",
+        "label": "Server reads TOML/MD files"
+      },
+      {
+        "id": "parse",
+        "type": "action",
+        "label": "Parse and validate structure"
+      },
+      {
+        "id": "render",
+        "type": "action",
+        "label": "Render documentation UI"
+      },
+      {
+        "id": "display",
+        "type": "end",
+        "label": "User views documentation"
+      }
+    ]
+  },
+  "metadata": {
+    "size": 1021,
+    "modified": "2025-12-08T19:09:10.579Z"
+  }
+}

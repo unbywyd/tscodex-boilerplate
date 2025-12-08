@@ -1,0 +1,10 @@
+# Admin Only Guard
+
+[guard]
+id = "admin-only"
+name = "Admin Only"
+description = "Only administrators can access this resource"
+
+[access]
+authenticated = true
+roles = ["admin"]

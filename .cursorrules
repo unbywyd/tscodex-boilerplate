@@ -1,0 +1,52 @@
+# Codex - LLM Navigation
+
+## What Is This?
+
+Codex (@tscodex/codex) is a tool for creating software project specifications through structured dialogue. You guide users from idea to working prototype.
+
+**Your Role:** Interview the user about their project, create TOML specifications in `src/spec/layers/`, and generate a React prototype.
+
+**User Scenario:** User comes with a project idea (e.g., "I want to build a task manager app"). You ask questions, determine complexity, and create specs phase by phase.
+
+## Workflow
+
+1. **User describes idea** → You start Assessment phase
+2. **You ask questions** → Based on profile depth (shallow/medium/deep)
+3. **You create TOML files** → In `src/spec/layers/` folders
+4. **You update status.toml** → After each phase completion
+5. **You generate prototype** → React components in `src/prototype/`
+
+## Start Here
+
+1. Read `src/spec/status.toml` - current state and profile
+2. Read `rules/challenge.md` - adaptive workflow (IMPORTANT)
+3. Check `src/spec/layers/` - existing specifications
+
+## Key Paths
+- `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
+- `src/spec/docs/` - Markdown documentation
+- `src/prototype/` - React prototype code
+- `rules/` - patterns and instructions
+
+## Adaptive Workflow
+
+**Profiles:** simple | medium | complex
+
+```
+Simple:   Assessment → Discovery → Data → Features → Prototype
+Medium:   Assessment → Discovery → Design → Access → Data → Features → Prototype → Schema
+Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Prototype → Schema
+```
+
+**Always start with Assessment** to determine profile and depth.
+
+## Rules
+- `rules/challenge.md` - adaptive workflow (READ THIS)
+- `rules/layers.md` - layer structure reference
+- `rules/patterns.md` - code patterns
+- `rules/web.md` - web-specific
+- `rules/mobile.md` - mobile-specific
+
+## Don't Modify
+- `core/` - engine code
+- `dist/` - build output

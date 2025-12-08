@@ -1,0 +1,15 @@
+{
+  "extends": "./core/app/tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "./core/app",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@prototype/*": ["../../src/prototype/*"],
+      "@docs/*": ["../../src/docs/*"]
+    }
+  },
+  "include": [
+    "core/app/src",
+    "src/prototype"
+  ]
+}

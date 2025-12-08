@@ -1,0 +1,16 @@
+# Admin Role
+
+[role]
+id = "admin"
+name = "Administrator"
+description = "Administrator with full access to all resources"
+level = 2
+
+[permissions]
+list = [
+  "view:docs",
+  "view:prototype",
+  "edit:profile",
+  "manage:users",
+  "manage:settings"
+]

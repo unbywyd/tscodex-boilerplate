@@ -1,0 +1,95 @@
+{
+  "path": "layers/components/badge.toml",
+  "name": "badge.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "badge",
+      "name": "Badge",
+      "description": "Small status indicator",
+      "category": "ui"
+    },
+    "props": [
+      {
+        "name": "variant",
+        "type": "enum",
+        "values": [
+          "default",
+          "primary",
+          "secondary",
+          "success",
+          "warning",
+          "error"
+        ],
+        "default": "default",
+        "description": "Badge color variant"
+      },
+      {
+        "name": "size",
+        "type": "enum",
+        "values": [
+          "sm",
+          "md"
+        ],
+        "default": "md",
+        "description": "Badge size"
+      },
+      {
+        "name": "children",
+        "type": "ReactNode",
+        "required": true,
+        "description": "Badge text"
+      }
+    ],
+    "variants": [
+      {
+        "name": "Default",
+        "props": {
+          "children": "Badge"
+        }
+      },
+      {
+        "name": "Primary",
+        "props": {
+          "variant": "primary",
+          "children": "Primary"
+        }
+      },
+      {
+        "name": "Success",
+        "props": {
+          "variant": "success",
+          "children": "Active"
+        }
+      },
+      {
+        "name": "Warning",
+        "props": {
+          "variant": "warning",
+          "children": "Pending"
+        }
+      },
+      {
+        "name": "Error",
+        "props": {
+          "variant": "error",
+          "children": "Failed"
+        }
+      },
+      {
+        "name": "Small",
+        "props": {
+          "size": "sm",
+          "children": "Small"
+        }
+      }
+    ],
+    "usage": {
+      "code": "import { Badge } from '@prototype/components/ui/Badge'\n\n<Badge variant=\"success\">Active</Badge>\n"
+    }
+  },
+  "metadata": {
+    "size": 1071,
+    "modified": "2025-12-08T19:43:28.178Z"
+  }
+}

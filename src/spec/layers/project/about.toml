@@ -1,0 +1,14 @@
+# Project Overview
+
+[project]
+id = "mvp-generator"
+name = "MVP Generator"
+type = "application"
+description = """
+File-driven documentation portal and MVP prototype system.
+All project knowledge lives in Markdown and TOML files.
+"""
+
+[owner]
+name = "MVP Generator Team"
+email = "team@mvp-generator.dev"

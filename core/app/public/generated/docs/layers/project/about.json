@@ -1,0 +1,21 @@
+{
+  "path": "layers/project/about.toml",
+  "name": "about.toml",
+  "type": "toml",
+  "content": {
+    "project": {
+      "id": "mvp-generator",
+      "name": "MVP Generator",
+      "type": "application",
+      "description": "File-driven documentation portal and MVP prototype system.\nAll project knowledge lives in Markdown and TOML files.\n"
+    },
+    "owner": {
+      "name": "MVP Generator Team",
+      "email": "team@mvp-generator.dev"
+    }
+  },
+  "metadata": {
+    "size": 302,
+    "modified": "2025-12-08T18:39:07.828Z"
+  }
+}

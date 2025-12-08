@@ -1,0 +1,24 @@
+{
+  "path": "layers/roles/user.toml",
+  "name": "user.toml",
+  "type": "toml",
+  "content": {
+    "role": {
+      "id": "user",
+      "name": "User",
+      "description": "Authenticated user with standard access",
+      "level": 1
+    },
+    "permissions": {
+      "list": [
+        "view:docs",
+        "view:prototype",
+        "edit:profile"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 190,
+    "modified": "2025-12-08T18:39:41.634Z"
+  }
+}

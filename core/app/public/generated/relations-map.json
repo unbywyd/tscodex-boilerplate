@@ -1,0 +1,233 @@
+{
+  "byId": {
+    "badge": {
+      "path": "layers/components/badge.toml",
+      "folder": "components",
+      "title": "Badge"
+    },
+    "button": {
+      "path": "layers/components/button.toml",
+      "folder": "components",
+      "title": "Button"
+    },
+    "card": {
+      "path": "layers/components/card.toml",
+      "folder": "components",
+      "title": "Card"
+    },
+    "input": {
+      "path": "layers/components/input.toml",
+      "folder": "components",
+      "title": "Input"
+    },
+    "category": {
+      "path": "layers/entities/category.toml",
+      "folder": "entities",
+      "title": "Category"
+    },
+    "product": {
+      "path": "layers/entities/product.toml",
+      "folder": "entities",
+      "title": "Product"
+    },
+    "user": {
+      "path": "layers/roles/user.toml",
+      "folder": "roles",
+      "title": "User"
+    },
+    "admin-only": {
+      "path": "layers/guards/admin.toml",
+      "folder": "guards",
+      "title": "Admin Only"
+    },
+    "authenticated": {
+      "path": "layers/guards/authenticated.toml",
+      "folder": "guards",
+      "title": "Authentication Required"
+    },
+    "public": {
+      "path": "layers/guards/public.toml",
+      "folder": "guards",
+      "title": "Public Access"
+    },
+    "architecture": {
+      "path": "layers/knowledge/architecture.toml",
+      "folder": "knowledge",
+      "title": "Project Architecture"
+    },
+    "auth": {
+      "path": "layers/knowledge/auth.toml",
+      "folder": "knowledge",
+      "title": "Authentication & Authorization"
+    },
+    "mvp-generator": {
+      "path": "layers/project/about.toml",
+      "folder": "project",
+      "title": "MVP Generator"
+    },
+    "business": {
+      "path": "layers/project/business.toml",
+      "folder": "project"
+    },
+    "design": {
+      "path": "layers/project/design.toml",
+      "folder": "project"
+    },
+    "tech": {
+      "path": "layers/project/tech.toml",
+      "folder": "project"
+    },
+    "admin": {
+      "path": "layers/roles/admin.toml",
+      "folder": "roles",
+      "title": "Administrator"
+    },
+    "visitor": {
+      "path": "layers/roles/visitor.toml",
+      "folder": "roles",
+      "title": "Visitor"
+    },
+    "route_dashboard": {
+      "path": "layers/routes/dashboard.toml",
+      "folder": "routes",
+      "title": "Dashboard"
+    },
+    "route_prototype_home": {
+      "path": "layers/routes/prototype-home.toml",
+      "folder": "routes",
+      "title": "Prototype Home"
+    },
+    "uc_view_documentation": {
+      "path": "layers/use-cases/view-documentation.toml",
+      "folder": "use-cases",
+      "title": "View Project Documentation"
+    },
+    "uc_view_prototype": {
+      "path": "layers/use-cases/view-prototype.toml",
+      "folder": "use-cases",
+      "title": "View Prototype"
+    }
+  },
+  "byFolder": {
+    "components": [
+      "badge",
+      "button",
+      "card",
+      "input"
+    ],
+    "entities": [
+      "category",
+      "product",
+      "user"
+    ],
+    "guards": [
+      "admin-only",
+      "authenticated",
+      "public"
+    ],
+    "knowledge": [
+      "architecture",
+      "auth"
+    ],
+    "modules": [],
+    "project": [
+      "mvp-generator",
+      "business",
+      "design",
+      "tech"
+    ],
+    "roles": [
+      "admin",
+      "user",
+      "visitor"
+    ],
+    "routes": [
+      "route_dashboard",
+      "route_prototype_home"
+    ],
+    "use-cases": [
+      "uc_view_documentation",
+      "uc_view_prototype"
+    ]
+  },
+  "referencedBy": {
+    "category": [
+      "category",
+      "product"
+    ],
+    "user": [
+      "user",
+      "route_dashboard",
+      "uc_view_documentation",
+      "uc_view_prototype"
+    ],
+    "admin": [
+      "user"
+    ],
+    "authenticated": [
+      "route_dashboard"
+    ],
+    "public": [
+      "route_prototype_home",
+      "uc_view_documentation",
+      "uc_view_prototype"
+    ],
+    "visitor": [
+      "route_prototype_home",
+      "uc_view_documentation",
+      "uc_view_prototype"
+    ]
+  },
+  "relations": {
+    "category": {
+      "entities": [
+        "category"
+      ]
+    },
+    "product": {
+      "entities": [
+        "category"
+      ]
+    },
+    "user": {
+      "roles": [
+        "user",
+        "admin"
+      ]
+    },
+    "route_dashboard": {
+      "guards": [
+        "authenticated"
+      ],
+      "roles": [
+        "user"
+      ]
+    },
+    "route_prototype_home": {
+      "guards": [
+        "public"
+      ],
+      "roles": [
+        "visitor"
+      ]
+    },
+    "uc_view_documentation": {
+      "roles": [
+        "visitor",
+        "user"
+      ],
+      "guards": [
+        "public"
+      ]
+    },
+    "uc_view_prototype": {
+      "roles": [
+        "visitor",
+        "user"
+      ],
+      "guards": [
+        "public"
+      ]
+    }
+  }
+}

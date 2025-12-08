@@ -1,0 +1,10 @@
+# Authentication Required Guard
+
+[guard]
+id = "authenticated"
+name = "Authentication Required"
+description = "User must be authenticated to access"
+
+[access]
+authenticated = true
+roles = []

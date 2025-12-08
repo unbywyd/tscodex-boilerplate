@@ -1,0 +1,56 @@
+# Card Component
+
+[component]
+id = "card"
+name = "Card"
+description = "Container for grouped content"
+category = "ui"
+
+[[props]]
+name = "title"
+type = "string"
+required = false
+description = "Card header title"
+
+[[props]]
+name = "description"
+type = "string"
+required = false
+description = "Card header description"
+
+[[props]]
+name = "footer"
+type = "ReactNode"
+required = false
+description = "Card footer content"
+
+[[props]]
+name = "children"
+type = "ReactNode"
+required = true
+description = "Card body content"
+
+[[variants]]
+name = "Simple"
+props = { children = "Card content goes here" }
+
+[[variants]]
+name = "With Title"
+props = { title = "Card Title", children = "Card content with a title" }
+
+[[variants]]
+name = "With Description"
+props = { title = "Card Title", description = "A brief description", children = "Card content" }
+
+[[variants]]
+name = "With Footer"
+props = { title = "Card Title", children = "Card content", footer = "Footer actions" }
+
+[usage]
+code = """
+import { Card } from '@prototype/components/ui/Card'
+
+<Card title="My Card" description="Description here">
+  <p>Content goes here</p>
+</Card>
+"""

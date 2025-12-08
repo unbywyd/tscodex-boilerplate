@@ -1,0 +1,10 @@
+{
+  "path": "docs/getting-started/intro.md",
+  "name": "intro.md",
+  "type": "markdown",
+  "content": "# Introduction\n\nMVP Generator is a file-driven documentation portal and prototype system.\n\n## What is it?\n\nA system that allows teams to document their MVP ideas using simple files and automatically generates a browsable documentation portal with a working React prototype.\n\n## Key Concepts\n\n- **Layers** - Structured TOML files defining guards, roles, routes, etc.\n- **Docs** - Markdown documentation (you're reading one now)\n- **Prototype** - Working React components linked to documentation\n",
+  "metadata": {
+    "size": 494,
+    "modified": "2025-12-08T18:45:04.487Z"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "path": "layers/roles/admin.toml",
+  "name": "admin.toml",
+  "type": "toml",
+  "content": {
+    "role": {
+      "id": "admin",
+      "name": "Administrator",
+      "description": "Administrator with full access to all resources",
+      "level": 2
+    },
+    "permissions": {
+      "list": [
+        "view:docs",
+        "view:prototype",
+        "edit:profile",
+        "manage:users",
+        "manage:settings"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 248,
+    "modified": "2025-12-08T18:39:43.504Z"
+  }
+}
