@@ -11,6 +11,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
 const mocksDir = path.join(rootDir, 'src/prototype/mocks')
+const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
 
 // Helper: read and parse TOML file
 async function readTomlFile(filePath: string): Promise<any> {
@@ -140,7 +141,7 @@ export function viteApiPlugin(): Plugin {
           const structure = await scanDirectory(specDir)
           const routeDocsMap: Record<string, string> = {}
 
-          async function extractRoutePaths(folder: any) {
+          const extractRoutePaths = async (folder: any): Promise<void> => {
             for (const file of folder.files) {
               if (file.type === 'toml') {
                 const filePath = path.join(specDir, file.path)
@@ -306,7 +307,7 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
-      // API: Get specific mock
+      // API: Get specific mock (must be after /api/mocks list endpoint)
       server.middlewares.use('/api/mocks/', async (req, res) => {
         try {
           const mockName = req.url?.replace('/api/mocks/', '').split('?')[0]
@@ -329,11 +330,33 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
+      // API: Get Prisma schema
+      server.middlewares.use('/api/prisma/schema', async (_req, res) => {
+        try {
+          const content = await fs.readFile(prismaSchemaPath, 'utf-8')
+          const stats = await fs.stat(prismaSchemaPath)
+          sendJson(res, {
+            schema: content,
+            metadata: {
+              path: 'src/prisma/schema.prisma',
+              size: stats.size,
+              modified: stats.mtime.toISOString(),
+            },
+          })
+        } catch (error: any) {
+          if (error.code === 'ENOENT') {
+            return sendJson(res, { error: 'Prisma schema not found', schema: null }, 404)
+          }
+          sendJson(res, { error: 'Internal server error' }, 500)
+        }
+      })
+
       console.log('\n📚 API endpoints available:')
       console.log('  GET /api/docs/tree       - Documentation structure')
       console.log('  GET /api/docs/file?path= - Specific doc file')
       console.log('  GET /api/docs/route-map  - Route to docs mapping')
       console.log('  GET /api/relations-map   - Relations graph')
+      console.log('  GET /api/prisma/schema   - Prisma schema file')
       console.log('  GET /api/mocks           - List all mocks')
       console.log('  GET /api/mocks/:name     - Specific mock data\n')
     },

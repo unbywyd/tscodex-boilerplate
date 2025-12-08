@@ -132,3 +132,119 @@
 .toml-content pre {
   @apply m-0 font-mono text-sm;
 }
+
+/* Prisma schema styles - light theme integration */
+.prisma-schema pre[class*="language-"] {
+  @apply bg-muted text-foreground border;
+}
+
+.prisma-schema code[class*="language-"] {
+  @apply text-foreground;
+}
+
+/* Override Prism.js colors for light theme */
+.prisma-schema .token.comment,
+.prisma-schema .token.prolog,
+.prisma-schema .token.doctype,
+.prisma-schema .token.cdata {
+  @apply text-muted-foreground;
+}
+
+.prisma-schema .token.punctuation {
+  @apply text-foreground;
+}
+
+.prisma-schema .token.property,
+.prisma-schema .token.tag,
+.prisma-schema .token.boolean,
+.prisma-schema .token.number,
+.prisma-schema .token.constant,
+.prisma-schema .token.symbol,
+.prisma-schema .token.deleted {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.prisma-schema .token.selector,
+.prisma-schema .token.attr-name,
+.prisma-schema .token.string,
+.prisma-schema .token.char,
+.prisma-schema .token.builtin,
+.prisma-schema .token.inserted {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.prisma-schema .token.operator,
+.prisma-schema .token.entity,
+.prisma-schema .token.url,
+.prisma-schema .language-css .token.string,
+.prisma-schema .style .token.string {
+  @apply text-purple-600 dark:text-purple-400;
+}
+
+.prisma-schema .token.atrule,
+.prisma-schema .token.attr-value,
+.prisma-schema .token.keyword {
+  @apply text-primary;
+}
+
+.prisma-schema .token.function,
+.prisma-schema .token.class-name {
+  @apply text-orange-600 dark:text-orange-400;
+}
+
+.prisma-schema .token.regex,
+.prisma-schema .token.important,
+.prisma-schema .token.variable {
+  @apply text-red-600 dark:text-red-400;
+}
+
+/* Mobile optimizations */
+@media (max-width: 640px) {
+  /* Improve touch targets */
+  button, a, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Better spacing for mobile */
+  .prose {
+    @apply text-sm;
+  }
+
+  /* Improve table scrolling on mobile */
+  .overflow-x-auto {
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  /* Better code block wrapping */
+  pre code {
+    word-break: break-word;
+    white-space: pre-wrap;
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Improve focus states for accessibility */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-primary;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Better text selection */
+::selection {
+  @apply bg-primary/20 text-foreground;
+}

@@ -73,3 +73,83 @@ export function getPathFromRoute(route: string): string {
 
 // Backward compatibility alias
 export const loadDocsStructure = loadDocsTree
+
+// Load Prisma schema
+export interface PrismaSchemaData {
+  schema: string | null
+  metadata: {
+    path: string
+    size: number
+    modified: string
+  } | null
+}
+
+export async function loadPrismaSchema(): Promise<PrismaSchemaData> {
+  if (isDev) {
+    const response = await fetch('/api/prisma/schema')
+    if (!response.ok) {
+      if (response.status === 404) {
+        return { schema: null, metadata: null }
+      }
+      throw new Error('Failed to load Prisma schema')
+    }
+    return response.json()
+  } else {
+    const response = await fetch('/generated/prisma-schema.json')
+    if (!response.ok) {
+      return { schema: null, metadata: null }
+    }
+    return response.json()
+  }
+}
+
+// Load mocks list
+export async function loadMocksList(): Promise<string[]> {
+  if (isDev) {
+    const response = await fetch('/api/mocks')
+    if (!response.ok) {
+      throw new Error('Failed to load mocks list')
+    }
+    return response.json()
+  } else {
+    const response = await fetch('/generated/mocks-index.json')
+    if (!response.ok) {
+      return []
+    }
+    return response.json()
+  }
+}
+
+// Load specific mock data
+export async function loadMock(name: string): Promise<any> {
+  if (isDev) {
+    const response = await fetch(`/api/mocks/${name}`)
+    if (!response.ok) {
+      throw new Error(`Failed to load mock: ${name}`)
+    }
+    return response.json()
+  } else {
+    const response = await fetch(`/generated/mocks/${name}.json`)
+    if (!response.ok) {
+      throw new Error(`Failed to load mock: ${name}`)
+    }
+    return response.json()
+  }
+}
+
+// Load relations map
+export async function loadRelationsMap(): Promise<any> {
+  if (isDev) {
+    const response = await fetch('/api/relations-map')
+    if (!response.ok) {
+      throw new Error('Failed to load relations map')
+    }
+    return response.json()
+  } else {
+    const response = await fetch('/generated/relations-map.json')
+    if (!response.ok) {
+      throw new Error('Failed to load relations map')
+    }
+    return response.json()
+  }
+}

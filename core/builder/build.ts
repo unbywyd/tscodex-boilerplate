@@ -8,6 +8,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
 const mocksDir = path.join(rootDir, 'src/prototype/mocks')
+const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
 const outputDir = path.join(rootDir, 'core/app/public/generated')
 
 async function readTomlFile(filePath: string): Promise<any> {
@@ -168,6 +169,40 @@ async function generateDocs() {
     JSON.stringify(routeDocsMap, null, 2)
   )
   console.log(`  ✓ route-docs-map.json (${Object.keys(routeDocsMap).length} routes)`)
+}
+
+// Generate Prisma schema
+async function generatePrismaSchema() {
+  console.log('🗄️  Generating Prisma schema...')
+
+  try {
+    const content = await fs.readFile(prismaSchemaPath, 'utf-8')
+    const stats = await fs.stat(prismaSchemaPath)
+
+    await fs.writeFile(
+      path.join(outputDir, 'prisma-schema.json'),
+      JSON.stringify({
+        schema: content,
+        metadata: {
+          path: 'src/prisma/schema.prisma',
+          size: stats.size,
+          modified: stats.mtime.toISOString(),
+        },
+      }, null, 2)
+    )
+    console.log('  ✓ prisma-schema.json')
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      console.log('  ⚠ No Prisma schema found (src/prisma/schema.prisma)')
+      // Write empty placeholder
+      await fs.writeFile(
+        path.join(outputDir, 'prisma-schema.json'),
+        JSON.stringify({ schema: null, metadata: null }, null, 2)
+      )
+    } else {
+      console.error('Error generating Prisma schema:', error)
+    }
+  }
 }
 
 // Generate mocks
@@ -404,6 +439,7 @@ async function build() {
 
   // Generate all data
   await generateDocs()
+  await generatePrismaSchema()
   await generateMocks()
 
   // Generate relations map

@@ -1,7 +1,7 @@
 import { lazy, Suspense } from 'react';
 import { getRenderer } from '../../lib/render-config';
 
-// Lazy load MermaidDiagram to avoid loading ReactFlow for non-mermaid pages
+// Lazy load MermaidDiagram to avoid loading mermaid library for non-mermaid pages
 const MermaidDiagram = lazy(() => import('./MermaidDiagram'));
 
 interface TomlRendererProps {

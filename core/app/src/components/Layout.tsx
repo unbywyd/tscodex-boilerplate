@@ -1,5 +1,6 @@
+import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Box, Home, Sparkles } from 'lucide-react'
+import { FileText, Box, Home, Sparkles, Database, Menu, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { DocsLink } from './DocsLink'
 import { Container } from './ui/container'
@@ -10,6 +11,7 @@ interface LayoutProps {
 
 export default function Layout({ children }: LayoutProps) {
   const location = useLocation()
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   const isActive = (path: string) => {
     if (path === '/') return location.pathname === '/'
@@ -18,8 +20,10 @@ export default function Layout({ children }: LayoutProps) {
 
   const navLinks = [
     { path: '/', label: 'Home', icon: Home },
+    { path: '/about', label: 'About', icon: Info },
     { path: '/docs', label: 'Docs', icon: FileText },
     { path: '/prototype', label: 'Prototype', icon: Box },
+    { path: '/schema', label: 'Schema', icon: Database },
   ]
 
   return (
@@ -27,24 +31,25 @@ export default function Layout({ children }: LayoutProps) {
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <Container>
-          <div className="flex h-16 items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2 group">
+          <div className="flex min-h-16 items-center justify-between py-2">
+            <Link to="/" className="flex items-center space-x-2 group py-2">
               <Sparkles className="h-5 w-5 text-primary transition-transform group-hover:scale-110" />
               <span className="font-bold text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
                 TSCodex BluePrint
               </span>
             </Link>
 
-            <nav className="flex items-center space-x-8 text-sm font-medium">
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-2 text-sm font-medium">
               {navLinks.map(({ path, label, icon: Icon }) => (
                 <Link
                   key={path}
                   to={path}
                   className={cn(
-                    'flex items-center gap-2 transition-colors relative',
+                    'flex items-center gap-2 transition-colors relative px-4 py-3 rounded-md',
                     isActive(path)
                       ? 'text-foreground'
-                      : 'text-foreground/60 hover:text-foreground/80'
+                      : 'text-foreground/60 hover:text-foreground/80 hover:bg-accent'
                   )}
                 >
                   <Icon className="h-4 w-4" />
@@ -55,7 +60,42 @@ export default function Layout({ children }: LayoutProps) {
                 </Link>
               ))}
             </nav>
+
+            {/* Mobile Menu Button */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 rounded-md hover:bg-accent transition-colors"
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
+            </button>
           </div>
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <nav className="md:hidden border-t py-4 space-y-2">
+              {navLinks.map(({ path, label, icon: Icon }) => (
+                <Link
+                  key={path}
+                  to={path}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className={cn(
+                    'flex items-center gap-3 px-4 py-3 rounded-md transition-colors',
+                    isActive(path)
+                      ? 'bg-accent text-accent-foreground font-medium'
+                      : 'text-foreground/60 hover:bg-accent hover:text-foreground'
+                  )}
+                >
+                  <Icon className="h-5 w-5" />
+                  <span>{label}</span>
+                </Link>
+              ))}
+            </nav>
+          )}
         </Container>
       </header>
 

@@ -1,0 +1,325 @@
+import { Container } from '@/components/ui/container'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui'
+import { Button } from '@/components/ui/button'
+import { Link } from 'react-router-dom'
+import {
+  FileText,
+  Layers,
+  Zap,
+  Database,
+  GitBranch,
+  Code2,
+  ArrowRight,
+  Sparkles,
+  Target,
+  Users,
+  CheckCircle2,
+  Box
+} from 'lucide-react'
+
+const features = [
+  {
+    icon: FileText,
+    title: 'File-Driven Architecture',
+    description: 'All project knowledge lives in TOML and Markdown files. No database required for documentation.',
+    color: 'text-blue-600 dark:text-blue-400',
+    bgColor: 'bg-blue-50 dark:bg-blue-950/50',
+  },
+  {
+    icon: Layers,
+    title: 'Layered Specifications',
+    description: 'Organize specs by layers: project, entities, roles, guards, routes, use-cases, and more.',
+    color: 'text-purple-600 dark:text-purple-400',
+    bgColor: 'bg-purple-50 dark:bg-purple-950/50',
+  },
+  {
+    icon: Zap,
+    title: 'Instant Prototype',
+    description: 'Generate working React components and pages directly from your specifications.',
+    color: 'text-orange-600 dark:text-orange-400',
+    bgColor: 'bg-orange-50 dark:bg-orange-950/50',
+  },
+  {
+    icon: Database,
+    title: 'Prisma Schema',
+    description: 'Automatically generate database schema from your entity definitions.',
+    color: 'text-green-600 dark:text-green-400',
+    bgColor: 'bg-green-50 dark:bg-green-950/50',
+  },
+  {
+    icon: GitBranch,
+    title: 'Relations Graph',
+    description: 'Visualize connections between entities, roles, guards, and use-cases.',
+    color: 'text-red-600 dark:text-red-400',
+    bgColor: 'bg-red-50 dark:bg-red-950/50',
+  },
+  {
+    icon: Code2,
+    title: 'LLM-Friendly',
+    description: 'Structured dialogue workflow designed for AI-assisted development.',
+    color: 'text-indigo-600 dark:text-indigo-400',
+    bgColor: 'bg-indigo-50 dark:bg-indigo-950/50',
+  },
+]
+
+const phases = [
+  { name: 'Assessment', description: 'Determine project scope and complexity' },
+  { name: 'Discovery', description: 'Define core value and target audience' },
+  { name: 'Design', description: 'Visual and UX requirements' },
+  { name: 'Access Control', description: 'User roles and permissions' },
+  { name: 'Data Model', description: 'Entities and relationships' },
+  { name: 'Features', description: 'Use cases, routes, components' },
+  { name: 'Prototype', description: 'Working React screens' },
+  { name: 'Schema', description: 'Database schema generation' },
+]
+
+export default function AboutPage() {
+  return (
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="relative overflow-hidden border-b bg-gradient-to-b from-primary/5 via-background to-background">
+        <Container size="lg" className="py-8 sm:py-12 md:py-16 lg:py-24">
+          <div className="flex flex-col items-center text-center space-y-4 sm:space-y-6 md:space-y-8">
+            <Badge variant="secondary" className="px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm">
+              <Sparkles className="w-3 h-3 mr-1.5 sm:mr-2" />
+              LLM-Driven Development
+            </Badge>
+
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight max-w-4xl px-4">
+              From{' '}
+              <span className="bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                Documentation
+              </span>{' '}
+              to Working{' '}
+              <span className="bg-gradient-to-r from-primary/60 to-primary bg-clip-text text-transparent">
+                Prototype
+              </span>
+            </h1>
+
+            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl px-4">
+              A file-driven system that transforms your MVP specifications into browsable documentation
+              and working React prototypes. Single source of truth for your project.
+            </p>
+
+            <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center w-full sm:w-auto px-4">
+              <Button size="lg" asChild className="w-full sm:w-auto">
+                <Link to="/docs">
+                  <FileText className="w-4 h-4 mr-2" />
+                  Browse Docs
+                </Link>
+              </Button>
+              <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
+                <Link to="/prototype">
+                  <Box className="w-4 h-4 mr-2" />
+                  View Prototype
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </Container>
+
+        {/* Decorative elements */}
+        <div className="hidden md:block absolute top-0 left-1/4 w-72 h-72 bg-primary/10 rounded-full blur-3xl -z-10" />
+        <div className="hidden md:block absolute bottom-0 right-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl -z-10" />
+      </section>
+
+      {/* Problem & Solution */}
+      <section className="border-b">
+        <Container size="lg" className="py-8 sm:py-12 md:py-16">
+          <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
+            <Card className="border-destructive/20 bg-destructive/5">
+              <CardHeader>
+                <div className="flex items-center gap-2 text-destructive">
+                  <Target className="w-5 h-5" />
+                  <CardTitle>The Problem</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3 text-muted-foreground">
+                <p>Documentation and prototypes live in separate worlds.</p>
+                <p>Specs get outdated as code evolves.</p>
+                <p>Teams waste time keeping them in sync.</p>
+              </CardContent>
+            </Card>
+
+            <Card className="border-green-500/30 bg-green-50 dark:bg-green-950/30">
+              <CardHeader>
+                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
+                  <CheckCircle2 className="w-5 h-5" />
+                  <CardTitle>The Solution</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent className="space-y-3 text-muted-foreground">
+                <p>Single source of truth in simple files.</p>
+                <p>Docs and prototype generated from same specs.</p>
+                <p>Change once, update everywhere.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      {/* Features Grid */}
+      <section className="border-b">
+        <Container size="lg" className="py-8 sm:py-12 md:py-16">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12 px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">Core Features</h2>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+              Everything you need to go from idea to working prototype
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            {features.map((feature) => {
+              const Icon = feature.icon
+              return (
+                <Card key={feature.title} className="group hover:shadow-lg transition-all hover:border-primary/50">
+                  <CardHeader>
+                    <div className={`w-12 h-12 rounded-lg ${feature.bgColor} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform`}>
+                      <Icon className={`w-6 h-6 ${feature.color}`} />
+                    </div>
+                    <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-sm">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </Container>
+      </section>
+
+      {/* Workflow Phases */}
+      <section className="border-b">
+        <Container size="lg" className="py-8 sm:py-12 md:py-16">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12 px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">Development Workflow</h2>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+              Structured dialogue guides you through each phase
+            </p>
+          </div>
+
+          <div className="relative px-4">
+            {/* Timeline line */}
+            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border md:-translate-x-1/2" />
+
+            <div className="space-y-6 sm:space-y-8">
+              {phases.map((phase, index) => (
+                <div
+                  key={phase.name}
+                  className={`relative flex items-start md:items-center gap-3 sm:gap-4 md:gap-8 ${
+                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                  }`}
+                >
+                  {/* Timeline dot */}
+                  <div className="absolute left-4 md:left-1/2 w-3 h-3 rounded-full bg-primary border-4 border-background md:-translate-x-1/2 z-10 shrink-0 mt-1 md:mt-0" />
+
+                  {/* Content */}
+                  <div className={`flex-1 ml-10 sm:ml-12 md:ml-0 w-full ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
+                    <Card className="w-full md:inline-block">
+                      <CardHeader className="pb-2">
+                        <div className={`flex items-center gap-2 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                          <Badge variant="outline" className="text-xs">
+                            Phase {index + 1}
+                          </Badge>
+                        </div>
+                        <CardTitle className="text-base sm:text-lg">{phase.name}</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <p className="text-xs sm:text-sm text-muted-foreground">{phase.description}</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+
+                  {/* Spacer for alternating layout */}
+                  <div className="hidden md:block flex-1" />
+                </div>
+              ))}
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      {/* Target Audience */}
+      <section className="border-b">
+        <Container size="lg" className="py-8 sm:py-12 md:py-16">
+          <div className="text-center mb-6 sm:mb-8 md:mb-12 px-4">
+            <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">Who Is This For?</h2>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+              Designed for teams and individuals who value clarity, speed, and automation
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <Card className="group hover:shadow-lg transition-all hover:border-blue-500/30">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-blue-50 dark:bg-blue-950/50 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                  <Users className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-blue-600 dark:text-blue-400" />
+                </div>
+                <CardTitle className="text-base sm:text-lg">Product Teams</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center text-muted-foreground text-sm">
+                Document requirements in structured files that translate directly to working code.
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all hover:border-purple-500/30">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-purple-50 dark:bg-purple-950/50 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                  <Code2 className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-purple-600 dark:text-purple-400" />
+                </div>
+                <CardTitle className="text-base sm:text-lg">Developers</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center text-muted-foreground text-sm">
+                Skip boilerplate. Focus on business logic while specs generate the scaffolding.
+              </CardContent>
+            </Card>
+
+            <Card className="group hover:shadow-lg transition-all hover:border-orange-500/30 sm:col-span-2 lg:col-span-1">
+              <CardHeader className="text-center">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-orange-50 dark:bg-orange-950/50 flex items-center justify-center mx-auto mb-3 sm:mb-4 group-hover:scale-110 transition-transform">
+                  <Sparkles className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 text-orange-600 dark:text-orange-400" />
+                </div>
+                <CardTitle className="text-base sm:text-lg">AI Enthusiasts</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center text-muted-foreground text-sm">
+                Leverage LLMs to accelerate specification writing and prototype generation.
+              </CardContent>
+            </Card>
+          </div>
+        </Container>
+      </section>
+
+      {/* CTA Section */}
+      <section>
+        <Container size="lg" className="py-8 sm:py-12 md:py-16 px-4">
+          <Card className="bg-gradient-to-br from-background via-muted/30 to-muted/50 border-border/50">
+            <CardContent className="py-8 sm:py-10 md:py-12 text-center">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Ready to Explore?</h2>
+              <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-xl mx-auto">
+                Check out the documentation to see how specs are structured, or jump straight to the prototype.
+              </p>
+              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
+                <Button size="lg" asChild className="w-full sm:w-auto">
+                  <Link to="/docs">
+                    Explore Documentation
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+                <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
+                  <Link to="/schema">
+                    View Schema
+                    <Database className="w-4 h-4 ml-2" />
+                  </Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </Container>
+      </section>
+    </div>
+  )
+}

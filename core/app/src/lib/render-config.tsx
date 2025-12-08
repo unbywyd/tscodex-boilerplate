@@ -47,8 +47,8 @@ const defaultTomlRenderer: RenderFunction = (content: any) => {
   return (
     <Card>
       <CardContent className="p-6">
-        <pre className="bg-muted p-4 rounded-lg overflow-auto">
-          <code className="text-sm font-mono">{JSON.stringify(content, null, 2)}</code>
+        <pre className="bg-muted p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
+          <code className="font-mono break-words whitespace-pre-wrap">{JSON.stringify(content, null, 2)}</code>
         </pre>
       </CardContent>
     </Card>
@@ -83,7 +83,7 @@ const useCaseRenderer: RenderFunction = (content: any) => {
       </Card>
 
       {(conditions.pre?.length > 0 || conditions.post?.length > 0) && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
           {conditions.pre?.length > 0 && (
             <Card>
               <CardHeader>
@@ -163,12 +163,12 @@ const knowledgeRenderer: RenderFunction = (content: any) => {
         {facts.map((fact: any, i: number) => (
           <Card key={i}>
             <CardContent className="pt-6">
-              <div className="flex items-start justify-between gap-4">
-                <div className="flex-1 space-y-2">
-                  <p className="font-semibold text-base text-primary">{fact.question}</p>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{fact.answer}</p>
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-4">
+                <div className="flex-1 space-y-2 min-w-0">
+                  <p className="font-semibold text-sm sm:text-base text-primary break-words">{fact.question}</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground leading-relaxed break-words">{fact.answer}</p>
                 </div>
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium shrink-0 ${
+                <span className={`text-xs px-2 sm:px-2.5 py-1 rounded-full font-medium shrink-0 ${
                   fact.status === 'verified' ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' :
                   fact.status === 'assumption' ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400' :
                   'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
@@ -201,13 +201,13 @@ const guardRenderer: RenderFunction = (content: any) => {
   const entityId = extractId(content)
 
   return (
-    <div className="guard-renderer space-y-8">
-      <div className="flex items-center gap-3">
-        <div className="w-4 h-4 rounded-full bg-yellow-500 shrink-0" />
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">{guard.name || guard.id}</h2>
+    <div className="guard-renderer space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-yellow-500 shrink-0 mt-1.5 sm:mt-2" />
+        <div className="space-y-1 flex-1 min-w-0">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{guard.name || guard.id}</h2>
           {guard.description && (
-            <p className="text-muted-foreground text-lg">{guard.description}</p>
+            <p className="text-muted-foreground text-base sm:text-lg break-words">{guard.description}</p>
           )}
         </div>
       </div>
@@ -305,17 +305,17 @@ const routeRenderer: RenderFunction = (content: any) => {
   const entityId = extractId(content)
 
   return (
-    <div className="route-renderer space-y-8">
+    <div className="route-renderer space-y-4 sm:space-y-6 md:space-y-8">
       <div className="space-y-2">
-        <h2 className="text-3xl font-bold tracking-tight">{route.title || route.path}</h2>
-        <code className="text-sm bg-muted px-3 py-1.5 rounded-md font-mono">{route.path}</code>
+        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{route.title || route.path}</h2>
+        <code className="text-xs sm:text-sm bg-muted px-2 sm:px-3 py-1 sm:py-1.5 rounded-md font-mono break-all">{route.path}</code>
       </div>
 
       {route.description && (
-        <p className="text-muted-foreground text-lg">{route.description}</p>
+        <p className="text-muted-foreground text-base sm:text-lg">{route.description}</p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
         <Card>
           <CardHeader>
             <CardTitle className="text-lg">Page Settings</CardTitle>
@@ -425,18 +425,18 @@ const projectRenderer: RenderFunction = (content: any) => {
   const entityId = extractId(content)
 
   return (
-    <div className="project-renderer space-y-8">
+    <div className="project-renderer space-y-4 sm:space-y-6 md:space-y-8">
       {(project.name || design?.name) && (
         <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold tracking-tight">{project.name || design?.name}</h2>
-            {project.type && <span className="text-sm bg-muted px-3 py-1 rounded-md font-medium">{project.type}</span>}
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{project.name || design?.name}</h2>
+            {project.type && <span className="text-xs sm:text-sm bg-muted px-2 sm:px-3 py-1 rounded-md font-medium whitespace-nowrap">{project.type}</span>}
           </div>
         </div>
       )}
 
       {(project.description || idea?.description || design?.description) && (
-        <p className="text-muted-foreground text-lg whitespace-pre-line leading-relaxed">
+        <p className="text-muted-foreground text-base sm:text-lg whitespace-pre-line leading-relaxed break-words">
           {project.description || idea?.description || design?.description}
         </p>
       )}
@@ -459,11 +459,11 @@ const projectRenderer: RenderFunction = (content: any) => {
             <CardTitle>Tech Stack</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2 sm:gap-3 text-xs sm:text-sm">
               {Object.entries(stack).map(([key, val]) => (
-                <div key={key} className="flex items-center gap-2">
-                  <span className="font-medium capitalize">{key}:</span>
-                  <span className="text-muted-foreground">{String(val)}</span>
+                <div key={key} className="flex items-center gap-2 break-words">
+                  <span className="font-medium capitalize shrink-0">{key}:</span>
+                  <span className="text-muted-foreground break-words">{String(val)}</span>
                 </div>
               ))}
             </div>
@@ -596,18 +596,18 @@ const entityRenderer: RenderFunction = (content: any) => {
   }
 
   return (
-    <div className="entity-renderer space-y-8">
-      <div className="flex items-center gap-3">
-        <div className="w-4 h-4 rounded-full bg-indigo-500 shrink-0" />
-        <div className="space-y-1">
-          <div className="flex items-center gap-3">
-            <h2 className="text-3xl font-bold tracking-tight">{entity.name || entity.id}</h2>
+    <div className="entity-renderer space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-indigo-500 shrink-0 mt-1.5 sm:mt-2" />
+        <div className="space-y-1 flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{entity.name || entity.id}</h2>
             {entity.table && (
-              <code className="text-sm bg-muted px-3 py-1 rounded-md font-mono">{entity.table}</code>
+              <code className="text-xs sm:text-sm bg-muted px-2 sm:px-3 py-0.5 sm:py-1 rounded-md font-mono whitespace-nowrap">{entity.table}</code>
             )}
           </div>
           {entity.description && (
-            <p className="text-muted-foreground text-lg">{entity.description}</p>
+            <p className="text-muted-foreground text-base sm:text-lg break-words">{entity.description}</p>
           )}
         </div>
       </div>
@@ -618,49 +618,55 @@ const entityRenderer: RenderFunction = (content: any) => {
             <CardTitle>Fields</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-muted border-b">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Name</th>
-                    <th className="text-left px-4 py-3 font-semibold">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold">Constraints</th>
-                    <th className="text-left px-4 py-3 font-semibold">Description</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {fields.map((field: any, i: number) => (
-                    <tr key={i} className={field.primary ? 'bg-yellow-50 dark:bg-yellow-900/10' : 'hover:bg-muted/50'}>
-                      <td className="px-4 py-3 font-mono">
-                        {field.name}
-                        {field.primary && <span className="ml-2 text-yellow-600 dark:text-yellow-400 font-semibold">PK</span>}
-                      </td>
-                      <td className="px-4 py-3">
-                        <span className={`px-2.5 py-1 rounded-md text-xs font-medium ${typeColors[field.type] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
-                          {field.type}
-                        </span>
-                        {field.format && (
-                          <span className="ml-2 text-xs text-muted-foreground">({field.format})</span>
-                        )}
-                        {field.target && (
-                          <span className="ml-2 text-xs text-indigo-600 dark:text-indigo-400">→ {field.target}</span>
-                        )}
-                      </td>
-                      <td className="px-4 py-3">
-                        <div className="flex flex-wrap gap-1.5">
-                          {field.required && <span className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 px-2 py-0.5 rounded text-xs font-medium">required</span>}
-                          {field.unique && <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-2 py-0.5 rounded text-xs font-medium">unique</span>}
-                          {field.hidden && <span className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 px-2 py-0.5 rounded text-xs font-medium">hidden</span>}
-                          {field.auto && <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-2 py-0.5 rounded text-xs font-medium">auto:{field.auto}</span>}
-                          {field.default !== undefined && <span className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 px-2 py-0.5 rounded text-xs font-medium">default:{String(field.default)}</span>}
-                          {field.values && <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 px-2 py-0.5 rounded text-xs font-medium">[{field.values.join(', ')}]</span>}
-                        </div>
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{field.description || '-'}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-border text-xs sm:text-sm">
+                    <thead className="bg-muted border-b">
+                      <tr>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Name</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Type</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold">Constraints</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border bg-background">
+                      {fields.map((field: any, i: number) => (
+                        <tr key={i} className={field.primary ? 'bg-yellow-50 dark:bg-yellow-900/10' : 'hover:bg-muted/50'}>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 font-mono whitespace-nowrap">
+                            {field.name}
+                            {field.primary && <span className="ml-1 sm:ml-2 text-yellow-600 dark:text-yellow-400 font-semibold text-xs">PK</span>}
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3">
+                            <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                              <span className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-md text-xs font-medium whitespace-nowrap ${typeColors[field.type] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
+                                {field.type}
+                              </span>
+                              {field.format && (
+                                <span className="text-xs text-muted-foreground whitespace-nowrap">({field.format})</span>
+                              )}
+                              {field.target && (
+                                <span className="text-xs text-indigo-600 dark:text-indigo-400 whitespace-nowrap">→ {field.target}</span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3">
+                            <div className="flex flex-wrap gap-1 sm:gap-1.5">
+                              {field.required && <span className="bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">required</span>}
+                              {field.unique && <span className="bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">unique</span>}
+                              {field.hidden && <span className="bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">hidden</span>}
+                              {field.auto && <span className="bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">auto:{field.auto}</span>}
+                              {field.default !== undefined && <span className="bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-300 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium whitespace-nowrap">default:{String(field.default)}</span>}
+                              {field.values && <span className="bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400 px-1.5 sm:px-2 py-0.5 rounded text-xs font-medium break-words">[{field.values.join(', ')}]</span>}
+                            </div>
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 text-muted-foreground min-w-[120px]">{field.description || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -707,26 +713,26 @@ const statusRenderer: RenderFunction = (content: any) => {
   const progress = activePhases.length > 0 ? Math.round((completedCount / activePhases.length) * 100) : 0
 
   return (
-    <div className="status-renderer space-y-8">
+    <div className="status-renderer space-y-4 sm:space-y-6 md:space-y-8">
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <div className="space-y-2">
-              <CardTitle className="text-2xl">{status.name || 'Project Status'}</CardTitle>
-              <div className="flex items-center gap-3">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div className="space-y-2 flex-1 min-w-0">
+              <CardTitle className="text-xl sm:text-2xl break-words">{status.name || 'Project Status'}</CardTitle>
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                 {status.profile && (
-                  <span className={`px-3 py-1 rounded-md text-xs font-medium ${profileColors[status.profile] || 'bg-gray-100'}`}>
+                  <span className={`px-2 sm:px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap ${profileColors[status.profile] || 'bg-gray-100'}`}>
                     {status.profile}
                   </span>
                 )}
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground break-words">
                   Current: <strong className="text-foreground">{phaseLabels[status.currentPhase] || status.currentPhase}</strong>
                 </span>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-primary">{progress}%</div>
-              <div className="text-sm text-muted-foreground">{completedCount}/{activePhases.length} phases</div>
+            <div className="text-left sm:text-right shrink-0">
+              <div className="text-3xl sm:text-4xl font-bold text-primary">{progress}%</div>
+              <div className="text-xs sm:text-sm text-muted-foreground">{completedCount}/{activePhases.length} phases</div>
             </div>
           </div>
         </CardHeader>
@@ -841,16 +847,16 @@ const componentRenderer: RenderFunction = (content: any) => {
   return (
     <div className="component-renderer space-y-8">
       <div className="space-y-2">
-        <div className="flex items-center gap-3">
-          <h2 className="text-3xl font-bold tracking-tight">{component.name}</h2>
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{component.name}</h2>
           {component.category && (
-            <span className={`px-3 py-1 rounded-md text-xs font-medium ${categoryColors[component.category] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
+            <span className={`px-2 sm:px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap ${categoryColors[component.category] || 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'}`}>
               {component.category}
             </span>
           )}
         </div>
         {component.description && (
-          <p className="text-muted-foreground text-lg">{component.description}</p>
+          <p className="text-muted-foreground text-base sm:text-lg break-words">{component.description}</p>
         )}
       </div>
 
@@ -860,37 +866,41 @@ const componentRenderer: RenderFunction = (content: any) => {
             <CardTitle>Props</CardTitle>
           </CardHeader>
           <CardContent className="p-0">
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead className="bg-muted border-b">
-                  <tr>
-                    <th className="text-left px-4 py-3 font-semibold">Name</th>
-                    <th className="text-left px-4 py-3 font-semibold">Type</th>
-                    <th className="text-left px-4 py-3 font-semibold">Default</th>
-                    <th className="text-left px-4 py-3 font-semibold">Description</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y">
-                  {props.map((prop: any, i: number) => (
-                    <tr key={i} className="hover:bg-muted/50">
-                      <td className="px-4 py-3 font-mono text-sm">
-                        {prop.name}
-                        {prop.required && <span className="text-red-500 ml-1">*</span>}
-                      </td>
-                      <td className="px-4 py-3">
-                        <code className={`text-xs font-mono ${typeColors[prop.type] || ''}`}>
-                          {prop.type}
-                          {prop.values && `: ${prop.values.join(' | ')}`}
-                        </code>
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {prop.default !== undefined ? String(prop.default) : '-'}
-                      </td>
-                      <td className="px-4 py-3 text-muted-foreground">{prop.description}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-border text-xs sm:text-sm">
+                    <thead className="bg-muted border-b">
+                      <tr>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Name</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Type</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Default</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border bg-background">
+                      {props.map((prop: any, i: number) => (
+                        <tr key={i} className="hover:bg-muted/50">
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 font-mono whitespace-nowrap">
+                            {prop.name}
+                            {prop.required && <span className="text-red-500 ml-1">*</span>}
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3">
+                            <code className={`text-xs font-mono break-words ${typeColors[prop.type] || ''}`}>
+                              {prop.type}
+                              {prop.values && `: ${prop.values.join(' | ')}`}
+                            </code>
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 text-muted-foreground whitespace-nowrap">
+                            {prop.default !== undefined ? String(prop.default) : '-'}
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 text-muted-foreground min-w-[120px]">{prop.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -931,8 +941,8 @@ const componentRenderer: RenderFunction = (content: any) => {
             <CardTitle>Usage</CardTitle>
           </CardHeader>
           <CardContent>
-            <pre className="bg-muted p-4 rounded-lg overflow-auto">
-              <code className="text-sm font-mono">{usage.code}</code>
+            <pre className="bg-muted p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
+              <code className="font-mono break-words whitespace-pre-wrap">{usage.code}</code>
             </pre>
           </CardContent>
         </Card>
@@ -952,13 +962,13 @@ const moduleRenderer: RenderFunction = (content: any) => {
   const entityId = extractId(content)
 
   return (
-    <div className="module-renderer space-y-8">
-      <div className="flex items-center gap-3">
-        <div className="w-4 h-4 rounded-full bg-orange-500 shrink-0" />
-        <div className="space-y-1">
-          <h2 className="text-3xl font-bold tracking-tight">{module.name || module.id}</h2>
+    <div className="module-renderer space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className="w-3 h-3 sm:w-4 sm:h-4 rounded-full bg-orange-500 shrink-0 mt-1.5 sm:mt-2" />
+        <div className="space-y-1 flex-1 min-w-0">
+          <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{module.name || module.id}</h2>
           {module.description && (
-            <p className="text-muted-foreground text-lg">{module.description}</p>
+            <p className="text-muted-foreground text-base sm:text-lg break-words">{module.description}</p>
           )}
         </div>
       </div>

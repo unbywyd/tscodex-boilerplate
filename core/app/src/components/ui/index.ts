@@ -11,3 +11,5 @@ export {
 export { Container } from "./container"
 export type { ContainerProps } from "./container"
 export { Skeleton } from "./skeleton"
+export { Badge, badgeVariants } from "./badge"
+export type { BadgeProps } from "./badge"

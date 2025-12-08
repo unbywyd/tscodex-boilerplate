@@ -19,33 +19,33 @@ function FolderTree({ folder, level = 0 }: FolderTreeProps) {
   const hasContent = folder.files.length > 0 || folder.folders.length > 0
 
   return (
-    <div className={cn('space-y-1', level > 0 && 'ml-4')}>
+    <div className={cn('space-y-1', level > 0 && 'ml-2 sm:ml-4')}>
       {/* Folder header */}
       <button
         onClick={() => setExpanded(!expanded)}
         className={cn(
-          'flex items-center gap-2 w-full px-2 py-1.5 rounded-md text-sm font-medium',
+          'flex items-center gap-2 w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-md text-xs sm:text-sm font-medium',
           'hover:bg-accent hover:text-accent-foreground transition-colors',
           'text-left'
         )}
       >
         {hasContent ? (
           expanded ? (
-            <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground shrink-0" />
           ) : (
-            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+            <ChevronRight className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground shrink-0" />
           )
         ) : (
-          <span className="w-4" />
+          <span className="w-3 sm:w-4" />
         )}
         {expanded ? (
-          <FolderOpen className="h-4 w-4 text-primary" />
+          <FolderOpen className="h-3 w-3 sm:h-4 sm:w-4 text-primary shrink-0" />
         ) : (
-          <Folder className="h-4 w-4 text-muted-foreground" />
+          <Folder className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground shrink-0" />
         )}
-        <span className="capitalize">{folder.name}</span>
+        <span className="capitalize truncate flex-1 min-w-0">{folder.name}</span>
         {folder.files.length > 0 && (
-          <span className="text-xs text-muted-foreground ml-auto">
+          <span className="text-xs text-muted-foreground ml-auto shrink-0">
             {folder.files.length}
           </span>
         )}
@@ -60,17 +60,17 @@ function FolderTree({ folder, level = 0 }: FolderTreeProps) {
               key={file.path}
               to={getRouteFromPath(file.path)}
               className={cn(
-                'flex items-center gap-2 px-2 py-1.5 ml-6 rounded-md text-sm',
+                'flex items-center gap-2 px-2 sm:px-3 py-1.5 sm:py-2 ml-4 sm:ml-6 rounded-md text-xs sm:text-sm',
                 'hover:bg-accent hover:text-accent-foreground transition-colors',
                 'text-muted-foreground hover:text-foreground'
               )}
             >
               {file.type === 'markdown' ? (
-                <FileText className="h-4 w-4" />
+                <FileText className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
               ) : (
-                <Settings className="h-4 w-4" />
+                <Settings className="h-3 w-3 sm:h-4 sm:w-4 shrink-0" />
               )}
-              <span>{file.name.replace(/\.(md|toml)$/, '')}</span>
+              <span className="truncate flex-1 min-w-0">{file.name.replace(/\.(md|toml)$/, '')}</span>
             </Link>
           ))}
 
@@ -143,16 +143,16 @@ export default function DocsIndex() {
   }
 
   return (
-    <Container size="lg" className="py-8 space-y-8">
+    <Container size="lg" className="py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight">Documentation</h1>
-        <p className="text-lg text-muted-foreground">
+        <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">Documentation</h1>
+        <p className="text-base sm:text-lg text-muted-foreground">
           Browse project documentation organized by folder structure
         </p>
       </div>
 
       <Card>
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <FolderTree folder={structure} />
         </CardContent>
       </Card>

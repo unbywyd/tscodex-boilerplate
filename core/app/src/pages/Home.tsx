@@ -142,13 +142,13 @@ export default function HomePage() {
       ) : statusData ? (
         <section className="space-y-4">
           <Card className="overflow-hidden border-primary/20 bg-gradient-to-br from-background to-primary/5">
-            <CardContent className="p-6 space-y-6">
+            <CardContent className="p-4 sm:p-6 space-y-4 sm:space-y-6">
               {/* Header with title and percentage */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
-                    {statusData.status.name || 'Project Status'}
-                    <span className={`px-2.5 py-1 rounded-full text-xs font-semibold ${
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="space-y-1 flex-1 min-w-0">
+                  <h2 className="text-xl sm:text-2xl font-bold tracking-tight flex flex-wrap items-center gap-2">
+                    <span className="break-words">{statusData.status.name || 'Project Status'}</span>
+                    <span className={`px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 ${
                       statusData.status.profile === 'simple' ? 'bg-green-500/20 text-green-600 dark:text-green-400' :
                       statusData.status.profile === 'medium' ? 'bg-blue-500/20 text-blue-600 dark:text-blue-400' :
                       'bg-purple-500/20 text-purple-600 dark:text-purple-400'
@@ -156,10 +156,10 @@ export default function HomePage() {
                       {statusData.status.profile}
                     </span>
                   </h2>
-                  <p className="text-sm text-muted-foreground">Specification workflow progress</p>
+                  <p className="text-xs sm:text-sm text-muted-foreground">Specification workflow progress</p>
                 </div>
-                <div className="text-right">
-                  <div className="text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                <div className="text-left sm:text-right shrink-0">
+                  <div className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                     {(() => {
                       const allPhases = ['assessment', 'discovery', 'design', 'access', 'data', 'schema', 'modules', 'features', 'prototype']
                       const activePhases = allPhases.filter(p => !statusData.phases[p]?.skip)
@@ -172,7 +172,62 @@ export default function HomePage() {
               </div>
 
               {/* Visual Progress Steps */}
-              <div className="relative">
+              {/* Mobile: Vertical layout */}
+              <div className="block sm:hidden space-y-4">
+                {workflowPhases.map((phase, idx) => {
+                  const phaseData = statusData.phases[phase.id]
+                  const isSkipped = phaseData?.skip
+                  const isCurrent = statusData.status.currentPhase === phase.id
+                  const isCompleted = phaseData?.status === 'completed'
+                  const isInProgress = phaseData?.status === 'in_progress'
+
+                  if (isSkipped) return null
+
+                  return (
+                    <div
+                      key={phase.id}
+                      className="flex items-center gap-3 cursor-pointer"
+                      onClick={() => handlePhaseClick(phase.id)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => e.key === 'Enter' && handlePhaseClick(phase.id)}
+                    >
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 transition-all ${
+                          isCompleted
+                            ? 'bg-green-500 text-white shadow-lg shadow-green-500/30'
+                            : isCurrent || isInProgress
+                              ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/30 ring-4 ring-primary/20 animate-pulse'
+                              : 'bg-muted text-muted-foreground border-2 border-muted-foreground/20'
+                        }`}
+                      >
+                        {isCompleted ? (
+                          <CheckCircle2 className="h-5 w-5" />
+                        ) : isCurrent || isInProgress ? (
+                          <Clock className="h-5 w-5" />
+                        ) : (
+                          <span className="text-sm font-medium">{idx + 1}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className={`text-sm font-medium ${
+                          isCompleted ? 'text-green-600 dark:text-green-400' :
+                          isCurrent || isInProgress ? 'text-primary' :
+                          'text-foreground'
+                        }`}>
+                          {phase.label}
+                        </div>
+                        <div className="text-xs text-muted-foreground mt-0.5">
+                          {phase.description}
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+
+              {/* Desktop: Horizontal layout */}
+              <div className="hidden sm:block relative">
                 {/* Background track */}
                 <div className="absolute top-5 left-0 right-0 h-1 bg-muted rounded-full" />
 
@@ -243,7 +298,7 @@ export default function HomePage() {
                           {phase.label}
                         </span>
                         {/* Tooltip on hover */}
-                        <div className="hidden group-hover:block absolute -bottom-8 bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap z-10 border">
+                        <div className="hidden group-hover:block absolute -bottom-8 bg-popover text-popover-foreground text-xs px-2 py-1 rounded shadow-lg whitespace-nowrap z-10 border pointer-events-none">
                           <span className="flex items-center gap-1">
                             {phase.description}
                             <ExternalLink className="h-3 w-3" />
@@ -256,13 +311,16 @@ export default function HomePage() {
               </div>
 
               {/* Current phase indicator */}
-              <div className="flex items-center justify-center gap-2 pt-2">
-                <span className="text-sm text-muted-foreground">Current:</span>
-                <span className="text-sm font-semibold text-primary">
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-center gap-1 sm:gap-2 pt-2">
+                <span className="text-xs sm:text-sm text-muted-foreground">Current:</span>
+                <span className="text-xs sm:text-sm font-semibold text-primary">
                   {workflowPhases.find(p => p.id === statusData.status.currentPhase)?.label || statusData.status.currentPhase}
                 </span>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-xs sm:text-sm text-muted-foreground hidden sm:inline">
                   — {workflowPhases.find(p => p.id === statusData.status.currentPhase)?.description}
+                </span>
+                <span className="text-xs text-muted-foreground sm:hidden block mt-1">
+                  {workflowPhases.find(p => p.id === statusData.status.currentPhase)?.description}
                 </span>
               </div>
             </CardContent>
