@@ -1,0 +1,17 @@
+# Web Application Platform
+# Main customer-facing web application
+
+[platform]
+id = "web-app"
+name = "Web Application"
+type = "web"
+description = "Main customer-facing web application with public and authenticated areas"
+
+[platform.config]
+baseRoute = "/app"
+theme = "default"
+
+[relations]
+routes = ["home", "dashboard", "profile", "settings"]
+roles = ["visitor", "user", "admin"]
+guards = ["public", "authenticated"]

@@ -6,6 +6,7 @@ id = "status"
 name = "Project Status"
 profile = "medium"  # simple | medium | complex
 currentPhase = "assessment"
+multiPlatform = false  # true if 2+ platforms (customer-app, admin-panel, etc.)
 lastUpdated = "2024-01-01"
 
 # Phase 0: Assessment
@@ -17,6 +18,7 @@ description = "Determine project scope and profile"
 typeIdentified = false
 rolesCount = false
 dataComplexity = false
+platformsIdentified = false
 profileSelected = false
 
 # Phase 1: Discovery
@@ -72,6 +74,7 @@ useCasesDefined = false
 routesCreated = false
 pageComponents = false
 compositions = false
+platformsDefined = false  # if multiPlatform = true
 
 # Phase 6: Modules (complex only)
 [phases.modules]

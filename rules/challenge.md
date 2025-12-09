@@ -20,6 +20,7 @@ Questions:
 - How many user roles? (single | 2-3 | many with hierarchy)
 - Data complexity? (simple-crud | relational | complex-hierarchy)
 - External integrations? (none | few-apis | many-services)
+- Multiple platforms? (single | 2-3 apps | many subsystems)
 - Team size? (solo | small | large)
 
 Based on answers, select profile:
@@ -44,6 +45,7 @@ Based on answers, select profile:
 [status]
 profile = "medium"  # selected profile
 currentPhase = "discovery"  # next phase
+multiPlatform = false  # true if 2+ platforms
 
 [phases.assessment]
 status = "completed"
@@ -52,6 +54,7 @@ status = "completed"
 typeIdentified = true
 rolesCount = true
 dataComplexity = true
+platformsIdentified = true
 profileSelected = true
 ```
 
@@ -59,6 +62,11 @@ Also set skip flags based on profile:
 - Simple: `phases.design.skip = true` (if no design needed), `phases.access.skip = true` (if single role)
 - Medium: all skips = false
 - Complex: `phases.modules.skip = false`
+
+**Multi-platform projects:** If user has 2+ platforms (e.g., customer app + admin panel):
+- Set `status.multiPlatform = true`
+- Create platform files in Phase 5 (Features)
+- Prototype will include platform selector/hub page
 
 ---
 
@@ -238,8 +246,11 @@ Output:
 - `layers/use-cases/*.toml`
 - `layers/routes/*.toml`
 - `layers/components/*.toml`
+- `layers/platforms/*.toml` (if multiple platforms)
 
 **Rule:** Every route must have a page component. Every page component must declare its composition (what UI components it uses).
+
+**Platforms:** If project has multiple platforms (e.g., customer app + admin panel), create platform files that group related routes, roles, and guards.
 
 **Status Update:**
 ```toml

@@ -212,6 +212,71 @@ import { UserForm } from '@prototype/components/forms/UserForm'
 import { useAuthStore } from '@prototype/stores/auth.store'
 ```
 
+## Multi-Platform Routing
+
+For projects with multiple platforms (customer app, admin panel, etc.):
+
+```
+/prototype              → PlatformHub (platform selector)
+/prototype/customer     → Customer app routes
+/prototype/admin        → Admin panel routes
+/prototype/vendor       → Vendor portal routes
+```
+
+### Platform Hub Component
+
+```tsx
+// pages/PlatformHub.tsx
+import { Link } from 'react-router-dom'
+import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Monitor, Shield, Store } from 'lucide-react'
+
+const platforms = [
+  { id: 'customer', name: 'Customer App', icon: Monitor, path: '/prototype/customer' },
+  { id: 'admin', name: 'Admin Panel', icon: Shield, path: '/prototype/admin' },
+  { id: 'vendor', name: 'Vendor Portal', icon: Store, path: '/prototype/vendor' },
+]
+
+export function PlatformHub() {
+  return (
+    <div className="container py-8">
+      <h1 className="text-3xl font-bold mb-6">Select Platform</h1>
+      <div className="grid gap-4 md:grid-cols-3">
+        {platforms.map(({ id, name, icon: Icon, path }) => (
+          <Link key={id} to={path}>
+            <Card className="hover:border-primary transition-colors">
+              <CardHeader>
+                <Icon className="h-8 w-8 mb-2 text-primary" />
+                <CardTitle>{name}</CardTitle>
+                <CardDescription>Open {name.toLowerCase()}</CardDescription>
+              </CardHeader>
+            </Card>
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+```
+
+### Route Config per Platform
+
+```tsx
+// config/routes.ts
+export const platformRoutes = {
+  customer: [
+    { path: 'home', element: <CustomerHome /> },
+    { path: 'catalog', element: <Catalog /> },
+    { path: 'cart', element: <Cart /> },
+  ],
+  admin: [
+    { path: 'dashboard', element: <AdminDashboard /> },
+    { path: 'users', element: <UsersPage /> },
+    { path: 'settings', element: <Settings /> },
+  ],
+}
+```
+
 ## File Structure
 
 ```
@@ -226,5 +291,9 @@ src/prototype/
 ├── components/
 │   ├── ui/               # Reusable UI
 │   └── forms/            # Form components
-└── pages/                # Page components
+└── pages/
+    ├── PlatformHub.tsx   # Platform selector (if multi-platform)
+    ├── customer/         # Customer app pages
+    ├── admin/            # Admin panel pages
+    └── vendor/           # Vendor portal pages
 ```

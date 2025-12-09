@@ -21,6 +21,7 @@ function extractId(content: any, fileName?: string): string | null {
   if (content.entity?.id) return content.entity.id
   if (content.module?.id) return content.module.id
   if (content.event?.id) return content.event.id
+  if (content.platform?.id) return content.platform.id
   if (fileName) return fileName.replace(/\.toml$/, '')
   return null
 }
@@ -422,6 +423,7 @@ const projectRenderer: RenderFunction = (content: any) => {
   const target = content.target
   const value = content.value
   const design = content.design
+  const features = content.features?.list || []
   const relations = content.relations || {}
   const entityId = extractId(content)
 
@@ -440,6 +442,24 @@ const projectRenderer: RenderFunction = (content: any) => {
         <p className="text-muted-foreground text-base sm:text-lg whitespace-pre-line leading-relaxed break-words">
           {project.description || idea?.description || design?.description}
         </p>
+      )}
+
+      {features.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Features</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ul className="space-y-2">
+              {features.map((f: string, i: number) => (
+                <li key={i} className="flex items-start gap-2">
+                  <span className="text-primary mt-1">✓</span>
+                  <span className="text-sm">{f}</span>
+                </li>
+              ))}
+            </ul>
+          </CardContent>
+        </Card>
       )}
 
       {owner && (
@@ -1162,6 +1182,75 @@ ${payload.map((p: any) => `  ${p.name}: ${p.type === 'string' ? "'...'" : p.type
   )
 }
 
+// Platform renderer - displays platform/subsystem documentation
+const platformRenderer: RenderFunction = (content: any) => {
+  const platform = content.platform || {}
+  const config = platform.config || {}
+  const relations = content.relations || {}
+  const entityId = extractId(content)
+
+  const typeColors: Record<string, string> = {
+    web: 'bg-blue-500',
+    mobile: 'bg-green-500',
+    api: 'bg-purple-500',
+    desktop: 'bg-orange-500',
+  }
+
+  const typeLabels: Record<string, string> = {
+    web: 'Web Application',
+    mobile: 'Mobile App',
+    api: 'API Service',
+    desktop: 'Desktop App',
+  }
+
+  const dotColor = typeColors[platform.type] || 'bg-slate-500'
+
+  return (
+    <div className="platform-renderer space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shrink-0 mt-1.5 sm:mt-2 ${dotColor}`} />
+        <div className="space-y-1 flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{platform.name || platform.id}</h2>
+            {platform.type && (
+              <span className={`px-2 sm:px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap text-white ${dotColor}`}>
+                {typeLabels[platform.type] || platform.type}
+              </span>
+            )}
+          </div>
+          {platform.description && (
+            <p className="text-muted-foreground text-base sm:text-lg break-words">{platform.description}</p>
+          )}
+        </div>
+      </div>
+
+      {(config.baseRoute || config.theme) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Configuration</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {config.baseRoute && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Base Route:</span>
+                <code className="text-sm bg-muted px-2 py-0.5 rounded-md font-mono">{config.baseRoute}</code>
+              </div>
+            )}
+            {config.theme && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Theme:</span>
+                <span className="text-sm text-muted-foreground">{config.theme}</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {entityId && <RelationsSection entityId={entityId} relations={relations} />}
+    </div>
+  )
+}
+
 // Render configuration - updated for layers/* structure
 export const renderConfig: RenderConfig = {
   // Status file at root of spec
@@ -1199,6 +1288,9 @@ export const renderConfig: RenderConfig = {
   },
   'layers/events': {
     toml: eventRenderer,
+  },
+  'layers/platforms': {
+    toml: platformRenderer,
   },
 
   // Docs - Markdown files

@@ -224,6 +224,38 @@ dispatchEvent('auth.login')
 dispatchEvent('cart.add', { productId: '123', quantity: 1 })
 ```
 
+## platforms/
+Project subsystems/applications. Use when project has multiple user-facing applications.
+
+```toml
+[platform]
+id = "customer-app"
+name = "Customer Application"
+type = "web"  # web | mobile | api | desktop
+description = "Main customer-facing application"
+
+[platform.config]
+baseRoute = "/customer"  # route namespace in prototype
+theme = "light"  # optional theme override
+
+[relations]
+routes = ["home", "catalog", "cart", "checkout"]
+roles = ["customer", "guest"]
+guards = ["public", "authenticated"]
+```
+
+Platform types:
+- `web` - Web application (SPA, SSR)
+- `mobile` - Mobile app (React Native, Flutter)
+- `api` - API service (REST, GraphQL)
+- `desktop` - Desktop app (Electron, Tauri)
+
+Example platforms:
+- customer-app - Main user application
+- admin-panel - Admin dashboard
+- vendor-portal - Supplier/vendor interface
+- mobile-app - Native mobile application
+
 ## modules/ (complex only)
 Domain decomposition for large projects.
 
