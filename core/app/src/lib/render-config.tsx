@@ -4,7 +4,7 @@
 import { lazy, Suspense, createElement } from 'react'
 import RelationsSection from '../components/renderers/RelationsSection'
 import { componentRegistry } from '@prototype/components/ui'
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '../components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card'
 
 export type RenderFunction = (content: any, metadata?: any) => React.ReactNode
 

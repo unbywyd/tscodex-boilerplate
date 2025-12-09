@@ -26,6 +26,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "@hookform/resolvers": "^3.9.1",
     "@iarna/toml": "^3.0.0",
     "@radix-ui/react-dialog": "^1.1.4",
@@ -66,6 +67,7 @@
     "tailwindcss": "^3.4.17",
     "tsx": "^4.19.2",
     "typescript": "^5.7.2",
-    "vite": "^6.0.7"
+    "vite": "^6.0.7",
+    "vite-plugin-pwa": "^1.2.0"
   }
 }

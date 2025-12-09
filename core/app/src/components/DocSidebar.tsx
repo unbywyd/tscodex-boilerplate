@@ -9,7 +9,7 @@ interface DocSidebarProps {
   currentPath: string
 }
 
-export default function DocSidebar({ files, currentPath }: DocSidebarProps) {
+export default function DocSidebar({ files }: DocSidebarProps) {
   const location = useLocation()
 
   return (

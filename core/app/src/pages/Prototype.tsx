@@ -1,4 +1,4 @@
-import { Link, Routes, Route, useLocation } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { Users, Package, LayoutDashboard, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles } from 'lucide-react'
 import { Container } from '@/components/ui/container'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
