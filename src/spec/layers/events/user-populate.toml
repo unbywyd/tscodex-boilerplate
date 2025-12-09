@@ -1,0 +1,17 @@
+[event]
+id = "user.populate"
+name = "Users Populated"
+description = "Fake users were generated for testing"
+category = "auth"
+
+[trigger]
+action = "click"
+element = "Populate button (+20)"
+
+[[payload]]
+name = "count"
+type = "number"
+description = "Number of users generated"
+
+[relations]
+components = ["users-page"]

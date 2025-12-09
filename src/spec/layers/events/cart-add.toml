@@ -1,0 +1,28 @@
+[event]
+id = "cart.add"
+name = "Add to Cart"
+description = "Product added to shopping cart"
+category = "commerce"
+
+[trigger]
+action = "click"
+element = "Add to Cart button"
+
+[[payload]]
+name = "productId"
+type = "string"
+description = "Product identifier"
+
+[[payload]]
+name = "quantity"
+type = "number"
+description = "Quantity added"
+
+[[payload]]
+name = "price"
+type = "number"
+description = "Product price at time of adding"
+
+[relations]
+entities = ["product"]
+routes = ["route_product_detail"]

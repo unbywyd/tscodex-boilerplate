@@ -165,4 +165,48 @@ export async function loadRelationsMap(): Promise<any> {
   }
 }
 
+// Event metadata for registration
+export interface EventDocMeta {
+  id: string
+  name: string
+  description: string
+  category?: string
+}
 
+// Load events from docs tree and register them
+export async function loadEvents(): Promise<EventDocMeta[]> {
+  try {
+    const tree = await loadDocsTree()
+    const events: EventDocMeta[] = []
+
+    // Find events folder in layers
+    const layersFolder = tree.folders.find(f => f.name === 'layers')
+    if (!layersFolder) return events
+
+    const eventsFolder = layersFolder.folders.find(f => f.name === 'events')
+    if (!eventsFolder) return events
+
+    // Load each event file
+    for (const file of eventsFolder.files) {
+      if (file.type === 'toml') {
+        try {
+          const doc = await loadDocFile(`layers/events/${file.name}`)
+          if (doc.content?.event) {
+            events.push({
+              id: doc.content.event.id,
+              name: doc.content.event.name,
+              description: doc.content.event.description || '',
+              category: doc.content.event.category,
+            })
+          }
+        } catch {
+          // Skip files that fail to load
+        }
+      }
+    }
+
+    return events
+  } catch {
+    return []
+  }
+}

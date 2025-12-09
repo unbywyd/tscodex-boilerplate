@@ -1,0 +1,27 @@
+[event]
+id = "form.submit"
+name = "Form Submit"
+description = "User submitted a form"
+category = "form"
+
+[trigger]
+action = "submit"
+element = "Form element"
+
+[[payload]]
+name = "formId"
+type = "string"
+description = "Form identifier"
+
+[[payload]]
+name = "formName"
+type = "string"
+description = "Human-readable form name"
+
+[[payload]]
+name = "success"
+type = "boolean"
+description = "Whether submission was successful"
+
+[relations]
+components = ["form"]

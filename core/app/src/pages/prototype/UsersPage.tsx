@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Users, Calendar, Shield, User, Trash2, Plus, RefreshCw, Wand2 } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import { useRepo } from '@/hooks/useRepo'
+import { dispatchEvent } from '@/lib/events'
 
 interface UserEntity {
   id: string
@@ -41,15 +42,18 @@ export default function UsersPage() {
   const handleAddUser = () => {
     // Add single fake user using populate
     populate(1)
+    dispatchEvent('user.create', { userId: 'new', userName: 'Generated User' })
   }
 
   const handlePopulate = () => {
     // Add 20 fake users
     populate(20)
+    dispatchEvent('user.populate', { count: 20 })
   }
 
   const handleDeleteUser = (id: string) => {
     deleteUser(id)
+    dispatchEvent('user.delete', { userId: id })
   }
 
   const handleResetData = async () => {

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import HomePage from './pages/Home';
@@ -6,10 +7,23 @@ import DocViewer from './pages/DocViewer';
 import PrototypePage from './pages/Prototype';
 import PrismaSchemaPage from './pages/PrismaSchema';
 import AboutPage from './pages/About';
+import EventToast from './components/EventToast';
+import { loadEvents } from './lib/docs-loader';
+import { registerEvents } from './lib/events';
 
 function App() {
+  // Load and register events from docs on mount
+  useEffect(() => {
+    loadEvents().then(events => {
+      if (events.length > 0) {
+        registerEvents(events)
+      }
+    })
+  }, [])
+
   return (
     <BrowserRouter>
+      <EventToast />
       <Layout>
         <Routes>
           <Route path="/" element={<HomePage />} />

@@ -179,6 +179,51 @@ uses = ["stats-card", "activity-list", "quick-actions"]
 components = ["dashboard-page"]
 ```
 
+## events/
+Application events with visual feedback. Events show toast notifications with name, description, and link to docs.
+
+```toml
+[event]
+id = "cart.add"
+name = "Add to Cart"
+description = "Product added to shopping cart"
+category = "commerce"
+
+[trigger]
+action = "click"
+element = "Add to Cart button"
+
+[[payload]]
+name = "productId"
+type = "string"
+description = "Product identifier"
+
+[[payload]]
+name = "quantity"
+type = "number"
+description = "Quantity added"
+
+[relations]
+components = ["cart-button", "product-card"]
+```
+
+Categories:
+- `auth` - authentication events (login, logout, register)
+- `commerce` - shopping events (add to cart, checkout, order)
+- `form` - form events (submit, validate, reset)
+- `navigation` - routing events (page view, redirect)
+
+**Usage in code:**
+```typescript
+import { dispatchEvent } from '@/lib/events'
+
+// Simple event
+dispatchEvent('auth.login')
+
+// Event with payload
+dispatchEvent('cart.add', { productId: '123', quantity: 1 })
+```
+
 ## modules/ (complex only)
 Domain decomposition for large projects.
 

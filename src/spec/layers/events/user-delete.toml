@@ -1,0 +1,17 @@
+[event]
+id = "user.delete"
+name = "User Deleted"
+description = "User was removed from the system"
+category = "auth"
+
+[trigger]
+action = "click"
+element = "Delete button on user card"
+
+[[payload]]
+name = "userId"
+type = "string"
+description = "Deleted user ID"
+
+[relations]
+components = ["users-page"]

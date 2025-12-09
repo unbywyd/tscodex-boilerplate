@@ -135,27 +135,66 @@ export function EntityForm({ onSubmit }: { onSubmit: (data: FormData) => void })
 import { useRepo } from '@/hooks/useRepo'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { dispatchEvent } from '@/lib/events'
 import type { Entity } from '@prototype/factories'
 
 export function EntityPage() {
-  const { data: items, populate, deleteAll } = useRepo<Entity>('entities')
+  const { data: items, populate, deleteAll, delete: remove } = useRepo<Entity>('entities')
+
+  const handlePopulate = () => {
+    populate(10)
+    dispatchEvent('entity.populate', { count: 10 })
+  }
+
+  const handleDelete = (id: string) => {
+    remove(id)
+    dispatchEvent('entity.delete', { entityId: id })
+  }
 
   return (
     <div className="space-y-6">
       <header className="flex justify-between">
         <h1 className="text-2xl font-bold">Entities</h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => populate(10)}>+10</Button>
+          <Button variant="outline" onClick={handlePopulate}>+10</Button>
           <Button variant="destructive" onClick={deleteAll}>Clear</Button>
         </div>
       </header>
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((item) => <Card key={item.id}>{item.name}</Card>)}
+        {items.map((item) => (
+          <Card key={item.id} onClick={() => handleDelete(item.id)}>
+            {item.name}
+          </Card>
+        ))}
       </div>
     </div>
   )
 }
 ```
+
+## Event Dispatch
+
+Dispatch events to show toast notifications with links to documentation.
+
+```typescript
+import { dispatchEvent } from '@/lib/events'
+
+// Simple event
+dispatchEvent('auth.login')
+
+// Event with payload
+dispatchEvent('cart.add', { productId: '123', quantity: 1 })
+
+// User actions
+dispatchEvent('user.create', { userId: 'abc', userName: 'John' })
+dispatchEvent('user.delete', { userId: 'abc' })
+```
+
+Events are defined in `src/spec/layers/events/*.toml`. Toast shows:
+- Event name and truncated description
+- Category color indicator (auth=blue, commerce=green, form=purple)
+- "Details" link to documentation
+- Auto-dismiss after 5 seconds
 
 ## Imports
 
@@ -165,6 +204,7 @@ import { useRepo } from '@/hooks/useRepo'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { registerFactory, faker } from '@/lib/data-factory'
+import { dispatchEvent } from '@/lib/events'
 
 // Prototype (your code) - modify freely
 import { UserEntity } from '@prototype/factories'

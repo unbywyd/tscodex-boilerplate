@@ -20,6 +20,7 @@ function extractId(content: any, fileName?: string): string | null {
   if (content.component?.id) return content.component.id
   if (content.entity?.id) return content.entity.id
   if (content.module?.id) return content.module.id
+  if (content.event?.id) return content.event.id
   if (fileName) return fileName.replace(/\.toml$/, '')
   return null
 }
@@ -1049,6 +1050,118 @@ const moduleRenderer: RenderFunction = (content: any) => {
   )
 }
 
+// Event renderer - displays event documentation with trigger info and payload
+const eventRenderer: RenderFunction = (content: any) => {
+  const event = content.event || {}
+  const trigger = content.trigger || {}
+  const payload = content.payload || []
+  const relations = content.relations || {}
+  const entityId = extractId(content)
+
+  const categoryColors: Record<string, string> = {
+    auth: 'bg-blue-500',
+    commerce: 'bg-green-500',
+    form: 'bg-purple-500',
+    navigation: 'bg-orange-500',
+    default: 'bg-slate-500',
+  }
+
+  const dotColor = categoryColors[event.category] || categoryColors.default
+
+  return (
+    <div className="event-renderer space-y-4 sm:space-y-6 md:space-y-8">
+      <div className="flex items-start gap-2 sm:gap-3">
+        <div className={`w-3 h-3 sm:w-4 sm:h-4 rounded-full shrink-0 mt-1.5 sm:mt-2 ${dotColor}`} />
+        <div className="space-y-1 flex-1 min-w-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight break-words">{event.name || event.id}</h2>
+            <code className="text-xs sm:text-sm bg-muted px-2 sm:px-3 py-0.5 sm:py-1 rounded-md font-mono whitespace-nowrap">{event.id}</code>
+          </div>
+          {event.description && (
+            <p className="text-muted-foreground text-base sm:text-lg break-words">{event.description}</p>
+          )}
+        </div>
+      </div>
+
+      {(trigger.action || trigger.element) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Trigger</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {trigger.action && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Action:</span>
+                <span className="text-sm bg-primary/10 text-primary px-2 py-0.5 rounded-md">{trigger.action}</span>
+              </div>
+            )}
+            {trigger.element && (
+              <div className="flex items-center gap-2">
+                <span className="font-medium">Element:</span>
+                <span className="text-sm text-muted-foreground">{trigger.element}</span>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {payload.length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Payload</CardTitle>
+          </CardHeader>
+          <CardContent className="p-0">
+            <div className="overflow-x-auto -mx-4 sm:mx-0">
+              <div className="inline-block min-w-full align-middle">
+                <div className="overflow-hidden">
+                  <table className="min-w-full divide-y divide-border text-xs sm:text-sm">
+                    <thead className="bg-muted border-b">
+                      <tr>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Name</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold whitespace-nowrap">Type</th>
+                        <th className="text-left px-3 sm:px-4 py-2 sm:py-3 font-semibold">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-border bg-background">
+                      {payload.map((field: any, i: number) => (
+                        <tr key={i} className="hover:bg-muted/50">
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 font-mono whitespace-nowrap">{field.name}</td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3">
+                            <span className="text-xs bg-muted px-2 py-0.5 rounded font-mono">{field.type}</span>
+                          </td>
+                          <td className="px-3 sm:px-4 py-2 sm:py-3 text-muted-foreground min-w-[120px]">{field.description || '-'}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Usage Example</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <pre className="bg-muted p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
+            <code className="font-mono break-words whitespace-pre-wrap">{`import { dispatchEvent } from '@/lib/events'
+
+// Dispatch the event
+dispatchEvent('${event.id}'${payload.length > 0 ? `, {
+${payload.map((p: any) => `  ${p.name}: ${p.type === 'string' ? "'...'" : p.type === 'boolean' ? 'true' : p.type === 'number' ? '0' : "'...'"}`).join(',\n')}
+}` : ''})`}</code>
+          </pre>
+        </CardContent>
+      </Card>
+
+      {entityId && <RelationsSection entityId={entityId} relations={relations} />}
+    </div>
+  )
+}
+
 // Render configuration - updated for layers/* structure
 export const renderConfig: RenderConfig = {
   // Status file at root of spec
@@ -1083,6 +1196,9 @@ export const renderConfig: RenderConfig = {
   },
   'layers/modules': {
     toml: moduleRenderer,
+  },
+  'layers/events': {
+    toml: eventRenderer,
   },
 
   // Docs - Markdown files

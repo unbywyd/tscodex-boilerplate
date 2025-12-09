@@ -1,0 +1,22 @@
+[event]
+id = "user.create"
+name = "User Created"
+description = "New user was created in the system"
+category = "auth"
+
+[trigger]
+action = "click"
+element = "Add User button"
+
+[[payload]]
+name = "userId"
+type = "string"
+description = "Created user ID"
+
+[[payload]]
+name = "userName"
+type = "string"
+description = "Created user name"
+
+[relations]
+components = ["users-page"]
