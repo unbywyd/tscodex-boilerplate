@@ -72,6 +72,11 @@ role = "user"
 [relations]
 guards = ["authenticated"]
 roles = ["user"]
+
+[implementation]
+component = "DashboardPage"           # Component name
+file = "pages/DashboardPage.tsx"      # File path in prototype
+status = "planned"                    # planned | in-progress | implemented
 ```
 
 ## use-cases/

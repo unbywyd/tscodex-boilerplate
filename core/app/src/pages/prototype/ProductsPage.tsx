@@ -44,7 +44,7 @@ export default function ProductsPage() {
   }
 
   return (
-    <Container size="lg" className="py-4 sm:py-6 md:py-8">
+    <Container size="lg" className="py-4 sm:py-6 md:py-8" data-screen="products-page">
       <div className="space-y-6">
         {/* Header */}
         <div className="space-y-2">
@@ -88,6 +88,8 @@ export default function ProductsPage() {
                 className={`relative hover:shadow-lg transition-all ${
                   product.isPopular ? 'border-primary shadow-md' : ''
                 }`}
+                data-component="product-card"
+                data-entity-id={product.id}
               >
                 {product.isPopular && (
                   <div className="absolute -top-2.5 sm:-top-3 left-1/2 -translate-x-1/2">

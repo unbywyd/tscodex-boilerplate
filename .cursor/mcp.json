@@ -1,13 +1,5 @@
 {
   "mcpServers": {
-    "mcp-images": {
-      "url": "http://127.0.0.1:4040/mcp/bc15e57a-3da8-4964-a0a4-a24240d0670a/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
-      "id": "bc15e57a-3da8-4964-a0a4-a24240d0670a"
-    },
-    "mcp-server-example": {
-      "url": "http://127.0.0.1:4040/mcp/af4b5c1e-6f31-4524-ab8d-4faa82b92c7e/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
-      "id": "af4b5c1e-6f31-4524-ab8d-4faa82b92c7e"
-    },
     "MCP Tools": {
       "url": "http://127.0.0.1:4040/mcp-tools",
       "id": "mcp-tools"
@@ -15,6 +7,10 @@
     "mcp-screenshot": {
       "url": "http://127.0.0.1:4040/mcp/b5779b26-9fcb-49a0-910e-5149f81a632e/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
       "id": "b5779b26-9fcb-49a0-910e-5149f81a632e"
+    },
+    "mcp-images": {
+      "url": "http://127.0.0.1:4040/mcp/bc15e57a-3da8-4964-a0a4-a24240d0670a/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
+      "id": "bc15e57a-3da8-4964-a0a4-a24240d0670a"
     }
   }
 }

@@ -76,7 +76,7 @@ export default function UsersPage() {
   }
 
   return (
-    <Container size="lg" className="py-4 sm:py-6 md:py-8">
+    <Container size="lg" className="py-4 sm:py-6 md:py-8" data-screen="users-page">
       <div className="space-y-6">
         {/* Header */}
         <div className="space-y-3 sm:space-y-4">
@@ -174,7 +174,7 @@ export default function UsersPage() {
         ) : (
           <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {users.map((user) => (
-              <Card key={user.id} className="hover:shadow-lg transition-shadow group">
+              <Card key={user.id} className="hover:shadow-lg transition-shadow group" data-component="user-card" data-entity-id={user.id}>
                 <CardHeader className="pb-3">
                   <div className="flex items-start gap-2 sm:gap-3">
                     <img

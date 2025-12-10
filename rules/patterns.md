@@ -196,6 +196,54 @@ Events are defined in `src/spec/layers/events/*.toml`. Toast shows:
 - "Details" link to documentation
 - Auto-dismiss after 5 seconds
 
+## Data Attributes for Screenshots
+
+Add `data-*` attributes to enable MCP screenshot server to capture screens and components.
+
+### Screen-level (Pages)
+
+```tsx
+// Add to page container
+<Container data-screen="users-page">
+  {/* page content */}
+</Container>
+```
+
+**Convention:** `data-screen` value should match the route/component id from TOML spec.
+
+### Component-level
+
+```tsx
+// For entity cards/items
+<Card data-component="user-card" data-entity-id={user.id}>
+  {/* card content */}
+</Card>
+
+// For UI components
+<Button data-component="submit-button">Submit</Button>
+```
+
+### Attributes Reference
+
+| Attribute | Purpose | Example |
+|-----------|---------|---------|
+| `data-screen` | Page/screen identifier | `"users-page"`, `"dashboard"` |
+| `data-component` | Component type | `"user-card"`, `"product-card"` |
+| `data-entity-id` | Entity instance ID | `{user.id}`, `{product.id}` |
+
+### MCP Server Usage
+
+```javascript
+// Capture full screen
+await screenshot('[data-screen="users-page"]')
+
+// Capture specific component
+await screenshot('[data-component="user-card"]')
+
+// Capture entity instance
+await screenshot('[data-entity-id="user-123"]')
+```
+
 ## Imports
 
 ```typescript
@@ -281,6 +329,8 @@ export const platformRoutes = {
 
 ```
 src/prototype/
+├── assets/
+│   └── images/           # Static images (logos, icons, photos)
 ├── factories/index.ts    # Entity types + factories
 ├── mocks/*.json          # Initial mock data
 ├── schemas/*.schema.ts   # Zod validation
@@ -297,3 +347,19 @@ src/prototype/
     ├── admin/            # Admin panel pages
     └── vendor/           # Vendor portal pages
 ```
+
+## Static Assets
+
+Put images and other static files in `src/prototype/assets/`:
+
+```tsx
+// Import and use in components
+import logo from '@prototype/assets/images/logo.png'
+import heroImage from '@prototype/assets/images/hero.jpg'
+
+function Header() {
+  return <img src={logo} alt="Logo" />
+}
+```
+
+For public files (favicon, og-image), use `core/app/public/`.

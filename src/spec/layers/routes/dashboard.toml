@@ -35,3 +35,8 @@ endpoints = [
   "GET /api/metrics",
   "GET /api/activity"
 ]
+
+[implementation]
+component = "DashboardPage"
+file = "pages/DashboardPage.tsx"
+status = "planned"

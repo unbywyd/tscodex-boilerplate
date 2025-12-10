@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Users, Package, LayoutDashboard, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles } from 'lucide-react'
+import { Users, Package, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen } from 'lucide-react'
 import { Container } from '@/components/ui/container'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -8,13 +8,6 @@ import ProductsPage from './prototype/ProductsPage'
 
 function PrototypeHome() {
   const pages = [
-    {
-      path: '/prototype/dashboard',
-      icon: LayoutDashboard,
-      title: 'Dashboard',
-      description: 'Overview with key metrics and stats',
-      badge: 'Interactive',
-    },
     {
       path: '/prototype/users',
       icon: Users,
@@ -28,6 +21,13 @@ function PrototypeHome() {
       title: 'Products',
       description: 'Product catalog with pricing',
       badge: 'Catalog',
+    },
+    {
+      path: '/docs',
+      icon: BookOpen,
+      title: 'Documentation',
+      description: 'Project specs and layer definitions',
+      badge: 'Specs',
     },
   ]
 

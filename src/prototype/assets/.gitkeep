@@ -1,0 +1,6 @@
+# Prototype assets folder
+# Put images, fonts, and other static files here
+#
+# Usage in components:
+# import logo from '@prototype/assets/images/logo.png'
+# <img src={logo} alt="Logo" />
