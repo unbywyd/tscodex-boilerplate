@@ -1,0 +1,21 @@
+[component]
+id = "user-card"
+name = "User Card"
+description = "Displays user information in a card format with avatar, name, email, role badge and actions"
+
+[component.props]
+user = "UserEntity"
+onDelete = "(id: string) => void"
+
+[component.features]
+list = [
+  "User avatar display",
+  "Name and email",
+  "Role badge (admin/user)",
+  "Join date",
+  "Delete action on hover"
+]
+
+[component.styling]
+hover = "shadow-lg transition"
+responsive = true

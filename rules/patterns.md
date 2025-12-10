@@ -196,46 +196,63 @@ Events are defined in `src/spec/layers/events/*.toml`. Toast shows:
 - "Details" link to documentation
 - Auto-dismiss after 5 seconds
 
-## Data Attributes for Screenshots
+## Doc Component
 
-Add `data-*` attributes to enable MCP screenshot server to capture screens and components.
+Use `Doc` wrapper to link prototype elements to documentation.
+Provided by the core engine — cannot be broken by prototype code.
 
-### Screen-level (Pages)
-
-```tsx
-// Add to page container
-<Container data-screen="users-page">
-  {/* page content */}
-</Container>
-```
-
-**Convention:** `data-screen` value should match the route/component id from TOML spec.
-
-### Component-level
+### Usage
 
 ```tsx
-// For entity cards/items
-<Card data-component="user-card" data-entity-id={user.id}>
-  {/* card content */}
-</Card>
+import { Doc } from '@/components/ui'
 
-// For UI components
-<Button data-component="submit-button">Submit</Button>
+// Page/screen
+<Doc of="routes.users">
+  <Container>...</Container>
+</Doc>
+
+// Component with entity
+<Doc of="components.user-card" entityId={user.id}>
+  <Card>...</Card>
+</Doc>
 ```
 
-### Attributes Reference
+### Props
 
-| Attribute | Purpose | Example |
-|-----------|---------|---------|
-| `data-screen` | Page/screen identifier | `"users-page"`, `"dashboard"` |
-| `data-component` | Component type | `"user-card"`, `"product-card"` |
-| `data-entity-id` | Entity instance ID | `{user.id}`, `{product.id}` |
+| Prop | Type | Description |
+|------|------|-------------|
+| `of` | `string` | Doc reference: `"layer.id"` (e.g., `"routes.users"`, `"components.user-card"`) |
+| `entityId` | `string \| number` | Optional entity instance ID |
+| `className` | `string` | Additional CSS classes |
+
+### How it works
+
+1. **Parses** `of` prop → extracts layer and id
+2. **Checks** if documentation exists in `/docs/layers/{layer}/{id}`
+3. **Sets** `data-screen` (for routes/pages) or `data-component` (for others)
+4. **Shows "?"** button only if doc exists
+
+### Behavior
+
+- **Hover** — "?" button appears in corner
+- **Click "?"** — popover shows doc path with copy button
+- **Click "Open docs"** — navigates to documentation
+- **No doc?** — no "?" button, just renders children
+
+### Supported layers
+
+| Layer | Data attribute | Example |
+|-------|----------------|---------|
+| `routes` | `data-screen` | `<Doc of="routes.users">` |
+| `pages` | `data-screen` | `<Doc of="pages.dashboard">` |
+| `components` | `data-component` | `<Doc of="components.user-card">` |
+| `entities` | `data-component` | `<Doc of="entities.user">` |
 
 ### MCP Server Usage
 
 ```javascript
 // Capture full screen
-await screenshot('[data-screen="users-page"]')
+await screenshot('[data-screen="users"]')
 
 // Capture specific component
 await screenshot('[data-component="user-card"]')
@@ -350,10 +367,18 @@ src/prototype/
 
 ## Static Assets
 
-Put images and other static files in `src/prototype/assets/`:
+### Two ways to use assets:
+
+| Method | Location | URL | When to use |
+|--------|----------|-----|-------------|
+| **Import** | `src/prototype/assets/` | bundled | Small files, component-specific (logos, icons) |
+| **Uploads** | `uploads/` | `/uploads/*` | Large files, external access (uploads, MCP screenshots) |
+
+### 1. Import (bundled)
+
+Files are processed by Vite, optimized, and included in the bundle.
 
 ```tsx
-// Import and use in components
 import logo from '@prototype/assets/images/logo.png'
 import heroImage from '@prototype/assets/images/hero.jpg'
 
@@ -362,4 +387,47 @@ function Header() {
 }
 ```
 
-For public files (favicon, og-image), use `core/app/public/`.
+**Best for:** logos, icons, small images used in specific components.
+
+### 2. Uploads folder (URL access)
+
+Files in `uploads/` are served at `/uploads/*` URL. Not bundled, accessible externally.
+
+```
+uploads/docs/images/screen.png  →  /uploads/docs/images/screen.png
+uploads/media/video.mp4         →  /uploads/media/video.mp4
+```
+
+```tsx
+// Direct URL reference
+<img src="/uploads/docs/images/screen.png" alt="Screenshot" />
+
+// Dynamic path
+<img src={`/uploads/media/${filename}`} alt={filename} />
+```
+
+**Best for:**
+- Files uploaded via curl/MCP
+- Screenshots for documentation
+- Large media files
+- Files that need external URL access
+
+### Uploads folder structure
+
+```
+uploads/
+├── docs/
+│   └── images/       # MCP screenshot captures
+└── media/            # Large media files
+```
+
+### When to use which
+
+| Scenario | Use |
+|----------|-----|
+| Component logo/icon | Import from `@prototype/assets/` |
+| User avatar placeholder | Import |
+| MCP screenshot upload | `uploads/docs/images/` |
+| curl file upload | `uploads/` |
+| Video/large image | `uploads/media/` |
+| Need URL for external API | `uploads/` |

@@ -7,8 +7,8 @@
       "name": "status.toml",
       "type": "toml",
       "metadata": {
-        "size": 2341,
-        "modified": "2025-12-08T19:51:21.812Z"
+        "size": 2501,
+        "modified": "2025-12-09T09:40:35.393Z"
       }
     }
   ],
@@ -105,6 +105,24 @@
                 "size": 1571,
                 "modified": "2025-12-08T19:43:31.983Z"
               }
+            },
+            {
+              "path": "layers/components/product-card.toml",
+              "name": "product-card.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 499,
+                "modified": "2025-12-10T20:41:22.116Z"
+              }
+            },
+            {
+              "path": "layers/components/user-card.toml",
+              "name": "user-card.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 448,
+                "modified": "2025-12-10T20:41:20.092Z"
+              }
             }
           ],
           "folders": []
@@ -138,6 +156,67 @@
               "metadata": {
                 "size": 1234,
                 "modified": "2025-12-08T19:24:28.425Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/events",
+          "name": "events",
+          "files": [
+            {
+              "path": "layers/events/cart-add.toml",
+              "name": "cart-add.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 496,
+                "modified": "2025-12-09T07:05:26.779Z"
+              }
+            },
+            {
+              "path": "layers/events/form-submit.toml",
+              "name": "form-submit.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 455,
+                "modified": "2025-12-09T07:05:34.211Z"
+              }
+            },
+            {
+              "path": "layers/events/user-create.toml",
+              "name": "user-create.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 373,
+                "modified": "2025-12-09T07:11:26.358Z"
+              }
+            },
+            {
+              "path": "layers/events/user-delete.toml",
+              "name": "user-delete.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 301,
+                "modified": "2025-12-09T07:11:34.761Z"
+              }
+            },
+            {
+              "path": "layers/events/user-login.toml",
+              "name": "user-login.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 439,
+                "modified": "2025-12-09T07:05:19.191Z"
+              }
+            },
+            {
+              "path": "layers/events/user-populate.toml",
+              "name": "user-populate.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 315,
+                "modified": "2025-12-09T07:11:42.110Z"
               }
             }
           ],
@@ -209,6 +288,56 @@
           "folders": []
         },
         {
+          "path": "layers/pages",
+          "name": "pages",
+          "files": [
+            {
+              "path": "layers/pages/products.toml",
+              "name": "products.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 441,
+                "modified": "2025-12-10T20:42:11.625Z"
+              }
+            },
+            {
+              "path": "layers/pages/users.toml",
+              "name": "users.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 438,
+                "modified": "2025-12-10T20:42:09.551Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
+          "path": "layers/platforms",
+          "name": "platforms",
+          "files": [
+            {
+              "path": "layers/platforms/admin-panel.toml",
+              "name": "admin-panel.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 414,
+                "modified": "2025-12-09T09:34:20.870Z"
+              }
+            },
+            {
+              "path": "layers/platforms/web-app.toml",
+              "name": "web-app.toml",
+              "type": "toml",
+              "metadata": {
+                "size": 417,
+                "modified": "2025-12-09T09:34:14.249Z"
+              }
+            }
+          ],
+          "folders": []
+        },
+        {
           "path": "layers/project",
           "name": "project",
           "files": [
@@ -217,8 +346,8 @@
               "name": "about.toml",
               "type": "toml",
               "metadata": {
-                "size": 302,
-                "modified": "2025-12-08T18:39:07.828Z"
+                "size": 764,
+                "modified": "2025-12-09T09:39:04.525Z"
               }
             },
             {
@@ -294,8 +423,8 @@
               "name": "dashboard.toml",
               "type": "toml",
               "metadata": {
-                "size": 610,
-                "modified": "2025-12-08T19:09:32.382Z"
+                "size": 708,
+                "modified": "2025-12-10T17:46:09.447Z"
               }
             },
             {

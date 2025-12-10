@@ -41,10 +41,15 @@
         "GET /api/metrics",
         "GET /api/activity"
       ]
+    },
+    "implementation": {
+      "component": "DashboardPage",
+      "file": "pages/DashboardPage.tsx",
+      "status": "planned"
     }
   },
   "metadata": {
-    "size": 610,
-    "modified": "2025-12-08T19:09:32.382Z"
+    "size": 708,
+    "modified": "2025-12-10T17:46:09.447Z"
   }
 }

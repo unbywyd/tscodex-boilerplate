@@ -1,0 +1,38 @@
+{
+  "path": "layers/events/user-create.toml",
+  "name": "user-create.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "user.create",
+      "name": "User Created",
+      "description": "New user was created in the system",
+      "category": "auth"
+    },
+    "trigger": {
+      "action": "click",
+      "element": "Add User button"
+    },
+    "payload": [
+      {
+        "name": "userId",
+        "type": "string",
+        "description": "Created user ID"
+      },
+      {
+        "name": "userName",
+        "type": "string",
+        "description": "Created user name"
+      }
+    ],
+    "relations": {
+      "components": [
+        "users-page"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 373,
+    "modified": "2025-12-09T07:11:26.358Z"
+  }
+}

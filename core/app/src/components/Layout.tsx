@@ -2,7 +2,6 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText, Box, Home, Sparkles, Database, Menu, X, Info } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { DocsLink } from './DocsLink'
 import { Container } from './ui/container'
 
 interface LayoutProps {
@@ -118,8 +117,6 @@ export default function Layout({ children }: LayoutProps) {
         </Container>
       </footer>
 
-      {/* Floating docs link */}
-      <DocsLink />
     </div>
   )
 }

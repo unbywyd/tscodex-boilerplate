@@ -8,6 +8,7 @@ import PrototypePage from './pages/Prototype';
 import PrismaSchemaPage from './pages/PrismaSchema';
 import AboutPage from './pages/About';
 import EventToast from './components/EventToast';
+import { DocProvider } from './components/documented';
 import { loadEvents } from './lib/docs-loader';
 import { registerEvents } from './lib/events';
 
@@ -23,17 +24,19 @@ function App() {
 
   return (
     <BrowserRouter>
-      <EventToast />
-      <Layout>
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/docs" element={<DocsIndex />} />
-          <Route path="/docs/*" element={<DocViewer />} />
-          <Route path="/prototype/*" element={<PrototypePage />} />
-          <Route path="/schema" element={<PrismaSchemaPage />} />
-          <Route path="/about" element={<AboutPage />} />
-        </Routes>
-      </Layout>
+      <DocProvider>
+        <EventToast />
+        <Layout>
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/docs" element={<DocsIndex />} />
+            <Route path="/docs/*" element={<DocViewer />} />
+            <Route path="/prototype/*" element={<PrototypePage />} />
+            <Route path="/schema" element={<PrismaSchemaPage />} />
+            <Route path="/about" element={<AboutPage />} />
+          </Routes>
+        </Layout>
+      </DocProvider>
     </BrowserRouter>
   );
 }

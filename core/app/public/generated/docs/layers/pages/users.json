@@ -1,0 +1,32 @@
+{
+  "path": "layers/pages/users.toml",
+  "name": "users.toml",
+  "type": "toml",
+  "content": {
+    "page": {
+      "id": "users",
+      "name": "Users Page",
+      "description": "Page for managing system users with CRUD operations",
+      "path": "/prototype/users",
+      "features": {
+        "list": [
+          "View all users in card grid",
+          "Add new users",
+          "Delete individual users",
+          "Bulk delete all users",
+          "Generate fake users for testing",
+          "Reset to mock data"
+        ]
+      }
+    },
+    "implementation": {
+      "component": "UsersPage",
+      "file": "src/prototype/pages/UsersPage.tsx",
+      "status": "implemented"
+    }
+  },
+  "metadata": {
+    "size": 438,
+    "modified": "2025-12-10T20:42:09.551Z"
+  }
+}

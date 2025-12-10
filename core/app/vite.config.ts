@@ -1,18 +1,44 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { viteStaticCopy } from 'vite-plugin-static-copy'
 import { fileURLToPath } from 'url'
 import path from 'path'
+import fs from 'fs'
 import { viteApiPlugin } from './vite-api-plugin'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
+const uploadsDir = path.resolve(rootDir, 'uploads')
 
 export default defineConfig({
   root: __dirname,
   plugins: [
     react(),
     viteApiPlugin(),
+    viteStaticCopy({
+      targets: [
+        {
+          src: '../../uploads/*',
+          dest: 'uploads',
+        },
+      ],
+    }),
+    // Serve /uploads/ in dev mode
+    {
+      name: 'serve-uploads',
+      configureServer(server) {
+        server.middlewares.use('/uploads', (req, res, next) => {
+          const filePath = path.join(uploadsDir, req.url || '')
+          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            fs.createReadStream(filePath).pipe(res)
+          } else {
+            next()
+          }
+        })
+      },
+    },
     VitePWA({
       registerType: 'autoUpdate',
       includeAssets: ['favicons/**/*', 'og-image.png', 'twitter-image.png'],

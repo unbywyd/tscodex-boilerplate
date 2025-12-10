@@ -20,6 +20,16 @@
       "folder": "components",
       "title": "Input"
     },
+    "product-card": {
+      "path": "layers/components/product-card.toml",
+      "folder": "components",
+      "title": "Product Card"
+    },
+    "user-card": {
+      "path": "layers/components/user-card.toml",
+      "folder": "components",
+      "title": "User Card"
+    },
     "category": {
       "path": "layers/entities/category.toml",
       "folder": "entities",
@@ -34,6 +44,30 @@
       "path": "layers/roles/user.toml",
       "folder": "roles",
       "title": "User"
+    },
+    "cart-add": {
+      "path": "layers/events/cart-add.toml",
+      "folder": "events"
+    },
+    "form-submit": {
+      "path": "layers/events/form-submit.toml",
+      "folder": "events"
+    },
+    "user-create": {
+      "path": "layers/events/user-create.toml",
+      "folder": "events"
+    },
+    "user-delete": {
+      "path": "layers/events/user-delete.toml",
+      "folder": "events"
+    },
+    "user-login": {
+      "path": "layers/events/user-login.toml",
+      "folder": "events"
+    },
+    "user-populate": {
+      "path": "layers/events/user-populate.toml",
+      "folder": "events"
     },
     "admin-only": {
       "path": "layers/guards/admin.toml",
@@ -59,6 +93,22 @@
       "path": "layers/knowledge/auth.toml",
       "folder": "knowledge",
       "title": "Authentication & Authorization"
+    },
+    "products": {
+      "path": "layers/pages/products.toml",
+      "folder": "pages"
+    },
+    "users": {
+      "path": "layers/pages/users.toml",
+      "folder": "pages"
+    },
+    "admin-panel": {
+      "path": "layers/platforms/admin-panel.toml",
+      "folder": "platforms"
+    },
+    "web-app": {
+      "path": "layers/platforms/web-app.toml",
+      "folder": "platforms"
     },
     "mvp-generator": {
       "path": "layers/project/about.toml",
@@ -113,12 +163,22 @@
       "badge",
       "button",
       "card",
-      "input"
+      "input",
+      "product-card",
+      "user-card"
     ],
     "entities": [
       "category",
       "product",
       "user"
+    ],
+    "events": [
+      "cart-add",
+      "form-submit",
+      "user-create",
+      "user-delete",
+      "user-login",
+      "user-populate"
     ],
     "guards": [
       "admin-only",
@@ -130,6 +190,14 @@
       "auth"
     ],
     "modules": [],
+    "pages": [
+      "products",
+      "users"
+    ],
+    "platforms": [
+      "admin-panel",
+      "web-app"
+    ],
     "project": [
       "mvp-generator",
       "business",
@@ -157,25 +225,73 @@
     ],
     "user": [
       "user",
+      "user-login",
+      "web-app",
       "route_dashboard",
       "uc_view_documentation",
       "uc_view_prototype"
     ],
     "admin": [
-      "user"
+      "user",
+      "admin-panel",
+      "web-app"
     ],
-    "authenticated": [
-      "route_dashboard"
+    "product": [
+      "cart-add"
     ],
-    "public": [
-      "route_prototype_home",
-      "uc_view_documentation",
-      "uc_view_prototype"
+    "route_product_detail": [
+      "cart-add"
+    ],
+    "form": [
+      "form-submit"
+    ],
+    "users-page": [
+      "user-create",
+      "user-delete",
+      "user-populate"
+    ],
+    "uc_login": [
+      "user-login"
+    ],
+    "guest": [
+      "user-login"
+    ],
+    "admin-dashboard": [
+      "admin-panel"
+    ],
+    "admin-users": [
+      "admin-panel"
+    ],
+    "admin-settings": [
+      "admin-panel"
+    ],
+    "home": [
+      "web-app"
+    ],
+    "dashboard": [
+      "web-app"
+    ],
+    "profile": [
+      "web-app"
+    ],
+    "settings": [
+      "web-app"
     ],
     "visitor": [
+      "web-app",
       "route_prototype_home",
       "uc_view_documentation",
       "uc_view_prototype"
+    ],
+    "public": [
+      "web-app",
+      "route_prototype_home",
+      "uc_view_documentation",
+      "uc_view_prototype"
+    ],
+    "authenticated": [
+      "web-app",
+      "route_dashboard"
     ]
   },
   "relations": {
@@ -193,6 +309,75 @@
       "roles": [
         "user",
         "admin"
+      ]
+    },
+    "cart-add": {
+      "entities": [
+        "product"
+      ],
+      "routes": [
+        "route_product_detail"
+      ]
+    },
+    "form-submit": {
+      "components": [
+        "form"
+      ]
+    },
+    "user-create": {
+      "components": [
+        "users-page"
+      ]
+    },
+    "user-delete": {
+      "components": [
+        "users-page"
+      ]
+    },
+    "user-login": {
+      "entities": [
+        "user"
+      ],
+      "useCases": [
+        "uc_login"
+      ],
+      "guards": [
+        "guest"
+      ]
+    },
+    "user-populate": {
+      "components": [
+        "users-page"
+      ]
+    },
+    "admin-panel": {
+      "routes": [
+        "admin-dashboard",
+        "admin-users",
+        "admin-settings"
+      ],
+      "roles": [
+        "admin"
+      ],
+      "guards": [
+        "admin"
+      ]
+    },
+    "web-app": {
+      "routes": [
+        "home",
+        "dashboard",
+        "profile",
+        "settings"
+      ],
+      "roles": [
+        "visitor",
+        "user",
+        "admin"
+      ],
+      "guards": [
+        "public",
+        "authenticated"
       ]
     },
     "route_dashboard": {

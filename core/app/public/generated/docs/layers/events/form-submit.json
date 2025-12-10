@@ -1,0 +1,43 @@
+{
+  "path": "layers/events/form-submit.toml",
+  "name": "form-submit.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "form.submit",
+      "name": "Form Submit",
+      "description": "User submitted a form",
+      "category": "form"
+    },
+    "trigger": {
+      "action": "submit",
+      "element": "Form element"
+    },
+    "payload": [
+      {
+        "name": "formId",
+        "type": "string",
+        "description": "Form identifier"
+      },
+      {
+        "name": "formName",
+        "type": "string",
+        "description": "Human-readable form name"
+      },
+      {
+        "name": "success",
+        "type": "boolean",
+        "description": "Whether submission was successful"
+      }
+    ],
+    "relations": {
+      "components": [
+        "form"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 455,
+    "modified": "2025-12-09T07:05:34.211Z"
+  }
+}

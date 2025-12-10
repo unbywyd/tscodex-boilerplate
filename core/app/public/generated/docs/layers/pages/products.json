@@ -1,0 +1,31 @@
+{
+  "path": "layers/pages/products.toml",
+  "name": "products.toml",
+  "type": "toml",
+  "content": {
+    "page": {
+      "id": "products",
+      "name": "Products Page",
+      "description": "Browse product catalog with pricing plans",
+      "path": "/prototype/products",
+      "features": {
+        "list": [
+          "Display products in responsive grid",
+          "Show pricing with currency formatting",
+          "Highlight popular products",
+          "List product features",
+          "Select plan action"
+        ]
+      }
+    },
+    "implementation": {
+      "component": "ProductsPage",
+      "file": "src/prototype/pages/ProductsPage.tsx",
+      "status": "implemented"
+    }
+  },
+  "metadata": {
+    "size": 441,
+    "modified": "2025-12-10T20:42:11.625Z"
+  }
+}

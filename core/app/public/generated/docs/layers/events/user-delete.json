@@ -1,0 +1,33 @@
+{
+  "path": "layers/events/user-delete.toml",
+  "name": "user-delete.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "user.delete",
+      "name": "User Deleted",
+      "description": "User was removed from the system",
+      "category": "auth"
+    },
+    "trigger": {
+      "action": "click",
+      "element": "Delete button on user card"
+    },
+    "payload": [
+      {
+        "name": "userId",
+        "type": "string",
+        "description": "Deleted user ID"
+      }
+    ],
+    "relations": {
+      "components": [
+        "users-page"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 301,
+    "modified": "2025-12-09T07:11:34.761Z"
+  }
+}

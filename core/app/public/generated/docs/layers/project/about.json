@@ -9,13 +9,24 @@
       "type": "application",
       "description": "File-driven documentation portal and MVP prototype system.\nAll project knowledge lives in Markdown and TOML files.\n"
     },
+    "features": {
+      "list": [
+        "Adaptive workflow (Simple/Medium/Complex profiles)",
+        "Structured layers: entities, roles, guards, routes, use-cases, components",
+        "Multi-platform support (web-app, admin-panel, mobile, API)",
+        "Event system with visual feedback and toast notifications",
+        "Auto-generated documentation from TOML specs",
+        "Working React prototype with mock data and localStorage persistence",
+        "Prisma schema generation from entity definitions"
+      ]
+    },
     "owner": {
       "name": "MVP Generator Team",
       "email": "team@mvp-generator.dev"
     }
   },
   "metadata": {
-    "size": 302,
-    "modified": "2025-12-08T18:39:07.828Z"
+    "size": 764,
+    "modified": "2025-12-09T09:39:04.525Z"
   }
 }

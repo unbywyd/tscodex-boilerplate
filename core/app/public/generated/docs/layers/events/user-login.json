@@ -1,0 +1,44 @@
+{
+  "path": "layers/events/user-login.toml",
+  "name": "user-login.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "auth.login",
+      "name": "User Login",
+      "description": "User successfully authenticated with credentials",
+      "category": "auth"
+    },
+    "trigger": {
+      "action": "submit",
+      "element": "Login form"
+    },
+    "payload": [
+      {
+        "name": "email",
+        "type": "string",
+        "description": "User email address"
+      },
+      {
+        "name": "method",
+        "type": "string",
+        "description": "Authentication method (email, oauth, etc)"
+      }
+    ],
+    "relations": {
+      "entities": [
+        "user"
+      ],
+      "useCases": [
+        "uc_login"
+      ],
+      "guards": [
+        "guest"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 439,
+    "modified": "2025-12-09T07:05:19.191Z"
+  }
+}

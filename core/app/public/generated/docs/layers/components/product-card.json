@@ -1,0 +1,34 @@
+{
+  "path": "layers/components/product-card.toml",
+  "name": "product-card.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "product-card",
+      "name": "Product Card",
+      "description": "Displays product/pricing plan with features list and selection button",
+      "props": {
+        "product": "Product",
+        "onSelect": "(id: number) => void"
+      },
+      "features": {
+        "list": [
+          "Product name and description",
+          "Price with currency formatting",
+          "Features checklist",
+          "Popular badge indicator",
+          "Select plan button"
+        ]
+      },
+      "styling": {
+        "hover": "shadow-lg transition",
+        "popular": "border-primary shadow-md",
+        "responsive": true
+      }
+    }
+  },
+  "metadata": {
+    "size": 499,
+    "modified": "2025-12-10T20:41:22.116Z"
+  }
+}

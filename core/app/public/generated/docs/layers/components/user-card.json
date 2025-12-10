@@ -1,0 +1,33 @@
+{
+  "path": "layers/components/user-card.toml",
+  "name": "user-card.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "user-card",
+      "name": "User Card",
+      "description": "Displays user information in a card format with avatar, name, email, role badge and actions",
+      "props": {
+        "user": "UserEntity",
+        "onDelete": "(id: string) => void"
+      },
+      "features": {
+        "list": [
+          "User avatar display",
+          "Name and email",
+          "Role badge (admin/user)",
+          "Join date",
+          "Delete action on hover"
+        ]
+      },
+      "styling": {
+        "hover": "shadow-lg transition",
+        "responsive": true
+      }
+    }
+  },
+  "metadata": {
+    "size": 448,
+    "modified": "2025-12-10T20:41:20.092Z"
+  }
+}

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Container } from '@/components/ui/container'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui'
+import { Badge, Doc } from '@/components/ui'
 import { Button } from '@/components/ui/button'
 import { Package, Check, Star, DollarSign } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -44,9 +44,11 @@ export default function ProductsPage() {
   }
 
   return (
-    <Container size="lg" className="py-4 sm:py-6 md:py-8" data-screen="products-page">
-      <div className="space-y-6">
-        {/* Header */}
+    <>
+      <Doc of="pages.products" floating position="bottom-right" />
+      <Container size="lg" className="py-4 sm:py-6 md:py-8">
+        <div className="space-y-6">
+          {/* Header */}
         <div className="space-y-2">
           <div className="flex items-center gap-2 sm:gap-3">
             <div className="rounded-lg bg-primary/10 p-1.5 sm:p-2">
@@ -83,15 +85,13 @@ export default function ProductsPage() {
         ) : (
           <div className="grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
             {products.map((product) => (
-              <Card
-                key={product.id}
-                className={`relative hover:shadow-lg transition-all ${
-                  product.isPopular ? 'border-primary shadow-md' : ''
-                }`}
-                data-component="product-card"
-                data-entity-id={product.id}
-              >
-                {product.isPopular && (
+              <Doc key={product.id} of="components.product-card" entityId={product.id}>
+                <Card
+                  className={`relative hover:shadow-lg transition-all ${
+                    product.isPopular ? 'border-primary shadow-md' : ''
+                  }`}
+                >
+                  {product.isPopular && (
                   <div className="absolute -top-2.5 sm:-top-3 left-1/2 -translate-x-1/2">
                     <Badge className="bg-primary text-primary-foreground text-xs">
                       <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 mr-1" />
@@ -129,11 +129,13 @@ export default function ProductsPage() {
                     Select Plan
                   </Button>
                 </CardContent>
-              </Card>
+                </Card>
+              </Doc>
             ))}
           </div>
         )}
-      </div>
-    </Container>
+        </div>
+      </Container>
+    </>
   )
 }

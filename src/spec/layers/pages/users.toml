@@ -1,0 +1,20 @@
+[page]
+id = "users"
+name = "Users Page"
+description = "Page for managing system users with CRUD operations"
+path = "/prototype/users"
+
+[page.features]
+list = [
+  "View all users in card grid",
+  "Add new users",
+  "Delete individual users",
+  "Bulk delete all users",
+  "Generate fake users for testing",
+  "Reset to mock data"
+]
+
+[implementation]
+component = "UsersPage"
+file = "src/prototype/pages/UsersPage.tsx"
+status = "implemented"

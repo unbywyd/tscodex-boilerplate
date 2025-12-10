@@ -1,0 +1,34 @@
+{
+  "path": "layers/platforms/admin-panel.toml",
+  "name": "admin-panel.toml",
+  "type": "toml",
+  "content": {
+    "platform": {
+      "id": "admin-panel",
+      "name": "Admin Panel",
+      "type": "web",
+      "description": "Administrative dashboard for system management, user administration, and content moderation",
+      "config": {
+        "baseRoute": "/admin",
+        "theme": "dark"
+      }
+    },
+    "relations": {
+      "routes": [
+        "admin-dashboard",
+        "admin-users",
+        "admin-settings"
+      ],
+      "roles": [
+        "admin"
+      ],
+      "guards": [
+        "admin"
+      ]
+    }
+  },
+  "metadata": {
+    "size": 414,
+    "modified": "2025-12-09T09:34:20.870Z"
+  }
+}

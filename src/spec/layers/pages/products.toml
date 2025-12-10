@@ -1,0 +1,19 @@
+[page]
+id = "products"
+name = "Products Page"
+description = "Browse product catalog with pricing plans"
+path = "/prototype/products"
+
+[page.features]
+list = [
+  "Display products in responsive grid",
+  "Show pricing with currency formatting",
+  "Highlight popular products",
+  "List product features",
+  "Select plan action"
+]
+
+[implementation]
+component = "ProductsPage"
+file = "src/prototype/pages/ProductsPage.tsx"
+status = "implemented"
