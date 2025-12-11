@@ -4,6 +4,10 @@
       "url": "http://127.0.0.1:4040/mcp-tools",
       "id": "mcp-tools"
     },
+    "mcp-pdf": {
+      "url": "http://127.0.0.1:4040/mcp/5cb5017a-6c98-4f58-830a-b30bb8e6cc93/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
+      "id": "5cb5017a-6c98-4f58-830a-b30bb8e6cc93"
+    },
     "mcp-images": {
       "url": "http://127.0.0.1:4040/mcp/bc15e57a-3da8-4964-a0a4-a24240d0670a/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
       "id": "bc15e57a-3da8-4964-a0a4-a24240d0670a"
@@ -11,10 +15,6 @@
     "mcp-screenshot": {
       "url": "http://127.0.0.1:4040/mcp/b5779b26-9fcb-49a0-910e-5149f81a632e/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
       "id": "b5779b26-9fcb-49a0-910e-5149f81a632e"
-    },
-    "mcp-pdf": {
-      "url": "http://127.0.0.1:4040/mcp/5cb5017a-6c98-4f58-830a-b30bb8e6cc93/28f75780-f9ed-4e4b-a2c0-6e8fc41f698c",
-      "id": "5cb5017a-6c98-4f58-830a-b30bb8e6cc93"
     }
   }
 }
