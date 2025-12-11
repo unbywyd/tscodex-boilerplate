@@ -123,6 +123,16 @@ async function generateDocs() {
         const outputDirPath = path.dirname(outputPath)
         await fs.mkdir(outputDirPath, { recursive: true })
 
+        // For TOML files, also save raw content
+        let rawContent: string | undefined
+        if (file.type === 'toml') {
+          try {
+            rawContent = await fs.readFile(filePath, 'utf-8')
+          } catch (error) {
+            console.error(`Error reading raw TOML ${filePath}:`, error)
+          }
+        }
+
         await fs.writeFile(
           outputPath,
           JSON.stringify({
@@ -130,6 +140,7 @@ async function generateDocs() {
             name: file.name,
             type: file.type,
             content,
+            rawContent, // Include raw TOML content for syntax highlighting
             metadata: file.metadata,
           }, null, 2)
         )
@@ -421,9 +432,170 @@ async function generateRelationsMap(): Promise<RelationsMap> {
   return relationsMap
 }
 
+// Generate unified manifest for LLM/RAG
+async function generateManifest(relationsMap: RelationsMap) {
+  console.log('📋 Generating manifest...')
+
+  const manifest: any = {
+    version: '1.0.0',
+    generated: new Date().toISOString(),
+    project: null,
+    layers: {
+      entities: [],
+      components: [],
+      routes: [],
+      pages: [],
+      useCases: [],
+      roles: [],
+      guards: [],
+      events: [],
+      platforms: [],
+      knowledge: [],
+      modules: [],
+    },
+    docs: [],
+    relations: {
+      byId: relationsMap.byId,
+      graph: relationsMap.relations,
+    },
+  }
+
+  const layersDir = path.join(specDir, 'layers')
+
+  // Recursively find all TOML files in a directory
+  async function findTomlFiles(dir: string, basePath: string = ''): Promise<{ filePath: string; relativePath: string }[]> {
+    const results: { filePath: string; relativePath: string }[] = []
+    try {
+      const entries = await fs.readdir(dir, { withFileTypes: true })
+      for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name)
+        const relPath = basePath ? `${basePath}/${entry.name}` : entry.name
+        if (entry.isDirectory()) {
+          results.push(...await findTomlFiles(fullPath, relPath))
+        } else if (entry.isFile() && entry.name.endsWith('.toml')) {
+          results.push({ filePath: fullPath, relativePath: relPath })
+        }
+      }
+    } catch (error: any) {
+      if (error.code !== 'ENOENT') throw error
+    }
+    return results
+  }
+
+  // Process each layer folder
+  for (const [layerName, layerArray] of Object.entries(manifest.layers) as [string, any[]][]) {
+    const folderName = layerName === 'useCases' ? 'use-cases' : layerName
+    const folderPath = path.join(layersDir, folderName)
+
+    try {
+      const tomlFiles = await findTomlFiles(folderPath)
+
+      for (const { filePath, relativePath } of tomlFiles) {
+        const content = await readTomlFile(filePath)
+        if (!content) continue
+
+        // Flatten the content - extract from wrapper (entity., component., etc.)
+        const wrapperKey = Object.keys(content).find(k =>
+          ['entity', 'component', 'route', 'page', 'useCase', 'role', 'guard', 'event', 'platform', 'topic', 'module', 'project'].includes(k)
+        )
+
+        let item: any
+        if (wrapperKey) {
+          item = { ...content[wrapperKey] }
+          // Include additional sections (fields, relations, etc.)
+          for (const [key, value] of Object.entries(content)) {
+            if (key !== wrapperKey && key !== 'relations') {
+              item[key] = value
+            }
+          }
+        } else {
+          item = { ...content }
+          delete item.relations
+        }
+
+        // Ensure id exists
+        if (!item.id) {
+          const fileName = relativePath.split('/').pop() || relativePath
+          item.id = fileName.replace('.toml', '')
+        }
+
+        // Add metadata with full relative path
+        item._meta = {
+          path: `layers/${folderName}/${relativePath}`,
+        }
+
+        // Special handling for project layer
+        const fileName = relativePath.split('/').pop()
+        if (folderName === 'project' && fileName === 'about.toml') {
+          manifest.project = item
+        } else {
+          layerArray.push(item)
+        }
+      }
+    } catch (error: any) {
+      if (error.code !== 'ENOENT') {
+        console.error(`Error processing ${folderName}:`, error)
+      }
+    }
+  }
+
+  // Process markdown docs
+  const docsDir = path.join(specDir, 'docs')
+  async function processDocsFolder(dirPath: string, basePath: string = '') {
+    try {
+      const entries = await fs.readdir(dirPath, { withFileTypes: true })
+
+      for (const entry of entries) {
+        const fullPath = path.join(dirPath, entry.name)
+        const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name
+
+        if (entry.isDirectory()) {
+          await processDocsFolder(fullPath, relativePath)
+        } else if (entry.isFile() && entry.name.endsWith('.md')) {
+          const content = await fs.readFile(fullPath, 'utf-8')
+          const id = relativePath.replace(/\.md$/, '').replace(/\//g, '-')
+
+          // Extract title from first heading
+          const titleMatch = content.match(/^#\s+(.+)$/m)
+          const title = titleMatch ? titleMatch[1] : entry.name.replace('.md', '')
+
+          manifest.docs.push({
+            id,
+            title,
+            content,
+            _meta: {
+              path: `docs/${relativePath}`,
+            },
+          })
+        }
+      }
+    } catch (error: any) {
+      if (error.code !== 'ENOENT') {
+        console.error(`Error processing docs:`, error)
+      }
+    }
+  }
+
+  await processDocsFolder(docsDir)
+
+  // Write manifest
+  await fs.writeFile(
+    path.join(outputDir, 'manifest.json'),
+    JSON.stringify(manifest, null, 2)
+  )
+
+  // Stats
+  const layerCounts = Object.entries(manifest.layers)
+    .filter(([_, arr]) => (arr as any[]).length > 0)
+    .map(([name, arr]) => `${name}: ${(arr as any[]).length}`)
+    .join(', ')
+
+  console.log(`  ✓ manifest.json (${layerCounts}, docs: ${manifest.docs.length})`)
+}
+
 // Main build function
 async function build() {
-  console.log('\n🚀 MVP Generator Build\n')
+  console.log('\n🚀 LLM Boilerplate Build\n')
   console.log(`Root: ${rootDir}`)
   console.log(`Spec: ${specDir}`)
   console.log(`Mocks: ${mocksDir}`)
@@ -449,6 +621,9 @@ async function build() {
     JSON.stringify(relationsMap, null, 2)
   )
   console.log('  ✓ relations-map.json')
+
+  // Generate manifest for LLM/RAG
+  await generateManifest(relationsMap)
 
   console.log('\n✅ Build complete!\n')
 }

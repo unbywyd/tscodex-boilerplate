@@ -25,10 +25,25 @@
         "popular": "border-primary shadow-md",
         "responsive": true
       }
+    },
+    "relations": {
+      "entities": [
+        "product"
+      ],
+      "pages": [
+        "products"
+      ]
+    },
+    "implementation": {
+      "component": "ProductCard",
+      "file": "core/app/src/pages/prototype/ProductsPage.tsx",
+      "preview": "/prototype/products",
+      "status": "implemented"
     }
   },
+  "rawContent": "[component]\nid = \"product-card\"\nname = \"Product Card\"\ndescription = \"Displays product/pricing plan with features list and selection button\"\n\n[component.props]\nproduct = \"Product\"\nonSelect = \"(id: number) => void\"\n\n[component.features]\nlist = [\n  \"Product name and description\",\n  \"Price with currency formatting\",\n  \"Features checklist\",\n  \"Popular badge indicator\",\n  \"Select plan button\"\n]\n\n[component.styling]\nhover = \"shadow-lg transition\"\npopular = \"border-primary shadow-md\"\nresponsive = true\n\n[relations]\nentities = [\"product\"]\npages = [\"products\"]\n\n[implementation]\ncomponent = \"ProductCard\"\nfile = \"core/app/src/pages/prototype/ProductsPage.tsx\"\npreview = \"/prototype/products\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 499,
-    "modified": "2025-12-10T20:41:22.116Z"
+    "size": 710,
+    "modified": "2025-12-11T08:13:00.669Z"
   }
 }

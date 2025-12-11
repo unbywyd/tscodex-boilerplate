@@ -56,6 +56,7 @@
       }
     ]
   },
+  "rawContent": "# Architecture Knowledge Base\n\n[topic]\nid = \"architecture\"\nname = \"Project Architecture\"\ndescription = \"Facts about project structure and patterns\"\n\n[[facts]]\nquestion = \"What is the project structure?\"\nanswer = \"core/ contains engine (app, builder, dev-server), src/ contains content (spec, prototype). Rules/ in root for LLM instructions.\"\ntags = [\"architecture\", \"structure\"]\nstatus = \"verified\"\n\n[[facts]]\nquestion = \"How does the build process work?\"\nanswer = \"Builder reads TOML/MD from src/spec/, converts to JSON, outputs to public/generated/. Vite then builds the React app.\"\ntags = [\"architecture\", \"build\"]\nstatus = \"verified\"\n\n[[facts]]\nquestion = \"What is the dev vs prod difference?\"\nanswer = \"Dev: API server serves files dynamically. Prod: Static JSON files in public/generated/\"\ntags = [\"architecture\", \"deployment\"]\nstatus = \"verified\"\n\n[[facts]]\nquestion = \"How does state management work?\"\nanswer = \"Zustand for global state. Stores in src/prototype/stores/. Auth store uses persist middleware for localStorage.\"\ntags = [\"architecture\", \"state\"]\nstatus = \"verified\"\n\n[[facts]]\nquestion = \"How are forms handled?\"\nanswer = \"React Hook Form + Zod for validation. Custom useForm hook wraps both. Schemas in src/prototype/schemas/.\"\ntags = [\"architecture\", \"forms\"]\nstatus = \"verified\"\n",
   "metadata": {
     "size": 1302,
     "modified": "2025-12-08T18:53:51.660Z"

@@ -110,10 +110,10 @@
       "path": "layers/platforms/web-app.toml",
       "folder": "platforms"
     },
-    "mvp-generator": {
+    "llm-boilerplate": {
       "path": "layers/project/about.toml",
       "folder": "project",
-      "title": "MVP Generator"
+      "title": "LLM Boilerplate"
     },
     "business": {
       "path": "layers/project/business.toml",
@@ -199,7 +199,7 @@
       "web-app"
     ],
     "project": [
-      "mvp-generator",
+      "llm-boilerplate",
       "business",
       "design",
       "tech"
@@ -219,25 +219,53 @@
     ]
   },
   "referencedBy": {
-    "category": [
-      "category",
-      "product"
+    "product": [
+      "product-card",
+      "cart-add",
+      "products"
+    ],
+    "products": [
+      "product-card",
+      "product",
+      "uc_view_prototype"
     ],
     "user": [
+      "user-card",
       "user",
+      "user-create",
+      "user-delete",
       "user-login",
+      "user-populate",
+      "users",
       "web-app",
       "route_dashboard",
       "uc_view_documentation",
       "uc_view_prototype"
+    ],
+    "users": [
+      "user-card",
+      "user",
+      "user-create",
+      "user-delete",
+      "user-populate",
+      "uc_view_prototype"
+    ],
+    "category": [
+      "category",
+      "product"
+    ],
+    "product-card": [
+      "product",
+      "products"
     ],
     "admin": [
       "user",
       "admin-panel",
       "web-app"
     ],
-    "product": [
-      "cart-add"
+    "user-card": [
+      "user",
+      "users"
     ],
     "route_product_detail": [
       "cart-add"
@@ -245,16 +273,20 @@
     "form": [
       "form-submit"
     ],
-    "users-page": [
-      "user-create",
-      "user-delete",
-      "user-populate"
-    ],
     "uc_login": [
       "user-login"
     ],
     "guest": [
       "user-login"
+    ],
+    "user-create": [
+      "users"
+    ],
+    "user-delete": [
+      "users"
+    ],
+    "user-populate": [
+      "users"
     ],
     "admin-dashboard": [
       "admin-panel"
@@ -295,6 +327,22 @@
     ]
   },
   "relations": {
+    "product-card": {
+      "entities": [
+        "product"
+      ],
+      "pages": [
+        "products"
+      ]
+    },
+    "user-card": {
+      "entities": [
+        "user"
+      ],
+      "pages": [
+        "users"
+      ]
+    },
     "category": {
       "entities": [
         "category"
@@ -303,12 +351,24 @@
     "product": {
       "entities": [
         "category"
+      ],
+      "pages": [
+        "products"
+      ],
+      "components": [
+        "product-card"
       ]
     },
     "user": {
       "roles": [
         "user",
         "admin"
+      ],
+      "pages": [
+        "users"
+      ],
+      "components": [
+        "user-card"
       ]
     },
     "cart-add": {
@@ -325,13 +385,19 @@
       ]
     },
     "user-create": {
-      "components": [
-        "users-page"
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
       ]
     },
     "user-delete": {
-      "components": [
-        "users-page"
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
       ]
     },
     "user-login": {
@@ -346,8 +412,32 @@
       ]
     },
     "user-populate": {
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
+      ]
+    },
+    "products": {
       "components": [
-        "users-page"
+        "product-card"
+      ],
+      "entities": [
+        "product"
+      ]
+    },
+    "users": {
+      "components": [
+        "user-card"
+      ],
+      "entities": [
+        "user"
+      ],
+      "events": [
+        "user-create",
+        "user-delete",
+        "user-populate"
       ]
     },
     "admin-panel": {
@@ -412,6 +502,10 @@
       ],
       "guards": [
         "public"
+      ],
+      "pages": [
+        "users",
+        "products"
       ]
     }
   }

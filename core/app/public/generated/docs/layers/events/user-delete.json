@@ -21,13 +21,24 @@
       }
     ],
     "relations": {
-      "components": [
-        "users-page"
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
       ]
+    },
+    "implementation": {
+      "handler": "handleDeleteUser",
+      "file": "core/app/src/pages/prototype/UsersPage.tsx",
+      "line": 54,
+      "preview": "/prototype/users",
+      "status": "implemented"
     }
   },
+  "rawContent": "[event]\nid = \"user.delete\"\nname = \"User Deleted\"\ndescription = \"User was removed from the system\"\ncategory = \"auth\"\n\n[trigger]\naction = \"click\"\nelement = \"Delete button on user card\"\n\n[[payload]]\nname = \"userId\"\ntype = \"string\"\ndescription = \"Deleted user ID\"\n\n[relations]\npages = [\"users\"]\nentities = [\"user\"]\n\n[implementation]\nhandler = \"handleDeleteUser\"\nfile = \"core/app/src/pages/prototype/UsersPage.tsx\"\nline = 54\npreview = \"/prototype/users\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 301,
-    "modified": "2025-12-09T07:11:34.761Z"
+    "size": 472,
+    "modified": "2025-12-11T08:14:05.499Z"
   }
 }

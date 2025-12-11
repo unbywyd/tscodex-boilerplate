@@ -19,6 +19,7 @@
       ]
     }
   },
+  "rawContent": "# Admin Role\n\n[role]\nid = \"admin\"\nname = \"Administrator\"\ndescription = \"Administrator with full access to all resources\"\nlevel = 2\n\n[permissions]\nlist = [\n  \"view:docs\",\n  \"view:prototype\",\n  \"edit:profile\",\n  \"manage:users\",\n  \"manage:settings\"\n]\n",
   "metadata": {
     "size": 248,
     "modified": "2025-12-08T18:39:43.504Z"

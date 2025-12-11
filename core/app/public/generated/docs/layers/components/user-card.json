@@ -24,10 +24,25 @@
         "hover": "shadow-lg transition",
         "responsive": true
       }
+    },
+    "relations": {
+      "entities": [
+        "user"
+      ],
+      "pages": [
+        "users"
+      ]
+    },
+    "implementation": {
+      "component": "UserCard",
+      "file": "core/app/src/pages/prototype/UsersPage.tsx",
+      "preview": "/prototype/users",
+      "status": "implemented"
     }
   },
+  "rawContent": "[component]\nid = \"user-card\"\nname = \"User Card\"\ndescription = \"Displays user information in a card format with avatar, name, email, role badge and actions\"\n\n[component.props]\nuser = \"UserEntity\"\nonDelete = \"(id: string) => void\"\n\n[component.features]\nlist = [\n  \"User avatar display\",\n  \"Name and email\",\n  \"Role badge (admin/user)\",\n  \"Join date\",\n  \"Delete action on hover\"\n]\n\n[component.styling]\nhover = \"shadow-lg transition\"\nresponsive = true\n\n[relations]\nentities = [\"user\"]\npages = [\"users\"]\n\n[implementation]\ncomponent = \"UserCard\"\nfile = \"core/app/src/pages/prototype/UsersPage.tsx\"\npreview = \"/prototype/users\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 448,
-    "modified": "2025-12-10T20:41:20.092Z"
+    "size": 644,
+    "modified": "2025-12-11T08:12:58.648Z"
   }
 }

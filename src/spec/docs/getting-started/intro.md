@@ -1,10 +1,10 @@
 # Introduction
 
-MVP Generator is a file-driven documentation portal and prototype system.
+LLM Boilerplate is a file-driven specification system for LLM-assisted development.
 
 ## What is it?
 
-A system that allows teams to document their MVP ideas using simple files and automatically generates a browsable documentation portal with a working React prototype.
+A system that allows teams to define their project specs using simple files (TOML/Markdown) and automatically generates a browsable documentation portal with a working React prototype. Optimized for AI-assisted workflows.
 
 ## Key Concepts
 

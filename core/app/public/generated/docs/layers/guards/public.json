@@ -13,6 +13,7 @@
       "roles": []
     }
   },
+  "rawContent": "# Public Access Guard\n\n[guard]\nid = \"public\"\nname = \"Public Access\"\ndescription = \"No authentication required, publicly accessible\"\n\n[access]\nauthenticated = false\nroles = []\n",
   "metadata": {
     "size": 175,
     "modified": "2025-12-08T18:39:24.636Z"

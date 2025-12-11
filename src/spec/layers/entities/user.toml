@@ -73,3 +73,12 @@ description = "Last update timestamp"
 # Relations to other entities
 [relations]
 roles = ["user", "admin"]
+pages = ["users"]
+components = ["user-card"]
+
+[implementation]
+interface = "UserEntity"
+file = "core/app/src/pages/prototype/UsersPage.tsx"
+mock = "core/app/public/generated/mocks/users.json"
+preview = "/prototype/users"
+status = "implemented"

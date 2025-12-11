@@ -19,4 +19,12 @@ type = "string"
 description = "Created user name"
 
 [relations]
-components = ["users-page"]
+pages = ["users"]
+entities = ["user"]
+
+[implementation]
+handler = "handleAddUser"
+file = "core/app/src/pages/prototype/UsersPage.tsx"
+line = 42
+preview = "/prototype/users"
+status = "implemented"

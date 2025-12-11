@@ -48,6 +48,7 @@
       "status": "planned"
     }
   },
+  "rawContent": "# Dashboard Page Documentation\n\n[route]\nid = \"route_dashboard\"\npath = \"/prototype/dashboard\"\ntitle = \"Dashboard\"\ndescription = \"Main dashboard with overview metrics and statistics\"\n\n[page]\ntype = \"authenticated\"\nrole = \"user\"\n\n# Relations - keys match folder names in layers/\n[relations]\nguards = [\"authenticated\"]\nroles = [\"user\"]\n\n[features]\nlist = [\n  \"Display key metrics and KPIs\",\n  \"Recent activity feed\",\n  \"Quick action buttons\",\n  \"Notifications summary\"\n]\n\n[components]\nused = [\n  \"MetricCard\",\n  \"ActivityFeed\",\n  \"QuickActions\"\n]\n\n[api]\nendpoints = [\n  \"GET /api/metrics\",\n  \"GET /api/activity\"\n]\n\n[implementation]\ncomponent = \"DashboardPage\"\nfile = \"pages/DashboardPage.tsx\"\nstatus = \"planned\"\n",
   "metadata": {
     "size": 708,
     "modified": "2025-12-10T17:46:09.447Z"

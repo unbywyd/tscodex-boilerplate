@@ -133,7 +133,7 @@ function PrototypeHome() {
         <CardHeader>
           <CardTitle>Getting Started</CardTitle>
           <CardDescription>
-            This prototype demonstrates the MVP Generator's capabilities. All data comes from JSON files.
+            This prototype demonstrates LLM Boilerplate capabilities. All data comes from JSON files.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">

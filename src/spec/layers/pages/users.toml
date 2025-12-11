@@ -14,7 +14,13 @@ list = [
   "Reset to mock data"
 ]
 
+[relations]
+components = ["user-card"]
+entities = ["user"]
+events = ["user-create", "user-delete", "user-populate"]
+
 [implementation]
 component = "UsersPage"
-file = "src/prototype/pages/UsersPage.tsx"
+file = "core/app/src/pages/prototype/UsersPage.tsx"
+preview = "/prototype/users"
 status = "implemented"

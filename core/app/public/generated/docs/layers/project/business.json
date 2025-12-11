@@ -4,22 +4,23 @@
   "type": "toml",
   "content": {
     "idea": {
-      "name": "MVP Generator",
-      "tagline": "From documentation to working prototype",
-      "description": "A system that allows teams to document their MVP ideas using simple files\n(TOML for structured data, Markdown for content) and automatically\ngenerates a browsable documentation portal with a working React prototype.\n"
+      "name": "LLM Boilerplate",
+      "tagline": "From idea to working prototype through structured dialogue",
+      "description": "A file-driven specification system for LLM-assisted development.\nDefine your project in TOML/Markdown files, get documentation portal\nand working React prototype. Optimized for AI-assisted workflows.\n"
     },
     "target": {
-      "audience": "Developers and product teams",
-      "problem": "Disconnect between documentation and actual prototype",
-      "solution": "File-driven approach where docs and prototype share same source"
+      "audience": "Developers using LLM assistants for project planning",
+      "problem": "LLMs lack structured context about project specifications",
+      "solution": "File-driven approach with manifest.json for LLM/RAG integration"
     },
     "value": {
-      "primary": "Single source of truth for MVP specification",
-      "secondary": "Instant prototype from documentation"
+      "primary": "Single source of truth optimized for LLM consumption",
+      "secondary": "Instant prototype + documentation from specs"
     }
   },
+  "rawContent": "# Business Idea\n\n[idea]\nname = \"LLM Boilerplate\"\ntagline = \"From idea to working prototype through structured dialogue\"\ndescription = \"\"\"\nA file-driven specification system for LLM-assisted development.\nDefine your project in TOML/Markdown files, get documentation portal\nand working React prototype. Optimized for AI-assisted workflows.\n\"\"\"\n\n[target]\naudience = \"Developers using LLM assistants for project planning\"\nproblem = \"LLMs lack structured context about project specifications\"\nsolution = \"File-driven approach with manifest.json for LLM/RAG integration\"\n\n[value]\nprimary = \"Single source of truth optimized for LLM consumption\"\nsecondary = \"Instant prototype + documentation from specs\"\n",
   "metadata": {
-    "size": 649,
-    "modified": "2025-12-08T18:39:11.613Z"
+    "size": 698,
+    "modified": "2025-12-11T07:52:34.384Z"
   }
 }

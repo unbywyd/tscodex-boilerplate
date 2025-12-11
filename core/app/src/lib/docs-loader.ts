@@ -40,9 +40,10 @@ export async function loadDocsTree(): Promise<DocFolder> {
 }
 
 // Load specific file content
-export async function loadDocFile(filePath: string): Promise<DocFile> {
+export async function loadDocFile(filePath: string, raw: boolean = false): Promise<DocFile> {
   if (isDev) {
-    const response = await fetch(`/api/docs/file?path=${encodeURIComponent(filePath)}`)
+    const url = `/api/docs/file?path=${encodeURIComponent(filePath)}${raw ? '&raw=true' : ''}`
+    const response = await fetch(url)
     if (!response.ok) {
       throw new Error(`Failed to load file: ${filePath}`)
     }
@@ -61,7 +62,15 @@ export async function loadDocFile(filePath: string): Promise<DocFile> {
     if (!response.ok) {
       throw new Error(`Failed to load file: ${filePath}`)
     }
-    return response.json()
+    const data = await response.json()
+    // If raw is requested and rawContent is available, return it
+    if (raw && data.rawContent && typeof data.rawContent === 'string') {
+      return {
+        ...data,
+        content: data.rawContent
+      }
+    }
+    return data
   }
 }
 
@@ -208,5 +217,62 @@ export async function loadEvents(): Promise<EventDocMeta[]> {
     return events
   } catch {
     return []
+  }
+}
+
+// Manifest types for LLM/RAG integration
+export interface ManifestLayer {
+  id: string
+  name?: string
+  description?: string
+  _meta: { path: string }
+  [key: string]: any
+}
+
+export interface ManifestDoc {
+  id: string
+  title: string
+  content: string
+  _meta: { path: string }
+}
+
+export interface Manifest {
+  version: string
+  generated: string
+  project: ManifestLayer | null
+  layers: {
+    entities: ManifestLayer[]
+    components: ManifestLayer[]
+    routes: ManifestLayer[]
+    pages: ManifestLayer[]
+    useCases: ManifestLayer[]
+    roles: ManifestLayer[]
+    guards: ManifestLayer[]
+    events: ManifestLayer[]
+    platforms: ManifestLayer[]
+    knowledge: ManifestLayer[]
+    modules: ManifestLayer[]
+  }
+  docs: ManifestDoc[]
+  relations: {
+    byId: Record<string, { path: string; folder: string; title?: string }>
+    graph: Record<string, Record<string, string[]>>
+  }
+}
+
+// Load unified manifest for LLM/RAG
+export async function loadManifest(): Promise<Manifest> {
+  if (isDev) {
+    const response = await fetch('/api/manifest')
+    if (!response.ok) {
+      throw new Error('Failed to load manifest')
+    }
+    return response.json()
+  } else {
+    const response = await fetch('/generated/manifest.json')
+    if (!response.ok) {
+      throw new Error('Failed to load manifest')
+    }
+    return response.json()
   }
 }

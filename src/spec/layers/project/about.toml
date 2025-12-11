@@ -1,11 +1,11 @@
 # Project Overview
 
 [project]
-id = "mvp-generator"
-name = "MVP Generator"
+id = "llm-boilerplate"
+name = "LLM Boilerplate"
 type = "application"
 description = """
-File-driven documentation portal and MVP prototype system.
+File-driven specification system for LLM-assisted development.
 All project knowledge lives in Markdown and TOML files.
 """
 
@@ -18,8 +18,9 @@ list = [
   "Auto-generated documentation from TOML specs",
   "Working React prototype with mock data and localStorage persistence",
   "Prisma schema generation from entity definitions",
+  "LLM/RAG integration via manifest.json",
 ]
 
 [owner]
-name = "MVP Generator Team"
-email = "team@mvp-generator.dev"
+name = "LLM Boilerplate Team"
+email = "team@llm-boilerplate.dev"

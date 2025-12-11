@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FileText, Box, FolderOpen, GitBranch, Bot, Zap, Sparkles, CheckCircle2, Clock, ExternalLink } from 'lucide-react'
 import { Container } from '@/components/ui/container'
@@ -6,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { workflowPhases } from '@/components/WorkflowDiagram'
 import { loadDocFile } from '@/lib/docs-loader'
-
-const WorkflowDiagram = lazy(() => import('@/components/WorkflowDiagram'))
 
 // Status data types
 interface StatusData {
@@ -106,11 +104,11 @@ export default function HomePage() {
         <div className="flex items-center justify-center gap-3 mb-4">
           <Sparkles className="h-8 w-8 text-primary" />
           <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            TSCodex BluePrint
+            LLM Boilerplate
           </h1>
         </div>
         <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-          LLM-driven project specification generator. Transform your ideas into working prototypes through structured dialogue and intelligent documentation.
+          File-driven specification system for LLM-assisted development. Define your project in TOML/Markdown, get documentation portal + working prototype.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
@@ -355,72 +353,29 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* How it works */}
-      <section className="space-y-8">
-        <div className="text-center space-y-2">
-          <h2 className="text-3xl font-bold tracking-tight">How It Works</h2>
-          <p className="text-muted-foreground">Structured dialogue from idea to working prototype</p>
-        </div>
-
-        {/* Workflow Flow Diagram */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-center">Development Workflow</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Suspense fallback={<div className="h-[200px] flex items-center justify-center text-muted-foreground">Loading diagram...</div>}>
-              <WorkflowDiagram height={200} showLegend={true} interactive={false} />
-            </Suspense>
-          </CardContent>
-        </Card>
-
-        {/* Phase descriptions */}
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {workflowPhases.map((phase, index) => (
-            <Card key={phase.id} className="hover:shadow-md transition-shadow">
-              <CardContent className="pt-6">
-                <div className="flex items-start gap-3">
-                  <div className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-primary text-primary-foreground text-sm font-bold shrink-0">
-                    {index + 1}
-                  </div>
-                  <div className="space-y-1">
-                    <h3 className="font-semibold">{phase.label}</h3>
-                    <p className="text-sm text-muted-foreground">{phase.description}</p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Profiles */}
-        <Card>
-          <CardContent className="pt-6">
-            <div className="space-y-4">
-              <h3 className="font-semibold text-center text-lg">Adaptive Workflow Profiles</h3>
-              <div className="grid gap-6 md:grid-cols-3">
-                <div className="space-y-2 text-center p-4 rounded-lg bg-green-50 dark:bg-green-900/20">
-                  <div className="font-semibold text-green-700 dark:text-green-400">Simple</div>
-                  <p className="text-sm text-muted-foreground">
-                    Assessment → Discovery → Data → Features → Prototype
-                  </p>
-                  <p className="text-xs text-muted-foreground">Landing pages, simple CRUD apps</p>
-                </div>
-                <div className="space-y-2 text-center p-4 rounded-lg bg-blue-50 dark:bg-blue-900/20">
-                  <div className="font-semibold text-blue-700 dark:text-blue-400">Medium</div>
-                  <p className="text-sm text-muted-foreground">
-                    + Design, Access, Schema phases
-                  </p>
-                  <p className="text-xs text-muted-foreground">SaaS, e-commerce, dashboards</p>
-                </div>
-                <div className="space-y-2 text-center p-4 rounded-lg bg-purple-50 dark:bg-purple-900/20">
-                  <div className="font-semibold text-purple-700 dark:text-purple-400">Complex</div>
-                  <p className="text-sm text-muted-foreground">
-                    + Modules decomposition phase
-                  </p>
-                  <p className="text-xs text-muted-foreground">ERP, marketplaces, enterprise apps</p>
-                </div>
-              </div>
+      {/* About Section */}
+      <section>
+        <Card className="bg-gradient-to-br from-background via-muted/30 to-muted/50 border-border/50 overflow-hidden">
+          <CardContent className="p-8 sm:p-12 text-center space-y-6">
+            <div className="space-y-3">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Learn More About the Project</h2>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Explore the system architecture, development workflow, and how the boilerplate helps turn ideas into working prototypes
+              </p>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button asChild size="lg" className="text-base">
+                <Link to="/about">
+                  <FileText className="h-5 w-5 mr-2" />
+                  About
+                </Link>
+              </Button>
+              <Button asChild variant="outline" size="lg" className="text-base">
+                <Link to="/docs">
+                  <ExternalLink className="h-5 w-5 mr-2" />
+                  Documentation
+                </Link>
+              </Button>
             </div>
           </CardContent>
         </Card>

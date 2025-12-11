@@ -127,6 +127,23 @@ tags = ["auth", "security"]
 ## components/
 UI components with props, variants, and usage examples.
 
+### Live Preview System
+
+Components can render live previews in documentation if registered in `componentRegistry`:
+
+```typescript
+// src/prototype/components/ui/index.ts
+export const componentRegistry: Record<string, ComponentType<any>> = {
+  button: Button,    // id → Component
+  card: Card,
+  input: Input,
+}
+```
+
+The `id` in TOML must match the key in registry. Then `[[variants]]` will render as live React components.
+
+### Structure
+
 ```toml
 [component]
 id = "button"
@@ -289,3 +306,85 @@ roles = ["user", "admin"]
 guards = ["authenticated"]
 entities = ["user", "product"]
 ```
+
+## Implementation (Universal)
+
+Any layer can have an `[implementation]` section to link specification to actual code:
+
+```toml
+[implementation]
+component = "UserCard"                    # Component/class name
+file = "src/prototype/components/UserCard.tsx"  # File path
+preview = "/prototype/users"              # Preview URL in prototype
+status = "implemented"                    # planned | in-progress | implemented
+```
+
+| Field | Description |
+|-------|-------------|
+| `component` | Component or class name in code |
+| `file` | Path to implementation file |
+| `preview` | URL to see it in action (prototype page) |
+| `status` | Implementation status |
+
+**Status values:**
+- `planned` — not started
+- `in-progress` — work in progress
+- `implemented` — complete and working
+
+**Examples by layer:**
+
+```toml
+# components/user-card.toml
+[implementation]
+component = "UserCard"
+file = "src/prototype/components/UserCard.tsx"
+preview = "/prototype/users"
+status = "implemented"
+
+# pages/users.toml
+[implementation]
+component = "UsersPage"
+file = "src/prototype/pages/UsersPage.tsx"
+preview = "/prototype/users"
+status = "implemented"
+
+# use-cases/view-users.toml
+[implementation]
+route = "/prototype/users"
+page = "users"
+status = "implemented"
+
+# events/user-create.toml
+[implementation]
+handler = "handleAddUser"
+file = "src/prototype/pages/UsersPage.tsx"
+line = 42
+status = "implemented"
+
+# entities/user.toml
+[implementation]
+interface = "UserEntity"
+file = "src/prototype/pages/UsersPage.tsx"
+mock = "src/prototype/mocks/users.json"
+status = "implemented"
+```
+
+## Manifest (LLM/RAG)
+
+All layers are compiled into a single `manifest.json` for LLM agents and RAG systems:
+
+- **URL:** `/generated/manifest.json`
+- **Dev:** `http://localhost:5173/generated/manifest.json`
+- **Prod:** `https://domain.com/generated/manifest.json`
+
+```typescript
+import { loadManifest } from '@/lib/docs-loader'
+
+const manifest = await loadManifest()
+const entities = manifest.layers.entities
+const user = entities.find(e => e.id === 'user')
+```
+
+Each layer item includes `_meta.path` pointing to the source TOML file.
+
+See `rules/docs-pdf.md` for detailed manifest structure and LangChain integration.

@@ -36,6 +36,7 @@
       ]
     }
   },
+  "rawContent": "[event]\nid = \"form.submit\"\nname = \"Form Submit\"\ndescription = \"User submitted a form\"\ncategory = \"form\"\n\n[trigger]\naction = \"submit\"\nelement = \"Form element\"\n\n[[payload]]\nname = \"formId\"\ntype = \"string\"\ndescription = \"Form identifier\"\n\n[[payload]]\nname = \"formName\"\ntype = \"string\"\ndescription = \"Human-readable form name\"\n\n[[payload]]\nname = \"success\"\ntype = \"boolean\"\ndescription = \"Whether submission was successful\"\n\n[relations]\ncomponents = [\"form\"]\n",
   "metadata": {
     "size": 455,
     "modified": "2025-12-09T07:05:34.211Z"

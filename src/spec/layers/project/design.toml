@@ -1,7 +1,7 @@
 # Design Requirements
 
 [design]
-name = "MVP Generator Design System"
+name = "LLM Boilerplate Design System"
 description = "Visual design requirements and guidelines"
 
 [design.theme]

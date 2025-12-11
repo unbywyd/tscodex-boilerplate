@@ -20,3 +20,13 @@ list = [
 hover = "shadow-lg transition"
 popular = "border-primary shadow-md"
 responsive = true
+
+[relations]
+entities = ["product"]
+pages = ["products"]
+
+[implementation]
+component = "ProductCard"
+file = "core/app/src/pages/prototype/ProductsPage.tsx"
+preview = "/prototype/products"
+status = "implemented"

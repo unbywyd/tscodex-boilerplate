@@ -37,6 +37,7 @@
       ]
     }
   },
+  "rawContent": "[event]\nid = \"auth.login\"\nname = \"User Login\"\ndescription = \"User successfully authenticated with credentials\"\ncategory = \"auth\"\n\n[trigger]\naction = \"submit\"\nelement = \"Login form\"\n\n[[payload]]\nname = \"email\"\ntype = \"string\"\ndescription = \"User email address\"\n\n[[payload]]\nname = \"method\"\ntype = \"string\"\ndescription = \"Authentication method (email, oauth, etc)\"\n\n[relations]\nentities = [\"user\"]\nuseCases = [\"uc_login\"]\nguards = [\"guest\"]\n",
   "metadata": {
     "size": 439,
     "modified": "2025-12-09T07:05:19.191Z"

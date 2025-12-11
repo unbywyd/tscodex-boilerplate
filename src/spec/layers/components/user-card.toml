@@ -19,3 +19,13 @@ list = [
 [component.styling]
 hover = "shadow-lg transition"
 responsive = true
+
+[relations]
+entities = ["user"]
+pages = ["users"]
+
+[implementation]
+component = "UserCard"
+file = "core/app/src/pages/prototype/UsersPage.tsx"
+preview = "/prototype/users"
+status = "implemented"

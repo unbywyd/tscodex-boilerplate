@@ -11,7 +11,7 @@ export default function DocFileRenderer({ file, folderPath }: DocFileRendererPro
   if (file.type === 'markdown') {
     return <MarkdownRenderer content={file.content as string} folderPath={folderPath} />;
   } else if (file.type === 'toml') {
-    return <TomlRenderer content={file.content} folderPath={folderPath} />;
+    return <TomlRenderer content={file.content} folderPath={folderPath} filePath={file.path} />;
   }
   
   return <div>Unsupported file type</div>;

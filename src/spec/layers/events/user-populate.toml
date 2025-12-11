@@ -14,4 +14,12 @@ type = "number"
 description = "Number of users generated"
 
 [relations]
-components = ["users-page"]
+pages = ["users"]
+entities = ["user"]
+
+[implementation]
+handler = "handlePopulate"
+file = "core/app/src/pages/prototype/UsersPage.tsx"
+line = 48
+preview = "/prototype/users"
+status = "implemented"

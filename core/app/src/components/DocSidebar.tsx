@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Settings } from 'lucide-react'
+import { FileText, Settings, ArrowUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { getRouteFromPath } from '@/lib/docs-loader'
 import type { DocFile } from '@/lib/docs-loader'
@@ -7,10 +7,16 @@ import type { DocFile } from '@/lib/docs-loader'
 interface DocSidebarProps {
   files: DocFile[]
   currentPath: string
+  folderPath?: string
 }
 
-export default function DocSidebar({ files }: DocSidebarProps) {
+export default function DocSidebar({ files, folderPath }: DocSidebarProps) {
   const location = useLocation()
+
+  // Build parent folder route
+  const parentRoute = folderPath && folderPath !== '*' 
+    ? `/docs/${folderPath.split('/').slice(0, -1).join('/')}`
+    : '/docs'
 
   return (
     <aside className="hidden lg:block w-64 shrink-0">
@@ -19,6 +25,20 @@ export default function DocSidebar({ files }: DocSidebarProps) {
           Navigation
         </h3>
         <nav className="space-y-1">
+          {/* Parent folder link */}
+          {folderPath && folderPath !== '*' && (
+            <Link
+              to={parentRoute}
+              className={cn(
+                'flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-colors mb-2',
+                'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
+              )}
+            >
+              <ArrowUp className="h-4 w-4 shrink-0" />
+              <span className="truncate">Up one level</span>
+            </Link>
+          )}
+          
           {files.map((file) => {
             const route = getRouteFromPath(file.path)
             const isActive = location.pathname === route

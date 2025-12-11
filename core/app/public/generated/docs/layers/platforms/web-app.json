@@ -31,6 +31,7 @@
       ]
     }
   },
+  "rawContent": "# Web Application Platform\n# Main customer-facing web application\n\n[platform]\nid = \"web-app\"\nname = \"Web Application\"\ntype = \"web\"\ndescription = \"Main customer-facing web application with public and authenticated areas\"\n\n[platform.config]\nbaseRoute = \"/app\"\ntheme = \"default\"\n\n[relations]\nroutes = [\"home\", \"dashboard\", \"profile\", \"settings\"]\nroles = [\"visitor\", \"user\", \"admin\"]\nguards = [\"public\", \"authenticated\"]\n",
   "metadata": {
     "size": 417,
     "modified": "2025-12-09T09:34:14.249Z"

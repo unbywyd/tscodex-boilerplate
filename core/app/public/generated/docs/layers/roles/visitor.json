@@ -16,6 +16,7 @@
       ]
     }
   },
+  "rawContent": "# Visitor Role\n\n[role]\nid = \"visitor\"\nname = \"Visitor\"\ndescription = \"Unauthenticated user viewing documentation and prototype\"\nlevel = 0\n\n[permissions]\nlist = [\n  \"view:docs\",\n  \"view:prototype\"\n]\n",
   "metadata": {
     "size": 198,
     "modified": "2025-12-08T18:39:39.747Z"

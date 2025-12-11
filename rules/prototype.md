@@ -1,6 +1,6 @@
 # Prototype Development Guide
 
-Best practices for building prototypes with MVP Generator.
+Best practices for building prototypes with LLM Boilerplate.
 
 ## Architecture Overview
 
@@ -292,6 +292,286 @@ deleteAll()
 localStorage.removeItem('prototype-projects')
 ```
 
+## Linking Prototype to Documentation
+
+Every prototype element should be linked to its TOML specification using the `Doc` component.
+
+### The Full Workflow
+
+```
+1. Define spec     →  src/spec/layers/pages/users.toml
+2. Build generates →  core/app/public/generated/docs/layers/pages/users.json
+3. Link in code    →  <Doc of="pages.users" floating />
+4. User sees       →  "?" button linking to /docs/layers/pages/users
+```
+
+### Step 1: Create TOML Specification
+
+```toml
+# src/spec/layers/pages/users.toml
+[page]
+id = "users"
+name = "Users Page"
+description = "User management interface with CRUD operations"
+
+[page.features]
+list = [
+  "Display users in responsive grid",
+  "Add/delete users with fake data",
+  "Role badges (admin/user)",
+  "LocalStorage persistence"
+]
+
+[relations]
+components = ["user-card"]
+entities = ["user"]
+```
+
+```toml
+# src/spec/layers/components/user-card.toml
+[component]
+id = "user-card"
+name = "User Card"
+description = "Displays user avatar, name, email and role"
+category = "ui"
+
+[[props]]
+name = "user"
+type = "UserEntity"
+required = true
+description = "User data object"
+
+[relations]
+entities = ["user"]
+```
+
+### Step 2: Link with Doc Component
+
+```tsx
+// In your page component
+import { Doc } from '@/components/ui'
+
+export default function UsersPage() {
+  const { data: users } = useRepo<UserEntity>('users')
+
+  return (
+    <>
+      {/* Page-level documentation (floating button) */}
+      <Doc of="pages.users" floating position="bottom-right" />
+
+      <Container>
+        {users.map(user => (
+          {/* Component-level documentation (hover button) */}
+          <Doc key={user.id} of="components.user-card" entityId={user.id}>
+            <UserCard user={user} />
+          </Doc>
+        ))}
+      </Container>
+    </>
+  )
+}
+```
+
+### Doc Component Reference
+
+| Mode | Usage | When to use |
+|------|-------|-------------|
+| **Floating** | `<Doc of="pages.x" floating />` | Page-level, one per page |
+| **Wrapper** | `<Doc of="components.x"><Child/></Doc>` | Components, list items |
+
+**Props:**
+- `of` — `"layer.id"` format (e.g., `"pages.users"`, `"components.user-card"`)
+- `floating` — renders fixed button instead of wrapping children
+- `position` — `"bottom-right"` | `"bottom-left"` | `"top-right"` | `"top-left"`
+- `entityId` — specific entity instance ID (for wrapper mode)
+
+### What Doc Renders
+
+**Floating mode:**
+```html
+<div data-doc-url="/docs/layers/pages/users" class="fixed bottom-6 right-6">
+  <button>?</button>
+</div>
+```
+
+**Wrapper mode:**
+```html
+<div data-component="user-card" data-doc-url="/docs/layers/components/user-card" data-entity-id="123">
+  ...children...
+</div>
+```
+
+### Adding New Page Checklist
+
+1. **Create page TOML:** `src/spec/layers/pages/[name].toml`
+2. **Create component TOML:** `src/spec/layers/components/[name]-card.toml` (if needed)
+3. **Run build:** `npm run build` (generates JSON in `public/generated/`)
+4. **Create page component:** Add `<Doc of="pages.[name]" floating />` at top
+5. **Wrap list items:** `<Doc of="components.[name]-card" entityId={item.id}>`
+6. **Dispatch events:** `dispatchEvent('[name].create', { ... })`
+
+### Why Link to Docs?
+
+| Benefit | Description |
+|---------|-------------|
+| **MCP Integration** | LLM can find `data-doc-url` and navigate to specification |
+| **Screenshot automation** | Use `[data-component="user-card"]` selector |
+| **Traceability** | Click "?" → see TOML spec path → edit source |
+| **Documentation** | Auto-generated docs from TOML specs |
+
+See `rules/patterns.md` for complete Doc component documentation.
+
+## Building Pages
+
+### Page Structure
+
+```tsx
+export default function UsersPage() {
+  // 1. Data hook
+  const { data: users, loading, populate, delete: remove } = useRepo<UserEntity>('users')
+
+  // 2. Event handlers
+  const handleDelete = (id: string) => {
+    remove(id)
+    dispatchEvent('user.delete', { userId: id })
+  }
+
+  return (
+    <>
+      {/* 3. Page-level Doc (floating) */}
+      <Doc of="pages.users" floating position="bottom-right" />
+
+      {/* 4. Content container */}
+      <Container size="lg" className="py-8">
+        {/* 5. Header */}
+        {/* 6. Loading / Empty / Content states */}
+        {/* 7. Item cards with Doc wrapper */}
+      </Container>
+    </>
+  )
+}
+```
+
+### Two Data Approaches
+
+| Use case | Approach |
+|----------|----------|
+| CRUD operations (users, cart) | `useRepo` with localStorage |
+| Read-only catalog | `loadMock` from JSON |
+
+```tsx
+// CRUD with persistence
+const { data, loading, create, update, delete: remove, populate } = useRepo<Entity>('entities')
+
+// Read-only mock data
+const [items, setItems] = useState([])
+useEffect(() => { loadMock('items').then(setItems) }, [])
+```
+
+### Loading State
+
+```tsx
+{loading ? (
+  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    {[1, 2, 3].map(i => (
+      <Card key={i}>
+        <CardHeader>
+          <Skeleton className="h-12 w-12 rounded-full" />
+          <Skeleton className="h-4 w-24" />
+        </CardHeader>
+      </Card>
+    ))}
+  </div>
+) : (
+  // Content
+)}
+```
+
+### Empty State
+
+```tsx
+{users.length === 0 ? (
+  <Card className="p-8 text-center">
+    <p className="text-muted-foreground mb-4">No users found</p>
+    <Button onClick={() => populate(1)}>
+      <Plus className="h-4 w-4 mr-2" />Add First User
+    </Button>
+  </Card>
+) : (
+  // Items grid
+)}
+```
+
+### Header Pattern
+
+```tsx
+<div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div className="flex items-center gap-3">
+    <div className="rounded-lg bg-primary/10 p-2">
+      <Users className="h-6 w-6 text-primary" />
+    </div>
+    <div>
+      <h1 className="text-3xl font-bold tracking-tight">Users</h1>
+      <p className="text-muted-foreground text-sm">Manage user accounts</p>
+    </div>
+  </div>
+  <div className="flex gap-2">
+    <Button variant="outline" onClick={handleReset}>Reset</Button>
+    <Button onClick={handleAdd}><Plus className="h-4 w-4 mr-2" />Add</Button>
+  </div>
+</div>
+```
+
+### Stats Cards
+
+```tsx
+<div className="grid gap-4 grid-cols-1 sm:grid-cols-3">
+  <Card>
+    <CardHeader className="pb-2">
+      <CardDescription>Total Users</CardDescription>
+      <CardTitle className="text-2xl">{users.length}</CardTitle>
+    </CardHeader>
+  </Card>
+</div>
+```
+
+### Items Grid with Doc
+
+```tsx
+<div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+  {users.map(user => (
+    <Doc key={user.id} of="components.user-card" entityId={user.id}>
+      <Card className="hover:shadow-lg transition-shadow">
+        <CardHeader>
+          <CardTitle>{user.name}</CardTitle>
+          <CardDescription>{user.email}</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Badge>{user.role}</Badge>
+        </CardContent>
+      </Card>
+    </Doc>
+  ))}
+</div>
+```
+
+### Responsive Patterns
+
+| Pattern | Mobile | sm: | lg: |
+|---------|--------|-----|-----|
+| Grid | 1 col | 2 cols | 3 cols |
+| Padding | py-4 | py-6 | py-8 |
+| Button | Icon | Icon+text | Full |
+
+```tsx
+<div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+<h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+<Button size="sm">
+  <Plus className="h-4 w-4 sm:mr-2" />
+  <span className="hidden sm:inline">Add User</span>
+</Button>
+```
+
 ## Common Patterns
 
 ### List + Detail View
@@ -358,3 +638,98 @@ function QuickEdit({ item }: { item: Entity }) {
   return <button onClick={toggle}>{item.active ? 'Active' : 'Inactive'}</button>
 }
 ```
+
+## Component Live Preview
+
+UI components can be previewed live in documentation at `/docs/layers/components/[id]`.
+
+### How It Works
+
+```
+TOML spec → componentRenderer → componentRegistry → Live React render
+```
+
+1. **TOML** defines component metadata, props, and variants
+2. **componentRegistry** maps component IDs to React components
+3. **Variants** render as live interactive previews
+
+### Adding Component with Live Preview
+
+**Step 1: Create React Component**
+
+```tsx
+// src/prototype/components/ui/MyButton.tsx
+export function MyButton({ variant = 'default', children }: Props) {
+  return <button className={`btn btn-${variant}`}>{children}</button>
+}
+```
+
+**Step 2: Register in componentRegistry**
+
+```typescript
+// src/prototype/components/ui/index.ts
+import { MyButton } from './MyButton'
+
+export const componentRegistry: Record<string, ComponentType<any>> = {
+  // existing...
+  'my-button': MyButton,  // key MUST match TOML id
+}
+```
+
+**Step 3: Create TOML Spec**
+
+```toml
+# src/spec/layers/components/my-button.toml
+[component]
+id = "my-button"          # Must match registry key!
+name = "My Button"
+description = "Custom button"
+category = "ui"
+
+[[props]]
+name = "variant"
+type = "enum"
+values = ["default", "primary"]
+default = "default"
+
+[[props]]
+name = "children"
+type = "ReactNode"
+required = true
+
+[[variants]]
+name = "Default"
+props = { variant = "default", children = "Click" }
+
+[[variants]]
+name = "Primary"
+props = { variant = "primary", children = "Submit" }
+
+[usage]
+code = """
+import { MyButton } from '@prototype/components/ui/MyButton'
+<MyButton variant="primary">Click me</MyButton>
+"""
+```
+
+### Result
+
+Visit `/docs/layers/components/my-button`:
+- **Props table** with types, defaults, required markers
+- **Live variants** rendered as actual React components
+- **Usage code** example
+
+### If Component Not Registered
+
+If `id` is not found in `componentRegistry`, variants show:
+```
+"Component not found in registry"
+```
+
+### Categories
+
+| Category | Use for |
+|----------|---------|
+| `ui` | Base elements (Button, Input, Card, Badge) |
+| `forms` | Form components (LoginForm, SearchForm) |
+| `pages` | Full page components (DashboardPage) |

@@ -23,6 +23,26 @@ async function readTomlFile(filePath: string): Promise<any> {
   }
 }
 
+// Helper: recursively find all TOML files in a directory
+async function findTomlFilesRecursive(dir: string, basePath: string = ''): Promise<{ filePath: string; relativePath: string }[]> {
+  const results: { filePath: string; relativePath: string }[] = []
+  try {
+    const entries = await fs.readdir(dir, { withFileTypes: true })
+    for (const entry of entries) {
+      const fullPath = path.join(dir, entry.name)
+      const relPath = basePath ? `${basePath}/${entry.name}` : entry.name
+      if (entry.isDirectory()) {
+        results.push(...await findTomlFilesRecursive(fullPath, relPath))
+      } else if (entry.isFile() && entry.name.endsWith('.toml')) {
+        results.push({ filePath: fullPath, relativePath: relPath })
+      }
+    }
+  } catch (error: any) {
+    if (error.code !== 'ENOENT') throw error
+  }
+  return results
+}
+
 // Helper: scan directory recursively
 async function scanDirectory(dirPath: string, basePath: string = ''): Promise<any> {
   try {
@@ -168,6 +188,7 @@ export function viteApiPlugin(): Plugin {
         try {
           const url = new URL(req.url!, `http://${req.headers.host}`)
           let filePath = url.searchParams.get('path')
+          const raw = url.searchParams.get('raw') === 'true'
 
           if (!filePath) {
             return sendJson(res, { error: 'Path parameter required' }, 400)
@@ -209,6 +230,23 @@ export function viteApiPlugin(): Plugin {
           const stats = await fs.stat(fullPath)
           if (!stats.isFile()) {
             return sendJson(res, { error: 'File not found' }, 404)
+          }
+
+          // If raw=true, return raw file content as text
+          if (raw) {
+            const rawContent = await fs.readFile(fullPath, 'utf-8')
+            res.setHeader('Content-Type', 'application/json')
+            sendJson(res, {
+              path: filePath,
+              name: path.basename(filePath),
+              type: finalExt === '.md' ? 'markdown' : 'toml',
+              content: rawContent,
+              metadata: {
+                size: stats.size,
+                modified: stats.mtime.toISOString(),
+              },
+            })
+            return
           }
 
           const content = await readFileContent(fullPath)
@@ -351,11 +389,138 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
+      // API: Get unified manifest for LLM/RAG
+      server.middlewares.use('/api/manifest', async (_req, res) => {
+        try {
+          const manifest: any = {
+            version: '1.0.0',
+            generated: new Date().toISOString(),
+            project: null,
+            layers: {
+              entities: [],
+              components: [],
+              routes: [],
+              pages: [],
+              useCases: [],
+              roles: [],
+              guards: [],
+              events: [],
+              platforms: [],
+              knowledge: [],
+              modules: [],
+            },
+            docs: [],
+            relations: {
+              byId: {} as Record<string, { path: string; folder: string; title?: string }>,
+              graph: {} as Record<string, Record<string, string[]>>,
+            },
+          }
+
+          const layersDir = path.join(specDir, 'layers')
+
+          // Process each layer folder
+          for (const [layerName, layerArray] of Object.entries(manifest.layers) as [string, any[]][]) {
+            const folderName = layerName === 'useCases' ? 'use-cases' : layerName
+            const folderPath = path.join(layersDir, folderName)
+
+            try {
+              const tomlFiles = await findTomlFilesRecursive(folderPath)
+
+              for (const { filePath, relativePath } of tomlFiles) {
+                const content = await readTomlFile(filePath)
+                if (!content) continue
+
+                // Flatten content
+                const wrapperKey = Object.keys(content).find(k =>
+                  ['entity', 'component', 'route', 'page', 'useCase', 'role', 'guard', 'event', 'platform', 'topic', 'module', 'project'].includes(k)
+                )
+
+                let item: any
+                if (wrapperKey) {
+                  item = { ...content[wrapperKey] }
+                  for (const [key, value] of Object.entries(content)) {
+                    if (key !== wrapperKey && key !== 'relations') {
+                      item[key] = value
+                    }
+                  }
+                } else {
+                  item = { ...content }
+                  delete item.relations
+                }
+
+                const fileName = relativePath.split('/').pop() || relativePath
+                if (!item.id) item.id = fileName.replace('.toml', '')
+                item._meta = { path: `layers/${folderName}/${relativePath}` }
+
+                // Build relations
+                const id = item.id
+                manifest.relations.byId[id] = {
+                  path: `layers/${folderName}/${relativePath}`,
+                  folder: folderName,
+                  title: item.name || item.title,
+                }
+                const relations = extractRelations(content)
+                if (relations) manifest.relations.graph[id] = relations
+
+                if (folderName === 'project' && fileName === 'about.toml') {
+                  manifest.project = item
+                } else {
+                  layerArray.push(item)
+                }
+              }
+            } catch (error: any) {
+              if (error.code !== 'ENOENT') {
+                console.error(`Error processing ${folderName}:`, error)
+              }
+            }
+          }
+
+          // Process markdown docs
+          const docsDir = path.join(specDir, 'docs')
+          const processDocsFolder = async (dirPath: string, basePath: string = ''): Promise<void> => {
+            try {
+              const entries = await fs.readdir(dirPath, { withFileTypes: true })
+              for (const entry of entries) {
+                const fullPath = path.join(dirPath, entry.name)
+                const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name
+
+                if (entry.isDirectory()) {
+                  await processDocsFolder(fullPath, relativePath)
+                } else if (entry.isFile() && entry.name.endsWith('.md')) {
+                  const content = await fs.readFile(fullPath, 'utf-8')
+                  const id = relativePath.replace(/\.md$/, '').replace(/\//g, '-')
+                  const titleMatch = content.match(/^#\s+(.+)$/m)
+                  const title = titleMatch ? titleMatch[1] : entry.name.replace('.md', '')
+
+                  manifest.docs.push({
+                    id,
+                    title,
+                    content,
+                    _meta: { path: `docs/${relativePath}` },
+                  })
+                }
+              }
+            } catch (error: any) {
+              if (error.code !== 'ENOENT') {
+                console.error('Error processing docs:', error)
+              }
+            }
+          }
+
+          await processDocsFolder(docsDir)
+          sendJson(res, manifest)
+        } catch (error) {
+          console.error('Error generating manifest:', error)
+          sendJson(res, { error: 'Internal server error' }, 500)
+        }
+      })
+
       console.log('\n📚 API endpoints available:')
       console.log('  GET /api/docs/tree       - Documentation structure')
       console.log('  GET /api/docs/file?path= - Specific doc file')
       console.log('  GET /api/docs/route-map  - Route to docs mapping')
       console.log('  GET /api/relations-map   - Relations graph')
+      console.log('  GET /api/manifest        - Unified manifest for LLM/RAG')
       console.log('  GET /api/prisma/schema   - Prisma schema file')
       console.log('  GET /api/mocks           - List all mocks')
       console.log('  GET /api/mocks/:name     - Specific mock data\n')

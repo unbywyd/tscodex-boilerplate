@@ -2,9 +2,9 @@
   "path": "docs/getting-started/intro.md",
   "name": "intro.md",
   "type": "markdown",
-  "content": "# Introduction\n\nMVP Generator is a file-driven documentation portal and prototype system.\n\n## What is it?\n\nA system that allows teams to document their MVP ideas using simple files and automatically generates a browsable documentation portal with a working React prototype.\n\n## Key Concepts\n\n- **Layers** - Structured TOML files defining guards, roles, routes, etc.\n- **Docs** - Markdown documentation (you're reading one now)\n- **Prototype** - Working React components linked to documentation\n",
+  "content": "# Introduction\n\nLLM Boilerplate is a file-driven specification system for LLM-assisted development.\n\n## What is it?\n\nA system that allows teams to define their project specs using simple files (TOML/Markdown) and automatically generates a browsable documentation portal with a working React prototype. Optimized for AI-assisted workflows.\n\n## Key Concepts\n\n- **Layers** - Structured TOML files defining guards, roles, routes, etc.\n- **Docs** - Markdown documentation (you're reading one now)\n- **Prototype** - Working React components linked to documentation\n",
   "metadata": {
-    "size": 494,
-    "modified": "2025-12-08T18:45:04.487Z"
+    "size": 559,
+    "modified": "2025-12-11T07:54:20.721Z"
   }
 }

@@ -13,7 +13,12 @@ list = [
   "Select plan action"
 ]
 
+[relations]
+components = ["product-card"]
+entities = ["product"]
+
 [implementation]
 component = "ProductsPage"
-file = "src/prototype/pages/ProductsPage.tsx"
+file = "core/app/src/pages/prototype/ProductsPage.tsx"
+preview = "/prototype/products"
 status = "implemented"

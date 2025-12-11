@@ -19,14 +19,29 @@
         ]
       }
     },
+    "relations": {
+      "components": [
+        "user-card"
+      ],
+      "entities": [
+        "user"
+      ],
+      "events": [
+        "user-create",
+        "user-delete",
+        "user-populate"
+      ]
+    },
     "implementation": {
       "component": "UsersPage",
-      "file": "src/prototype/pages/UsersPage.tsx",
+      "file": "core/app/src/pages/prototype/UsersPage.tsx",
+      "preview": "/prototype/users",
       "status": "implemented"
     }
   },
+  "rawContent": "[page]\nid = \"users\"\nname = \"Users Page\"\ndescription = \"Page for managing system users with CRUD operations\"\npath = \"/prototype/users\"\n\n[page.features]\nlist = [\n  \"View all users in card grid\",\n  \"Add new users\",\n  \"Delete individual users\",\n  \"Bulk delete all users\",\n  \"Generate fake users for testing\",\n  \"Reset to mock data\"\n]\n\n[relations]\ncomponents = [\"user-card\"]\nentities = [\"user\"]\nevents = [\"user-create\", \"user-delete\", \"user-populate\"]\n\n[implementation]\ncomponent = \"UsersPage\"\nfile = \"core/app/src/pages/prototype/UsersPage.tsx\"\npreview = \"/prototype/users\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 438,
-    "modified": "2025-12-10T20:42:09.551Z"
+    "size": 593,
+    "modified": "2025-12-11T08:13:23.099Z"
   }
 }

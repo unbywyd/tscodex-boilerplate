@@ -1,7 +1,7 @@
 {
-  "name": "@tscodex/blueprint",
+  "name": "llm-boilerplate",
   "version": "1.0.0",
-  "description": "LLM-driven project specification generator. From idea to working prototype through structured dialogue.",
+  "description": "File-driven specification system for LLM-assisted development. From idea to working prototype through structured dialogue.",
   "private": true,
   "type": "module",
   "scripts": {
@@ -14,14 +14,15 @@
     "prisma:format": "prisma format --schema=src/prisma/schema.prisma"
   },
   "keywords": [
-    "codex",
-    "specification",
     "llm",
+    "boilerplate",
+    "specification",
     "ai",
     "prototype",
     "generator",
     "toml",
-    "react"
+    "react",
+    "documentation"
   ],
   "author": "",
   "license": "MIT",

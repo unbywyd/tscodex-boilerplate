@@ -25,6 +25,13 @@ post = [
 [relations]
 roles = ["visitor", "user"]
 guards = ["public"]
+pages = ["users", "products"]
+
+[implementation]
+route = "/prototype"
+pages = ["users", "products"]
+preview = "/prototype"
+status = "implemented"
 
 # Flow diagram
 [[flow]]

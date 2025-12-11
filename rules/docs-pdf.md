@@ -490,3 +490,128 @@ ls src/spec/layers/components/
 # Find by doc URL
 [data-doc-url="/docs/layers/components/product-card"]
 ```
+
+---
+
+## Project Manifest for LLM/RAG
+
+For LLM agents and RAG systems, the project provides a unified manifest containing all specifications.
+
+### Accessing the Manifest
+
+| Environment | URL |
+|-------------|-----|
+| Development | `http://localhost:5173/generated/manifest.json` |
+| Production | `https://domain.com/generated/manifest.json` |
+
+### Manifest Structure
+
+```json
+{
+  "version": "1.0.0",
+  "generated": "2025-12-11T...",
+  "project": {
+    "id": "llm-boilerplate",
+    "name": "LLM Boilerplate",
+    "description": "...",
+    "_meta": { "path": "layers/project/about.toml" }
+  },
+  "layers": {
+    "entities": [...],
+    "components": [...],
+    "routes": [...],
+    "pages": [...],
+    "useCases": [...],
+    "roles": [...],
+    "guards": [...],
+    "events": [...],
+    "platforms": [...],
+    "knowledge": [...],
+    "modules": []
+  },
+  "docs": [
+    {
+      "id": "getting-started-intro",
+      "title": "Introduction",
+      "content": "...(markdown content)...",
+      "_meta": { "path": "docs/getting-started/intro.md" }
+    }
+  ],
+  "relations": {
+    "byId": { "user": { "path": "...", "folder": "entities" } },
+    "graph": { "user": { "roles": ["user", "admin"] } }
+  }
+}
+```
+
+### Layer Item Structure
+
+Each item in `layers.*` arrays follows this pattern:
+
+```json
+{
+  "id": "user-card",
+  "name": "User Card",
+  "description": "Displays user information in a card format",
+  "category": "ui",
+  "props": [...],
+  "_meta": { "path": "layers/components/user-card.toml" }
+}
+```
+
+- TOML wrapper keys (`[component]`, `[entity]`) are removed
+- `_meta.path` traces back to source file
+- Each item is a self-contained chunk for RAG
+
+### Using with LangChain
+
+```python
+from langchain.schema import Document
+import json
+
+# Load manifest
+manifest = json.load(open('manifest.json'))
+
+documents = []
+for layer_name, items in manifest['layers'].items():
+    for item in items:
+        doc = Document(
+            page_content=f"{item.get('name', item['id'])}: {item.get('description', '')}\n{json.dumps(item)}",
+            metadata={
+                "layer": layer_name,
+                "id": item['id'],
+                "source": item['_meta']['path']
+            }
+        )
+        documents.append(doc)
+
+# Add to vector store
+vectorstore.add_documents(documents)
+```
+
+### Frontend Access
+
+```typescript
+import { loadManifest, type Manifest } from '@/lib/docs-loader'
+
+const manifest: Manifest = await loadManifest()
+
+// Find specific entity
+const user = manifest.layers.entities.find(e => e.id === 'user')
+
+// Get all components
+const components = manifest.layers.components
+
+// Access relations graph
+const userRelations = manifest.relations.graph['user']
+```
+
+### Why Manifest for LLM?
+
+| Requirement | Solution |
+|-------------|----------|
+| RAG chunking | Each item in `layers.*` array = 1 document chunk |
+| LLM context | Flat arrays, descriptive fields, no deep nesting |
+| Source tracing | `_meta.path` links to original TOML file |
+| Programmatic access | Direct JavaScript object traversal |
+| Deduplication | Relations in separate section, not embedded |

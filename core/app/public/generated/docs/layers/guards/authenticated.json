@@ -13,6 +13,7 @@
       "roles": []
     }
   },
+  "rawContent": "# Authentication Required Guard\n\n[guard]\nid = \"authenticated\"\nname = \"Authentication Required\"\ndescription = \"User must be authenticated to access\"\n\n[access]\nauthenticated = true\nroles = []\n",
   "metadata": {
     "size": 190,
     "modified": "2025-12-08T18:39:26.516Z"

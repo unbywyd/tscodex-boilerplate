@@ -70,6 +70,7 @@
       "code": "import { Card } from '@prototype/components/ui/Card'\n\n<Card title=\"My Card\" description=\"Description here\">\n  <p>Content goes here</p>\n</Card>\n"
     }
   },
+  "rawContent": "# Card Component\n\n[component]\nid = \"card\"\nname = \"Card\"\ndescription = \"Container for grouped content\"\ncategory = \"ui\"\n\n[[props]]\nname = \"title\"\ntype = \"string\"\nrequired = false\ndescription = \"Card header title\"\n\n[[props]]\nname = \"description\"\ntype = \"string\"\nrequired = false\ndescription = \"Card header description\"\n\n[[props]]\nname = \"footer\"\ntype = \"ReactNode\"\nrequired = false\ndescription = \"Card footer content\"\n\n[[props]]\nname = \"children\"\ntype = \"ReactNode\"\nrequired = true\ndescription = \"Card body content\"\n\n[[variants]]\nname = \"Simple\"\nprops = { children = \"Card content goes here\" }\n\n[[variants]]\nname = \"With Title\"\nprops = { title = \"Card Title\", children = \"Card content with a title\" }\n\n[[variants]]\nname = \"With Description\"\nprops = { title = \"Card Title\", description = \"A brief description\", children = \"Card content\" }\n\n[[variants]]\nname = \"With Footer\"\nprops = { title = \"Card Title\", children = \"Card content\", footer = \"Footer actions\" }\n\n[usage]\ncode = \"\"\"\nimport { Card } from '@prototype/components/ui/Card'\n\n<Card title=\"My Card\" description=\"Description here\">\n  <p>Content goes here</p>\n</Card>\n\"\"\"\n",
   "metadata": {
     "size": 1124,
     "modified": "2025-12-08T19:43:30.063Z"

@@ -1,8 +1,8 @@
-# Codex - Claude Instructions
+# LLM Boilerplate - Claude Instructions
 
 ## What Is This?
 
-Codex (@tscodex/codex) is a tool for creating software project specifications through structured dialogue. You guide users from idea to working prototype.
+LLM Boilerplate is a file-driven specification system for LLM-assisted development. You guide users from idea to working prototype through structured dialogue.
 
 **Your Role:** Interview the user about their project, create TOML specifications in `src/spec/layers/`, and generate a React prototype.
 
@@ -43,9 +43,22 @@ Complex:  Assessment → Discovery → Design → Access → Data → Modules �
 ## Rules
 - `rules/challenge.md` - adaptive workflow (READ THIS)
 - `rules/layers.md` - layer structure reference
-- `rules/patterns.md` - code patterns
+- `rules/patterns.md` - code patterns (Doc component, events, page building)
+- `rules/prototype.md` - prototype development (useRepo, factories, linking to docs)
+- `rules/docs-pdf.md` - PDF documentation, MCP integration, manifest
 - `rules/web.md` - web-specific
 - `rules/mobile.md` - mobile-specific
+
+## LLM/RAG Integration
+
+All project specifications are available as unified manifest:
+
+- **URL:** `/generated/manifest.json`
+- **Dev:** `http://localhost:5173/generated/manifest.json`
+
+Contains all layers (entities, components, routes, etc.) with `_meta.path` for source tracing.
+
+See `rules/docs-pdf.md` for manifest structure and LangChain integration.
 
 ## Don't Modify
 - `core/` - engine code

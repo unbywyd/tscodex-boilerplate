@@ -43,9 +43,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['favicons/**/*', 'og-image.png', 'twitter-image.png'],
       manifest: {
-        name: 'TSCodex BluePrint',
-        short_name: 'BluePrint',
-        description: 'LLM-driven project specification generator',
+        name: 'LLM Boilerplate',
+        short_name: 'LLM BP',
+        description: 'File-driven specification system for LLM-assisted development',
         theme_color: '#1e293b',
         background_color: '#ffffff',
         display: 'standalone',

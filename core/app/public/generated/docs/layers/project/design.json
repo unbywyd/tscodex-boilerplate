@@ -4,7 +4,7 @@
   "type": "toml",
   "content": {
     "design": {
-      "name": "MVP Generator Design System",
+      "name": "LLM Boilerplate Design System",
       "description": "Visual design requirements and guidelines",
       "theme": {
         "mode": "light",
@@ -51,8 +51,9 @@
       }
     }
   },
+  "rawContent": "# Design Requirements\n\n[design]\nname = \"LLM Boilerplate Design System\"\ndescription = \"Visual design requirements and guidelines\"\n\n[design.theme]\nmode = \"light\"  # light | dark | system\nprimary = \"blue\"\nradius = \"0.5rem\"\n\n[design.typography]\nfontFamily = \"Inter, system-ui, sans-serif\"\nmonoFamily = \"JetBrains Mono, monospace\"\nbaseSize = \"16px\"\n\n[design.layout]\nmaxWidth = \"1280px\"\ncontainerPadding = \"1.5rem\"\nheaderHeight = \"56px\"\n\n[design.components]\nbuttonStyle = \"rounded\"  # rounded | pill | square\ncardStyle = \"bordered\"   # bordered | shadow | flat\ninputStyle = \"outlined\"  # outlined | filled | underlined\n\n[design.principles]\nlist = [\n  \"Clean and minimal interface\",\n  \"Consistent spacing and alignment\",\n  \"Clear visual hierarchy\",\n  \"Accessible color contrast\",\n  \"Responsive on all devices\"\n]\n\n[design.palette]\nbackground = \"#ffffff\"\nforeground = \"#0f172a\"\nmuted = \"#f1f5f9\"\nmutedForeground = \"#64748b\"\nprimary = \"#3b82f6\"\nprimaryForeground = \"#ffffff\"\nsecondary = \"#f1f5f9\"\nsecondaryForeground = \"#0f172a\"\naccent = \"#f1f5f9\"\naccentForeground = \"#0f172a\"\ndestructive = \"#ef4444\"\nborder = \"#e2e8f0\"\n",
   "metadata": {
-    "size": 1108,
-    "modified": "2025-12-08T18:54:05.971Z"
+    "size": 1110,
+    "modified": "2025-12-11T07:54:34.914Z"
   }
 }

@@ -21,13 +21,24 @@
       }
     ],
     "relations": {
-      "components": [
-        "users-page"
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
       ]
+    },
+    "implementation": {
+      "handler": "handlePopulate",
+      "file": "core/app/src/pages/prototype/UsersPage.tsx",
+      "line": 48,
+      "preview": "/prototype/users",
+      "status": "implemented"
     }
   },
+  "rawContent": "[event]\nid = \"user.populate\"\nname = \"Users Populated\"\ndescription = \"Fake users were generated for testing\"\ncategory = \"auth\"\n\n[trigger]\naction = \"click\"\nelement = \"Populate button (+20)\"\n\n[[payload]]\nname = \"count\"\ntype = \"number\"\ndescription = \"Number of users generated\"\n\n[relations]\npages = [\"users\"]\nentities = [\"user\"]\n\n[implementation]\nhandler = \"handlePopulate\"\nfile = \"core/app/src/pages/prototype/UsersPage.tsx\"\nline = 48\npreview = \"/prototype/users\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 315,
-    "modified": "2025-12-09T07:11:42.110Z"
+    "size": 484,
+    "modified": "2025-12-11T08:14:17.898Z"
   }
 }

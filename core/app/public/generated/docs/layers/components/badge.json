@@ -88,6 +88,7 @@
       "code": "import { Badge } from '@prototype/components/ui/Badge'\n\n<Badge variant=\"success\">Active</Badge>\n"
     }
   },
+  "rawContent": "# Badge Component\n\n[component]\nid = \"badge\"\nname = \"Badge\"\ndescription = \"Small status indicator\"\ncategory = \"ui\"\n\n[[props]]\nname = \"variant\"\ntype = \"enum\"\nvalues = [\"default\", \"primary\", \"secondary\", \"success\", \"warning\", \"error\"]\ndefault = \"default\"\ndescription = \"Badge color variant\"\n\n[[props]]\nname = \"size\"\ntype = \"enum\"\nvalues = [\"sm\", \"md\"]\ndefault = \"md\"\ndescription = \"Badge size\"\n\n[[props]]\nname = \"children\"\ntype = \"ReactNode\"\nrequired = true\ndescription = \"Badge text\"\n\n[[variants]]\nname = \"Default\"\nprops = { children = \"Badge\" }\n\n[[variants]]\nname = \"Primary\"\nprops = { variant = \"primary\", children = \"Primary\" }\n\n[[variants]]\nname = \"Success\"\nprops = { variant = \"success\", children = \"Active\" }\n\n[[variants]]\nname = \"Warning\"\nprops = { variant = \"warning\", children = \"Pending\" }\n\n[[variants]]\nname = \"Error\"\nprops = { variant = \"error\", children = \"Failed\" }\n\n[[variants]]\nname = \"Small\"\nprops = { size = \"sm\", children = \"Small\" }\n\n[usage]\ncode = \"\"\"\nimport { Badge } from '@prototype/components/ui/Badge'\n\n<Badge variant=\"success\">Active</Badge>\n\"\"\"\n",
   "metadata": {
     "size": 1071,
     "modified": "2025-12-08T19:43:28.178Z"

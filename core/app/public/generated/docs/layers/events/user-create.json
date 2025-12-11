@@ -26,13 +26,24 @@
       }
     ],
     "relations": {
-      "components": [
-        "users-page"
+      "pages": [
+        "users"
+      ],
+      "entities": [
+        "user"
       ]
+    },
+    "implementation": {
+      "handler": "handleAddUser",
+      "file": "core/app/src/pages/prototype/UsersPage.tsx",
+      "line": 42,
+      "preview": "/prototype/users",
+      "status": "implemented"
     }
   },
+  "rawContent": "[event]\nid = \"user.create\"\nname = \"User Created\"\ndescription = \"New user was created in the system\"\ncategory = \"auth\"\n\n[trigger]\naction = \"click\"\nelement = \"Add User button\"\n\n[[payload]]\nname = \"userId\"\ntype = \"string\"\ndescription = \"Created user ID\"\n\n[[payload]]\nname = \"userName\"\ntype = \"string\"\ndescription = \"Created user name\"\n\n[relations]\npages = [\"users\"]\nentities = [\"user\"]\n\n[implementation]\nhandler = \"handleAddUser\"\nfile = \"core/app/src/pages/prototype/UsersPage.tsx\"\nline = 42\npreview = \"/prototype/users\"\nstatus = \"implemented\"\n",
   "metadata": {
-    "size": 373,
-    "modified": "2025-12-09T07:11:26.358Z"
+    "size": 541,
+    "modified": "2025-12-11T08:14:03.457Z"
   }
 }

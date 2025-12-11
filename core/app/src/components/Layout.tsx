@@ -34,7 +34,7 @@ export default function Layout({ children }: LayoutProps) {
             <Link to="/" className="flex items-center space-x-2 group py-2">
               <Sparkles className="h-5 w-5 text-primary transition-transform group-hover:scale-110" />
               <span className="font-bold text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                TSCodex BluePrint
+                LLM Boilerplate
               </span>
             </Link>
 
@@ -108,7 +108,7 @@ export default function Layout({ children }: LayoutProps) {
         <Container>
           <div className="flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-              TSCodex BluePrint - LLM-driven project specification generator
+              LLM Boilerplate - File-driven specification for LLM-assisted development
             </p>
             <p className="text-center text-xs text-muted-foreground md:text-right">
               From idea to working prototype through structured dialogue

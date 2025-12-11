@@ -26,6 +26,13 @@ post = [
 roles = ["visitor", "user"]
 guards = ["public"]
 
+[implementation]
+route = "/docs"
+component = "DocsPage"
+file = "core/app/src/pages/Docs.tsx"
+preview = "/docs"
+status = "implemented"
+
 # Mermaid diagram - automatically rendered as ReactFlow
 [mermaid]
 title = "Documentation Flow"

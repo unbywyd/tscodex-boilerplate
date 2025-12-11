@@ -33,6 +33,13 @@
         "public"
       ]
     },
+    "implementation": {
+      "route": "/docs",
+      "component": "DocsPage",
+      "file": "core/app/src/pages/Docs.tsx",
+      "preview": "/docs",
+      "status": "implemented"
+    },
     "mermaid": {
       "title": "Documentation Flow",
       "code": "graph LR\n    A((Start)) --> B[Navigate to /docs]\n    B --> C[Load TOML/MD files]\n    C --> D{Valid?}\n    D -->|Yes| E[Parse content]\n    D -->|No| F[Show error]\n    E --> G[Render UI]\n    G --> H((End))\n    F --> H\n"
@@ -65,8 +72,9 @@
       }
     ]
   },
+  "rawContent": "# View Project Documentation\n\n[useCase]\nid = \"uc_view_documentation\"\nname = \"View Project Documentation\"\nasRole = \"visitor\"\niWant = \"view project documentation\"\nsoThat = \"I can understand the project structure and requirements\"\n\n[useCase.meta]\nisActive = true\npriority = 1\n\n[useCase.conditions]\npre = [\n  \"Documentation server is running\",\n  \"Project manifests are available\"\n]\npost = [\n  \"User has viewed documentation\",\n  \"Documentation is displayed correctly\"\n]\n\n# Relations - keys match folder names in layers/\n[relations]\nroles = [\"visitor\", \"user\"]\nguards = [\"public\"]\n\n[implementation]\nroute = \"/docs\"\ncomponent = \"DocsPage\"\nfile = \"core/app/src/pages/Docs.tsx\"\npreview = \"/docs\"\nstatus = \"implemented\"\n\n# Mermaid diagram - automatically rendered as ReactFlow\n[mermaid]\ntitle = \"Documentation Flow\"\ncode = \"\"\"\ngraph LR\n    A((Start)) --> B[Navigate to /docs]\n    B --> C[Load TOML/MD files]\n    C --> D{Valid?}\n    D -->|Yes| E[Parse content]\n    D -->|No| F[Show error]\n    E --> G[Render UI]\n    G --> H((End))\n    F --> H\n\"\"\"\n\n# Flow diagram - visual representation of how the use case works\n[[flow]]\nid = \"navigate\"\ntype = \"start\"\nlabel = \"User navigates to /docs\"\n\n[[flow]]\nid = \"read_files\"\ntype = \"action\"\nlabel = \"Server reads TOML/MD files\"\n\n[[flow]]\nid = \"parse\"\ntype = \"action\"\nlabel = \"Parse and validate structure\"\n\n[[flow]]\nid = \"render\"\ntype = \"action\"\nlabel = \"Render documentation UI\"\n\n[[flow]]\nid = \"display\"\ntype = \"end\"\nlabel = \"User views documentation\"\n",
   "metadata": {
-    "size": 1347,
-    "modified": "2025-12-08T20:57:23.345Z"
+    "size": 1482,
+    "modified": "2025-12-11T08:14:39.491Z"
   }
 }

@@ -15,8 +15,10 @@ import {
   Target,
   Users,
   CheckCircle2,
-  Box
+  Box,
+  Link as LinkIcon
 } from 'lucide-react'
+import ArchitectureDiagram from '@/components/ArchitectureDiagram'
 
 const features = [
   {
@@ -72,6 +74,7 @@ const phases = [
   { name: 'Features', description: 'Use cases, routes, components' },
   { name: 'Prototype', description: 'Working React screens' },
   { name: 'Schema', description: 'Database schema generation' },
+  { name: 'Manifest', description: 'Unified JSON manifest for LLM/RAG integration', endpoint: import.meta.env.DEV ? '/api/manifest' : '/generated/manifest.json', isEndpoint: true },
 ]
 
 export default function AboutPage() {
@@ -202,6 +205,17 @@ export default function AboutPage() {
             </p>
           </div>
 
+          {/* Architecture Diagram */}
+          <div className="mb-12 px-4">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-2 text-center">System Architecture</h3>
+              <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto">
+                Visual overview: core engine, spec layers, prototype, documentation, manifest, and multi-platform support
+              </p>
+            </div>
+            <ArchitectureDiagram />
+          </div>
+
           <div className="relative px-4">
             {/* Timeline line */}
             <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border md:-translate-x-1/2" />
@@ -221,15 +235,28 @@ export default function AboutPage() {
                   <div className={`flex-1 ml-10 sm:ml-12 md:ml-0 w-full ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
                     <Card className="w-full md:inline-block">
                       <CardHeader className="pb-2">
-                        <div className={`flex items-center gap-2 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                        <div className={`flex items-center gap-2 flex-wrap ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
                           <Badge variant="outline" className="text-xs">
                             Phase {index + 1}
                           </Badge>
+                          {(phase as any).isEndpoint && (
+                            <Badge variant="secondary" className="text-xs">
+                              <LinkIcon className="w-3 h-3 mr-1" />
+                              API
+                            </Badge>
+                          )}
                         </div>
                         <CardTitle className="text-base sm:text-lg">{phase.name}</CardTitle>
                       </CardHeader>
                       <CardContent>
-                        <p className="text-xs sm:text-sm text-muted-foreground">{phase.description}</p>
+                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">{phase.description}</p>
+                        {(phase as any).endpoint && (
+                          <div className="mt-2 pt-2 border-t">
+                            <code className="text-xs bg-muted px-2 py-1 rounded font-mono break-all">
+                              {(phase as any).endpoint}
+                            </code>
+                          </div>
+                        )}
                       </CardContent>
                     </Card>
                   </div>

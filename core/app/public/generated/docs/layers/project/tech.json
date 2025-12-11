@@ -36,6 +36,7 @@
       }
     }
   },
+  "rawContent": "# Technical Stack\n\n[stack]\nruntime = \"Node.js 20+\"\nlanguage = \"TypeScript 5.x\"\nframework = \"React 19\"\nstyling = \"Tailwind CSS 4\"\nbundler = \"Vite 6\"\norm = \"Prisma 7 (schema validation only)\"\n\n[architecture]\ntype = \"Single Page Application\"\npattern = \"File-driven\"\ndescription = \"\"\"\nSingle SPA combining documentation portal and MVP prototype.\nSource files (TOML/Markdown) are converted to JSON at build time.\n\"\"\"\n\n[folders]\ncore = \"Engine code (app, builder, dev-server)\"\nsrc = \"Content (docs, prototype)\"\ninstructions = \"LLM instructions (root level)\"\n\n[dependencies.state]\nname = \"zustand\"\npurpose = \"Simple state management\"\n\n[dependencies.forms]\nname = \"react-hook-form + zod\"\npurpose = \"Form validation\"\n\n[dependencies.routing]\nname = \"react-router-dom\"\npurpose = \"Client-side routing\"\n",
   "metadata": {
     "size": 790,
     "modified": "2025-12-08T18:39:09.706Z"

@@ -198,68 +198,126 @@ Events are defined in `src/spec/layers/events/*.toml`. Toast shows:
 
 ## Doc Component
 
-Use `Doc` wrapper to link prototype elements to documentation.
+Use `Doc` to link prototype elements to TOML specifications.
 Provided by the core engine — cannot be broken by prototype code.
 
-### Usage
+### Two Modes
 
+**Wrapper mode** — wraps components with hover documentation button:
 ```tsx
 import { Doc } from '@/components/ui'
 
-// Page/screen
-<Doc of="routes.users">
-  <Container>...</Container>
-</Doc>
-
-// Component with entity
 <Doc of="components.user-card" entityId={user.id}>
-  <Card>...</Card>
+  <Card>{user.name}</Card>
 </Doc>
+```
+
+**Floating mode** — renders fixed button for pages (doesn't wrap content):
+```tsx
+<Doc of="pages.users" floating position="bottom-right" />
 ```
 
 ### Props
 
 | Prop | Type | Description |
 |------|------|-------------|
-| `of` | `string` | Doc reference: `"layer.id"` (e.g., `"routes.users"`, `"components.user-card"`) |
-| `entityId` | `string \| number` | Optional entity instance ID |
-| `className` | `string` | Additional CSS classes |
+| `of` | `string` | Doc reference: `"layer.id"` (e.g., `"pages.users"`, `"components.user-card"`) |
+| `floating` | `boolean` | When `true`, renders fixed button without wrapping children |
+| `position` | `Position` | Floating button position (default: `"bottom-right"`) |
+| `entityId` | `string \| number` | Optional entity instance ID (wrapper mode only) |
+| `className` | `string` | Additional CSS classes (wrapper mode only) |
 
-### How it works
+**Position options:** `"bottom-right"` | `"bottom-left"` | `"top-right"` | `"top-left"`
 
-1. **Parses** `of` prop → extracts layer and id
-2. **Checks** if documentation exists in `/docs/layers/{layer}/{id}`
-3. **Sets** `data-screen` (for routes/pages) or `data-component` (for others)
-4. **Shows "?"** button only if doc exists
+### Rendered HTML & Data Attributes
 
-### Behavior
+**Wrapper mode:**
+```html
+<div data-component="user-card" data-doc-url="/docs/layers/components/user-card" data-entity-id="123">
+  ...children...
+</div>
+```
 
-- **Hover** — "?" button appears in corner
-- **Click "?"** — popover shows doc path with copy button
-- **Click "Open docs"** — navigates to documentation
-- **No doc?** — no "?" button, just renders children
+**Floating mode:**
+```html
+<div data-doc-url="/docs/layers/pages/users" class="fixed bottom-6 right-6 z-50">
+  <button>?</button>
+</div>
+```
 
-### Supported layers
+### Data Attributes Reference
 
-| Layer | Data attribute | Example |
-|-------|----------------|---------|
-| `routes` | `data-screen` | `<Doc of="routes.users">` |
-| `pages` | `data-screen` | `<Doc of="pages.dashboard">` |
-| `components` | `data-component` | `<Doc of="components.user-card">` |
-| `entities` | `data-component` | `<Doc of="entities.user">` |
+| Attribute | Purpose | Set by |
+|-----------|---------|--------|
+| `data-screen` | Page/screen identifier | Wrapper mode for `pages`, `routes`, `screens` layers |
+| `data-component` | Component identifier | Wrapper mode for all other layers |
+| `data-entity-id` | Specific entity instance | When `entityId` prop provided |
+| `data-doc-url` | **Path to documentation** | Always set (both modes) |
 
-### MCP Server Usage
+### Best Practices
+
+**When to use wrapper mode:**
+- Card components: `<Doc of="components.user-card"><Card>...</Card></Doc>`
+- List items: wrap each item with entityId
+- Buttons with actions: document interaction points
+- Any UI element that should be documentable
+
+**When to use floating mode:**
+- Page-level documentation: add once per page
+- Dashboard screens: floating button doesn't interfere with layout
+- When you can't wrap the entire page container
+
+**Page documentation pattern:**
+```tsx
+// UsersPage.tsx
+export function UsersPage() {
+  return (
+    <>
+      <Doc of="pages.users" floating position="bottom-right" />
+      <Container>
+        {users.map(user => (
+          <Doc of="components.user-card" entityId={user.id} key={user.id}>
+            <UserCard user={user} />
+          </Doc>
+        ))}
+      </Container>
+    </>
+  )
+}
+```
+
+### MCP Server / LLM Integration
+
+The `data-doc-url` attribute enables LLM agents to navigate documentation:
 
 ```javascript
-// Capture full screen
+// Find all documentable elements
+document.querySelectorAll('[data-doc-url]')
+
+// Get doc path from element
+element.getAttribute('data-doc-url')
+// → "/docs/layers/components/user-card"
+
+// Derive TOML file path
+// /docs/layers/components/user-card → src/spec/layers/components/user-card.toml
+```
+
+**Screenshot selectors for MCP:**
+```javascript
+// Full page
 await screenshot('[data-screen="users"]')
 
-// Capture specific component
+// Any component of type
 await screenshot('[data-component="user-card"]')
 
-// Capture entity instance
+// Specific entity instance
 await screenshot('[data-entity-id="user-123"]')
+
+// Find by doc URL
+await screenshot('[data-doc-url="/docs/layers/components/product-card"]')
 ```
+
+> **See `rules/prototype.md`** for complete page building guide (loading states, empty states, headers, grids, responsive patterns).
 
 ## Imports
 

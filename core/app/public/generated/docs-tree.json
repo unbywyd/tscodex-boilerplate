@@ -43,8 +43,8 @@
               "name": "intro.md",
               "type": "markdown",
               "metadata": {
-                "size": 494,
-                "modified": "2025-12-08T18:45:04.487Z"
+                "size": 559,
+                "modified": "2025-12-11T07:54:20.721Z"
               }
             },
             {
@@ -111,8 +111,8 @@
               "name": "product-card.toml",
               "type": "toml",
               "metadata": {
-                "size": 499,
-                "modified": "2025-12-10T20:41:22.116Z"
+                "size": 710,
+                "modified": "2025-12-11T08:13:00.669Z"
               }
             },
             {
@@ -120,8 +120,8 @@
               "name": "user-card.toml",
               "type": "toml",
               "metadata": {
-                "size": 448,
-                "modified": "2025-12-10T20:41:20.092Z"
+                "size": 644,
+                "modified": "2025-12-11T08:12:58.648Z"
               }
             }
           ],
@@ -145,8 +145,8 @@
               "name": "product.toml",
               "type": "toml",
               "metadata": {
-                "size": 1389,
-                "modified": "2025-12-08T19:24:30.588Z"
+                "size": 1645,
+                "modified": "2025-12-11T08:13:46.281Z"
               }
             },
             {
@@ -154,8 +154,8 @@
               "name": "user.toml",
               "type": "toml",
               "metadata": {
-                "size": 1234,
-                "modified": "2025-12-08T19:24:28.425Z"
+                "size": 1478,
+                "modified": "2025-12-11T08:13:44.253Z"
               }
             }
           ],
@@ -188,8 +188,8 @@
               "name": "user-create.toml",
               "type": "toml",
               "metadata": {
-                "size": 373,
-                "modified": "2025-12-09T07:11:26.358Z"
+                "size": 541,
+                "modified": "2025-12-11T08:14:03.457Z"
               }
             },
             {
@@ -197,8 +197,8 @@
               "name": "user-delete.toml",
               "type": "toml",
               "metadata": {
-                "size": 301,
-                "modified": "2025-12-09T07:11:34.761Z"
+                "size": 472,
+                "modified": "2025-12-11T08:14:05.499Z"
               }
             },
             {
@@ -215,8 +215,8 @@
               "name": "user-populate.toml",
               "type": "toml",
               "metadata": {
-                "size": 315,
-                "modified": "2025-12-09T07:11:42.110Z"
+                "size": 484,
+                "modified": "2025-12-11T08:14:17.898Z"
               }
             }
           ],
@@ -296,8 +296,8 @@
               "name": "products.toml",
               "type": "toml",
               "metadata": {
-                "size": 441,
-                "modified": "2025-12-10T20:42:11.625Z"
+                "size": 548,
+                "modified": "2025-12-11T08:13:25.142Z"
               }
             },
             {
@@ -305,8 +305,8 @@
               "name": "users.toml",
               "type": "toml",
               "metadata": {
-                "size": 438,
-                "modified": "2025-12-10T20:42:09.551Z"
+                "size": 593,
+                "modified": "2025-12-11T08:13:23.099Z"
               }
             }
           ],
@@ -346,8 +346,8 @@
               "name": "about.toml",
               "type": "toml",
               "metadata": {
-                "size": 764,
-                "modified": "2025-12-09T09:39:04.525Z"
+                "size": 819,
+                "modified": "2025-12-11T07:52:06.632Z"
               }
             },
             {
@@ -355,8 +355,8 @@
               "name": "business.toml",
               "type": "toml",
               "metadata": {
-                "size": 649,
-                "modified": "2025-12-08T18:39:11.613Z"
+                "size": 698,
+                "modified": "2025-12-11T07:52:34.384Z"
               }
             },
             {
@@ -364,8 +364,8 @@
               "name": "design.toml",
               "type": "toml",
               "metadata": {
-                "size": 1108,
-                "modified": "2025-12-08T18:54:05.971Z"
+                "size": 1110,
+                "modified": "2025-12-11T07:54:34.914Z"
               }
             },
             {
@@ -448,8 +448,8 @@
               "name": "view-documentation.toml",
               "type": "toml",
               "metadata": {
-                "size": 1347,
-                "modified": "2025-12-08T20:57:23.345Z"
+                "size": 1482,
+                "modified": "2025-12-11T08:14:39.491Z"
               }
             },
             {
@@ -457,8 +457,8 @@
               "name": "view-prototype.toml",
               "type": "toml",
               "metadata": {
-                "size": 902,
-                "modified": "2025-12-08T19:09:12.908Z"
+                "size": 1047,
+                "modified": "2025-12-11T08:14:37.403Z"
               }
             }
           ],

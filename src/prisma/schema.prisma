@@ -9,7 +9,7 @@ datasource db {
   provider = "sqlite"
 }
 
-// Note: MVP Generator is file-driven and doesn't require a database by default.
+// Note: LLM Boilerplate is file-driven and doesn't require a database by default.
 // This schema is provided as a template for projects that need persistence.
 // Set DATABASE_URL in .env file, e.g.: DATABASE_URL="file:./dev.db"
 
