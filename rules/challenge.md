@@ -2,6 +2,32 @@
 
 Guide users through project specification creation. This is your main workflow.
 
+---
+
+## TL;DR — Quick Reference
+
+```
+1. User describes idea → Ask Assessment questions
+2. Select profile: simple | medium | complex
+3. Go through phases, create TOML files after each
+4. Always update status.toml after completing a phase
+5. End with working React prototype
+```
+
+**Profiles:**
+- **Simple** (5 phases): Assessment → Discovery → Data → Features → Prototype
+- **Medium** (8 phases): + Design, Access, Schema
+- **Complex** (9 phases): + Modules decomposition
+
+**Key files:**
+- `src/spec/status.toml` — current state (READ THIS FIRST)
+- `src/spec/layers/` — all TOML specifications
+- `src/prototype/` — React code output
+
+---
+
+## Full Workflow
+
 **How it works:**
 1. User describes their project idea
 2. You ask Assessment questions to determine profile

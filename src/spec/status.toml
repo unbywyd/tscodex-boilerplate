@@ -1,5 +1,21 @@
 # Project Status
-# LLM updates this file as phases complete
+# ================================================
+# LLM: READ THIS FILE FIRST!
+#
+# If currentPhase = "assessment" and all phases "pending":
+#   → This is a FRESH PROJECT, start from scratch
+#   → Ask user Assessment questions (see rules/challenge.md)
+#
+# If some phases are "completed":
+#   → CONTINUE from currentPhase
+#   → Read existing files in src/spec/layers/
+#
+# After completing each phase:
+#   1. Set phase status = "completed"
+#   2. Set currentPhase = next phase
+#   3. Mark checklist items = true
+#   4. Update lastUpdated date
+# ================================================
 
 [status]
 id = "status"

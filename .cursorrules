@@ -6,21 +6,56 @@ LLM Boilerplate is a file-driven specification system for LLM-assisted developme
 
 **Your Role:** Interview the user about their project, create TOML specifications in `src/spec/layers/`, and generate a React prototype.
 
-**User Scenario:** User comes with a project idea (e.g., "I want to build a task manager app"). You ask questions, determine complexity, and create specs phase by phase.
+## Quick Start (Do This First!)
 
-## Workflow
+1. **Read `src/spec/status.toml`** — check `currentPhase` and `profile`
+2. **Determine state:**
+   - If `currentPhase = "assessment"` and all phases `pending` → **Fresh project, start from scratch**
+   - If some phases `completed` → **Continue from `currentPhase`**
+3. **Read `rules/challenge.md`** — full workflow details
 
-1. **User describes idea** → You start Assessment phase
-2. **You ask questions** → Based on profile depth (shallow/medium/deep)
-3. **You create TOML files** → In `src/spec/layers/` folders
-4. **You update status.toml** → After each phase completion
-5. **You generate prototype** → React components in `src/prototype/`
+## Fresh Project Flow
 
-## Start Here
+When user describes a new project idea:
 
-1. Read `src/spec/status.toml` - current state and profile
-2. Read `rules/challenge.md` - adaptive workflow (IMPORTANT)
-3. Check `src/spec/layers/` - existing specifications
+```
+User: "I want to build a task manager app"
+
+You: "Great! Let me ask a few questions to understand the scope:
+1. What type of project? (web-app, mobile, api, landing)
+2. How many user roles? (single user, 2-3 roles, many roles)
+3. Data complexity? (simple CRUD, relational, complex)
+4. External integrations needed?
+5. Single app or multiple platforms (web + mobile + admin)?"
+
+[Based on answers → select profile: simple/medium/complex]
+[Update status.toml → profile, currentPhase = "discovery"]
+[Continue to Discovery phase questions...]
+```
+
+## Phase-by-Phase Actions
+
+| Phase | Your Action | Output |
+|-------|-------------|--------|
+| Assessment | Ask scope questions, select profile | Update `status.toml` |
+| Discovery | Ask "what/who/why" questions | Create `layers/project/about.toml` |
+| Design | Ask visual/UX preferences | Create `layers/project/design.toml` |
+| Access | Ask about roles and permissions | Create `layers/roles/*.toml`, `layers/guards/*.toml` |
+| Data | Ask about entities and fields | Create `layers/entities/*.toml` |
+| Features | Ask about screens and actions | Create `layers/routes/*.toml`, `layers/use-cases/*.toml`, `layers/components/*.toml` |
+| Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
+| Schema | Generate Prisma schema | Create `prisma/schema.prisma` |
+
+## Critical Rules
+
+1. **Always update status.toml** after completing each phase
+2. **Ask before generating** — don't assume, clarify requirements
+3. **Create TOML files** in correct folders under `src/spec/layers/`
+4. **Use knowledge layer** — capture every decision as a fact in `layers/knowledge/*.toml`
+5. **Follow profile depth:**
+   - Simple → shallow questions, minimal files
+   - Medium → detailed questions, full specs
+   - Complex → deep questions, edge cases, modules
 
 ## Key Paths
 - `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
