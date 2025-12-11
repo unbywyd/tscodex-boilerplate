@@ -139,39 +139,51 @@ function Section({
 }) {
   const styles = {
     blue: { 
-      border: 'border-blue-300 dark:border-blue-700', 
-      bg: 'bg-blue-50/50 dark:bg-blue-950/20',
-      label: 'text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900/50',
+      border: 'border-blue-200/40 dark:border-blue-600/40', 
+      bg: 'bg-blue-50/30 dark:bg-blue-950/30',
+      label: 'text-blue-700 dark:text-blue-300 bg-blue-100/70 dark:bg-blue-900/50',
       icon: 'text-blue-600 dark:text-blue-400'
     },
     purple: { 
-      border: 'border-purple-300 dark:border-purple-700', 
-      bg: 'bg-purple-50/50 dark:bg-purple-950/20',
-      label: 'text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/50',
+      border: 'border-purple-200/40 dark:border-purple-600/40', 
+      bg: 'bg-purple-50/30 dark:bg-purple-950/30',
+      label: 'text-purple-700 dark:text-purple-300 bg-purple-100/70 dark:bg-purple-900/50',
       icon: 'text-purple-600 dark:text-purple-400'
     },
     green: { 
-      border: 'border-green-300 dark:border-green-700', 
-      bg: 'bg-green-50/50 dark:bg-green-950/20',
-      label: 'text-green-700 dark:text-green-300 bg-green-100 dark:bg-green-900/50',
+      border: 'border-green-200/40 dark:border-green-600/40', 
+      bg: 'bg-green-50/30 dark:bg-green-950/30',
+      label: 'text-green-700 dark:text-green-300 bg-green-100/70 dark:bg-green-900/50',
       icon: 'text-green-600 dark:text-green-400'
     },
     amber: { 
-      border: 'border-amber-300 dark:border-amber-700', 
-      bg: 'bg-amber-50/50 dark:bg-amber-950/20',
-      label: 'text-amber-700 dark:text-amber-300 bg-amber-100 dark:bg-amber-900/50',
+      border: 'border-amber-200/40 dark:border-amber-600/40', 
+      bg: 'bg-amber-50/30 dark:bg-amber-950/30',
+      label: 'text-amber-700 dark:text-amber-300 bg-amber-100/70 dark:bg-amber-900/50',
       icon: 'text-amber-600 dark:text-amber-400'
     },
   }
   const style = styles[color]
   
   return (
-    <div className={`
-      relative border-2 border-dashed ${style.border} ${style.bg}
-      rounded-xl p-4 pt-6 shadow-sm
-      transition-all duration-300 hover:shadow-md hover:scale-[1.01]
-    `}>
-      <div className={`absolute -top-3 left-4 flex items-center gap-1.5 px-3 py-1 rounded-lg ${style.label} shadow-sm`}>
+    <div 
+      className={`
+        relative border ${style.border} ${style.bg}
+        rounded-xl p-4 pt-6
+        transition-all duration-300 hover:scale-[1.01]
+        backdrop-blur-xl
+      `}
+      style={{ 
+        backdropFilter: 'blur(24px)', 
+        WebkitBackdropFilter: 'blur(24px)',
+        backgroundColor: style.bg.includes('blue') ? 'rgba(239, 246, 255, 0.3)' :
+                         style.bg.includes('purple') ? 'rgba(250, 245, 255, 0.3)' :
+                         style.bg.includes('green') ? 'rgba(240, 253, 244, 0.3)' :
+                         'rgba(255, 251, 235, 0.3)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)'
+      }}
+    >
+      <div className={`absolute -top-3 left-4 flex items-center gap-1.5 px-3 py-1 rounded-lg ${style.label} backdrop-blur-sm`} style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
         {Icon && <Icon className={`w-3.5 h-3.5 ${style.icon}`} />}
         <span className="text-xs font-semibold">{label}</span>
       </div>
@@ -201,12 +213,16 @@ function Tag({
     amber: 'border-amber-400/60 dark:border-amber-600 text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/50',
   }
   return (
-    <span className={`
-      inline-flex items-center gap-1.5 border rounded-md font-medium
-      transition-all duration-200 hover:scale-105 hover:shadow-sm
-      ${colors[color]}
-      ${small ? 'px-1.5 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'}
-    `}>
+    <span 
+      className={`
+        inline-flex items-center gap-1.5 border rounded-md font-medium
+        transition-all duration-200 hover:scale-105
+        ${colors[color].replace('50', '40').replace('950/50', '900/40')}
+        backdrop-blur-sm
+        ${small ? 'px-1.5 py-0.5 text-[10px]' : 'px-2.5 py-1 text-xs'}
+      `}
+      style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}
+    >
       {Icon && <Icon className={`${small ? 'w-2.5 h-2.5' : 'w-3 h-3'}`} />}
       {children}
     </span>
@@ -239,14 +255,22 @@ function OutputCard({
   endpoint: string
 }) {
   return (
-    <div className="group relative p-3 rounded-lg border border-border/50 bg-background/50 hover:bg-background transition-all duration-200 hover:shadow-md">
+    <div 
+      className="group relative p-3 rounded-lg border border-white/40 backdrop-blur-xl hover:bg-white/60 dark:hover:bg-slate-900/60 transition-all duration-200"
+      style={{ 
+        backdropFilter: 'blur(24px)', 
+        WebkitBackdropFilter: 'blur(24px)',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)'
+      }}
+    >
       <div className="flex flex-col items-center text-center space-y-2">
-        <div className="p-2 rounded-lg bg-muted/50 group-hover:bg-muted transition-colors">
+        <div className="p-2 rounded-lg bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm group-hover:bg-white/60 dark:group-hover:bg-slate-800/60 transition-colors">
           <Icon className="w-5 h-5 text-muted-foreground" />
         </div>
         <Tag color={tagColor} small>{title}</Tag>
         <p className="text-xs text-muted-foreground">{description}</p>
-        <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded font-mono text-muted-foreground break-all">
+        <code className="text-[10px] bg-white/40 dark:bg-slate-800/40 backdrop-blur-sm px-1.5 py-0.5 rounded font-mono text-muted-foreground break-all border border-white/20">
           {endpoint}
         </code>
       </div>

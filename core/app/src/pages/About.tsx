@@ -10,13 +10,13 @@ import {
   Database,
   GitBranch,
   Code2,
-  ArrowRight,
   Sparkles,
   Target,
   Users,
   CheckCircle2,
   Box,
-  Link as LinkIcon
+  Github,
+  Bot
 } from 'lucide-react'
 import ArchitectureDiagram from '@/components/ArchitectureDiagram'
 
@@ -65,16 +65,11 @@ const features = [
   },
 ]
 
-const phases = [
-  { name: 'Assessment', description: 'Determine project scope and complexity' },
-  { name: 'Discovery', description: 'Define core value and target audience' },
-  { name: 'Design', description: 'Visual and UX requirements' },
-  { name: 'Access Control', description: 'User roles and permissions' },
-  { name: 'Data Model', description: 'Entities and relationships' },
-  { name: 'Features', description: 'Use cases, routes, components' },
-  { name: 'Prototype', description: 'Working React screens' },
-  { name: 'Schema', description: 'Database schema generation' },
-  { name: 'Manifest', description: 'Unified JSON manifest for LLM/RAG integration', endpoint: import.meta.env.DEV ? '/api/manifest' : '/generated/manifest.json', isEndpoint: true },
+const roadmap = [
+  { name: 'LLM Challenge', description: 'LLM performs challenge according to project rules' },
+  { name: 'Project Structure', description: 'Project has clear structure and allows creating files and folders' },
+  { name: 'Auto Generation', description: 'Documentation and prototype in UI are automatically generated' },
+  { name: 'Production SPA', description: 'On production we get SPA with all files - static, no server' },
 ]
 
 export default function AboutPage() {
@@ -131,10 +126,12 @@ export default function AboutPage() {
       <section className="border-b">
         <Container size="lg" className="py-8 sm:py-12 md:py-16">
           <div className="grid md:grid-cols-2 gap-4 sm:gap-6 md:gap-8">
-            <Card className="border-destructive/20 bg-destructive/5">
+            <Card className="!backdrop-blur-xl !border-white/40 bg-gradient-to-br from-red-100/70 via-red-50/50 to-white/50 dark:from-red-950/30 dark:via-red-900/20 dark:to-slate-900/50" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
               <CardHeader>
-                <div className="flex items-center gap-2 text-destructive">
-                  <Target className="w-5 h-5" />
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-gradient-to-br from-red-400 to-red-600 p-2.5">
+                    <Target className="w-5 h-5 text-white" />
+                  </div>
                   <CardTitle>The Problem</CardTitle>
                 </div>
               </CardHeader>
@@ -145,10 +142,12 @@ export default function AboutPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-green-500/30 bg-green-50 dark:bg-green-950/30">
+            <Card className="!backdrop-blur-xl !border-white/40 bg-gradient-to-br from-green-100/70 via-green-50/50 to-white/50 dark:from-green-950/30 dark:via-green-900/20 dark:to-slate-900/50" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
               <CardHeader>
-                <div className="flex items-center gap-2 text-green-700 dark:text-green-400">
-                  <CheckCircle2 className="w-5 h-5" />
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-gradient-to-br from-green-400 to-green-600 p-2.5">
+                    <CheckCircle2 className="w-5 h-5 text-white" />
+                  </div>
                   <CardTitle>The Solution</CardTitle>
                 </div>
               </CardHeader>
@@ -196,8 +195,15 @@ export default function AboutPage() {
       </section>
 
       {/* Workflow Phases */}
-      <section className="border-b">
-        <Container size="lg" className="py-8 sm:py-12 md:py-16">
+      <section className="border-b relative overflow-hidden">
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          {/* Animated gradient blobs - local to section, muted */}
+          <div className="absolute top-0 left-[10%] w-[500px] h-[500px] bg-purple-300/15 dark:bg-purple-400/8 rounded-full blur-3xl animate-blob-1" />
+          <div className="absolute top-1/4 right-[15%] w-[500px] h-[500px] bg-blue-300/15 dark:bg-blue-400/8 rounded-full blur-3xl animate-blob-2" />
+          <div className="absolute bottom-1/4 left-[20%] w-[500px] h-[500px] bg-pink-300/15 dark:bg-pink-400/8 rounded-full blur-3xl animate-blob-3" />
+          <div className="absolute bottom-0 right-[10%] w-[500px] h-[500px] bg-green-300/15 dark:bg-green-400/8 rounded-full blur-3xl animate-blob-4" />
+        </div>
+        <Container size="lg" className="py-8 sm:py-12 md:py-16 relative">
           <div className="text-center mb-6 sm:mb-8 md:mb-12 px-4">
             <h2 className="text-2xl sm:text-3xl font-bold mb-2 sm:mb-4">Development Workflow</h2>
             <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
@@ -205,67 +211,70 @@ export default function AboutPage() {
             </p>
           </div>
 
-          {/* Architecture Diagram */}
+          {/* Roadmap */}
           <div className="mb-12 px-4">
             <div className="mb-6">
               <h3 className="text-xl font-semibold mb-2 text-center">System Architecture</h3>
+            </div>
+            <div className="relative px-4 overflow-visible">
+              {/* Timeline line - gradient */}
+              <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-primary/30 to-transparent md:-translate-x-1/2" />
+
+              <div className="space-y-6 sm:space-y-8">
+                {roadmap.map((step, index) => {
+                  // Gradient colors for dots
+                  const gradientColors = [
+                    'from-purple-400 to-purple-600',
+                    'from-blue-400 to-blue-600',
+                    'from-pink-400 to-pink-600',
+                    'from-green-400 to-green-600',
+                  ]
+                  const gradient = gradientColors[index % gradientColors.length]
+
+                  return (
+                    <div
+                      key={step.name}
+                      className={`relative flex items-start md:items-center gap-3 sm:gap-4 md:gap-8 ${index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
+                        }`}
+                    >
+                      {/* Timeline dot - gradient */}
+                      <div className={`absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-gradient-to-br ${gradient} border-2 border-white dark:border-slate-900 md:-translate-x-1/2 z-10 shrink-0 mt-1 md:mt-0`} style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }} />
+
+                      {/* Content */}
+                      <div className={`flex-1 ml-10 sm:ml-12 md:ml-0 w-full ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
+                        <Card className="w-full md:inline-block !backdrop-blur-xl !bg-white/50 dark:!bg-slate-900/50 !border-white/40 hover:!bg-white/60 dark:hover:!bg-slate-900/60 transition-all duration-300" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
+                          <CardHeader className="pb-2">
+                            <div className={`flex items-center gap-2 flex-wrap ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                              <Badge variant="outline" className="text-xs border-white/30">
+                                Step {index + 1}
+                              </Badge>
+                            </div>
+                            <CardTitle className="text-base sm:text-lg">{step.name}</CardTitle>
+                          </CardHeader>
+                          <CardContent>
+                            <p className="text-xs sm:text-sm text-muted-foreground mb-2">{step.description}</p>
+                          </CardContent>
+                        </Card>
+                      </div>
+
+                      {/* Spacer for alternating layout */}
+                      <div className="hidden md:block flex-1" />
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          </div>
+
+          {/* Architecture Diagram */}
+          <div className="mt-16 mb-12 px-4">
+            <div className="mb-6">
+              <h3 className="text-xl font-semibold mb-2 text-center">System Structure</h3>
               <p className="text-sm text-muted-foreground text-center max-w-2xl mx-auto">
                 Visual overview: core engine, spec layers, prototype, documentation, manifest, and multi-platform support
               </p>
             </div>
             <ArchitectureDiagram />
-          </div>
-
-          <div className="relative px-4">
-            {/* Timeline line */}
-            <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-border md:-translate-x-1/2" />
-
-            <div className="space-y-6 sm:space-y-8">
-              {phases.map((phase, index) => (
-                <div
-                  key={phase.name}
-                  className={`relative flex items-start md:items-center gap-3 sm:gap-4 md:gap-8 ${
-                    index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-                  }`}
-                >
-                  {/* Timeline dot */}
-                  <div className="absolute left-4 md:left-1/2 w-3 h-3 rounded-full bg-primary border-4 border-background md:-translate-x-1/2 z-10 shrink-0 mt-1 md:mt-0" />
-
-                  {/* Content */}
-                  <div className={`flex-1 ml-10 sm:ml-12 md:ml-0 w-full ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
-                    <Card className="w-full md:inline-block">
-                      <CardHeader className="pb-2">
-                        <div className={`flex items-center gap-2 flex-wrap ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                          <Badge variant="outline" className="text-xs">
-                            Phase {index + 1}
-                          </Badge>
-                          {(phase as any).isEndpoint && (
-                            <Badge variant="secondary" className="text-xs">
-                              <LinkIcon className="w-3 h-3 mr-1" />
-                              API
-                            </Badge>
-                          )}
-                        </div>
-                        <CardTitle className="text-base sm:text-lg">{phase.name}</CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <p className="text-xs sm:text-sm text-muted-foreground mb-2">{phase.description}</p>
-                        {(phase as any).endpoint && (
-                          <div className="mt-2 pt-2 border-t">
-                            <code className="text-xs bg-muted px-2 py-1 rounded font-mono break-all">
-                              {(phase as any).endpoint}
-                            </code>
-                          </div>
-                        )}
-                      </CardContent>
-                    </Card>
-                  </div>
-
-                  {/* Spacer for alternating layout */}
-                  <div className="hidden md:block flex-1" />
-                </div>
-              ))}
-            </div>
           </div>
         </Container>
       </section>
@@ -323,23 +332,23 @@ export default function AboutPage() {
       {/* CTA Section */}
       <section>
         <Container size="lg" className="py-8 sm:py-12 md:py-16 px-4">
-          <Card className="bg-gradient-to-br from-background via-muted/30 to-muted/50 border-border/50">
-            <CardContent className="py-8 sm:py-10 md:py-12 text-center">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 sm:mb-4">Ready to Explore?</h2>
-              <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-xl mx-auto">
-                Check out the documentation to see how specs are structured, or jump straight to the prototype.
+          <Card className="!backdrop-blur-xl !bg-white/50 dark:!bg-slate-900/50 !border-white/40" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
+            <CardContent className="py-8 sm:py-10 md:py-12 text-center space-y-4">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-bold">Ready to Explore?</h2>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-2xl mx-auto">
+                Clone the repository, invite your LLM, and start building your project today
               </p>
-              <div className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center">
-                <Button size="lg" asChild className="w-full sm:w-auto">
-                  <Link to="/docs">
-                    Explore Documentation
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </Link>
+              <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                <Button asChild size="lg">
+                  <a href="https://github.com/unbywyd/tscodex-boilerplate" target="_blank" rel="noopener noreferrer">
+                    <Github className="h-4 w-4 mr-2" />
+                    Clone Repository
+                  </a>
                 </Button>
-                <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
-                  <Link to="/schema">
-                    View Schema
-                    <Database className="w-4 h-4 ml-2" />
+                <Button asChild variant="outline" size="lg">
+                  <Link to="/challenge">
+                    <Bot className="h-4 w-4 mr-2" />
+                    Learn How It Works
                   </Link>
                 </Button>
               </div>

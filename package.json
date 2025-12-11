@@ -24,8 +24,8 @@
     "react",
     "documentation"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Artyom Gorlovetskiy (unbywyd) <https://unbywyd.com>",
+  "license": "CC-BY-NC-4.0",
   "dependencies": {
     "@faker-js/faker": "^10.1.0",
     "@hookform/resolvers": "^3.9.1",
