@@ -482,6 +482,22 @@ async function generateManifest(relationsMap: RelationsMap) {
     return results
   }
 
+  // Load project info first (special case - not in layers array)
+  const projectAboutPath = path.join(layersDir, 'project/about.toml')
+  try {
+    const projectContent = await readTomlFile(projectAboutPath)
+    if (projectContent?.project) {
+      manifest.project = {
+        ...projectContent.project,
+        _meta: { path: 'layers/project/about.toml' },
+      }
+    }
+  } catch (error: any) {
+    if (error.code !== 'ENOENT') {
+      console.error('Error loading project about.toml:', error)
+    }
+  }
+
   // Process each layer folder
   for (const [layerName, layerArray] of Object.entries(manifest.layers) as [string, any[]][]) {
     const folderName = layerName === 'useCases' ? 'use-cases' : layerName

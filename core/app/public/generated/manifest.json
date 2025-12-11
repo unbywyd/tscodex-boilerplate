@@ -1,7 +1,15 @@
 {
   "version": "1.0.0",
-  "generated": "2025-12-11T09:08:47.600Z",
-  "project": null,
+  "generated": "2025-12-11T09:32:03.261Z",
+  "project": {
+    "id": "llm-boilerplate",
+    "name": "LLM Boilerplate",
+    "type": "application",
+    "description": "File-driven specification system for LLM-assisted development.\nAll project knowledge lives in Markdown and TOML files.\n",
+    "_meta": {
+      "path": "layers/project/about.toml"
+    }
+  },
   "layers": {
     "entities": [
       {
