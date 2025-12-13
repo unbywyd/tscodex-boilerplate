@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Box, Home, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList } from 'lucide-react'
+import { FileText, Box, Home, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Palette } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Container } from './ui/container'
 
@@ -29,6 +29,7 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/docs', label: 'Docs', icon: FileText },
     { path: '/prototype', label: 'Prototype', icon: Box },
     { path: '/schema', label: 'Schema', icon: Database },
+    { path: '/ui-kit', label: 'UIKit', icon: Palette },
   ]
 
   return (

@@ -101,6 +101,49 @@ Contains all layers (entities, components, routes, etc.) with `_meta.path` for s
 
 See `rules/docs-pdf.md` for manifest structure and LangChain integration.
 
+## Prototype Tools (USE THESE!)
+
+When generating prototype code, use the built-in infrastructure:
+
+### useRepo - CRUD with persistence
+
+```tsx
+import { useRepo } from '@/hooks/useRepo'
+
+const users = useRepo<User>('users')
+
+// State
+users.data          // T[]
+users.loading       // boolean
+users.count         // number
+
+// CRUD (types exclude id/timestamps automatically)
+users.create({ name: 'John', email: '...' })
+users.update(id, { name: 'Jane' })
+users.delete(id)
+
+// Query
+users.getById(id)
+users.getWhere(u => u.role === 'admin')
+
+// Fake data (uses registerFactory)
+users.populate(20)
+```
+
+### registerFactory - fake data
+
+```tsx
+import { registerFactory, faker } from '@/hooks/useRepo'
+
+registerFactory<User>('users', () => ({
+  name: faker.person.fullName(),
+  email: faker.internet.email(),
+  role: faker.helpers.arrayElement(['admin', 'user']),
+}))
+```
+
+**Full docs:** `rules/prototype.md`
+
 ## Demo Content (Delete When Starting Real Project)
 
 The `src/prototype/` folder contains **example/demo code** that demonstrates the prototype structure:

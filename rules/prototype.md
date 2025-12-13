@@ -15,8 +15,9 @@ src/prototype/           # Your prototype code (editable)
 ├── guards/              # Route protection components
 ├── config/              # Configuration (roles, routes)
 ├── components/
-│   ├── ui/              # UI components (Button, Card, etc.)
-│   └── forms/           # Form components
+│   ├── ui/              # UIKit - low-level components (DO NOT document in project docs)
+│   ├── mobile/          # Mobile-specific UIKit components
+│   └── business/        # Business components (DOCUMENT in project docs)
 └── pages/               # Page components
 
 core/                    # Engine code (DO NOT MODIFY)
@@ -24,6 +25,70 @@ core/                    # Engine code (DO NOT MODIFY)
 ├── app/src/hooks/       # Core hooks (useRepo)
 └── app/src/components/  # Core UI components
 ```
+
+## UIKit vs Business Components
+
+**CRITICAL DISTINCTION:**
+
+| Type | Location | Document? | Examples |
+|------|----------|-----------|----------|
+| **UIKit** | `ui/`, `mobile/` | NO (use /ui-kit page) | Button, Card, Dialog, Toast, Counter |
+| **Business** | `business/`, `pages/` | YES (TOML specs) | UserCard, OrderForm, ProductList |
+
+### UIKit Components (Low-level)
+
+Pre-built UI components ready to use. **DO NOT create TOML documentation for these.**
+
+**Documentation & Reference:**
+- Live demo with code: `/ui-kit` page in browser
+- Component source: `src/prototype/components/ui/` and `src/prototype/components/mobile/`
+- All exports: `src/prototype/components/ui/index.ts`
+
+```tsx
+// Just import and use - no documentation needed
+import {
+  Button, Card, Input, Badge,
+  Dialog, Sheet, Drawer, Toast,
+  Counter, StarRating, Slider,
+  // ... see /ui-kit for full list
+} from '@prototype/components/ui'
+
+// Mobile components
+import {
+  MobileList, TopBar, BottomNav,
+  ActionSheet, CardSlider,
+} from '@prototype/components/ui'
+```
+
+### Business Components (Project-specific)
+
+Components that implement business logic. **MUST be documented in TOML specs.**
+
+```tsx
+// src/prototype/components/business/UserCard.tsx
+// REQUIRES: src/spec/layers/components/user-card.toml
+
+export function UserCard({ user }: { user: UserEntity }) {
+  return (
+    <Card>
+      <Avatar src={user.avatar} />
+      <h3>{user.name}</h3>
+      <Badge>{user.role}</Badge>
+    </Card>
+  )
+}
+```
+
+### When to Create TOML Documentation
+
+| Create TOML | Skip TOML |
+|-------------|-----------|
+| UserCard, ProductCard | Button, Card, Badge |
+| OrderForm, LoginForm | Input, Select, Checkbox |
+| DashboardPage, ProfilePage | Dialog, Sheet, Drawer |
+| CartWidget, NotificationBell | Toast, Counter, Slider |
+
+**Rule of thumb:** If it has business logic or entity binding → document it. If it's pure UI → use UIKit.
 
 ## Key Principle: Core vs Prototype
 
@@ -180,6 +245,69 @@ export type ProjectFormData = z.infer<typeof projectSchema>
 ```
 
 ## Forms
+
+### Quick Approach: QuickForm (Recommended for Prototypes)
+
+For rapid prototyping, use `QuickForm` - declarative forms with built-in validation:
+
+```tsx
+import { QuickForm, validators } from '@prototype/components/ui'
+
+// Define fields as config
+const userFields = [
+  { name: 'name', type: 'string', label: 'Full Name', required: true },
+  { name: 'email', type: 'email', label: 'Email', required: true, validation: [validators.email()] },
+  { name: 'phone', type: 'phone', label: 'Phone' },
+  { name: 'role', type: 'enum', label: 'Role', options: ['user', 'admin'], default: 'user' },
+  { name: 'bio', type: 'text', label: 'About', rows: 3 },
+  { name: 'isActive', type: 'boolean', label: 'Active' },
+]
+
+// Render form - done!
+<QuickForm
+  fields={userFields}
+  onSubmit={(data) => users.create(data)}
+  submitLabel="Create User"
+/>
+```
+
+**Available field types:**
+- `string`, `email`, `password`, `url` - text inputs
+- `number`, `currency` - numeric inputs
+- `phone` - phone input with formatting
+- `text` - textarea
+- `boolean` - checkbox
+- `enum` - select dropdown
+- `date` - date picker
+- `otp` - OTP input
+
+**Built-in validators:**
+```tsx
+validators.required('Custom message')
+validators.email()
+validators.minLength(3)
+validators.maxLength(100)
+validators.pattern(/regex/, 'Invalid format')
+validators.min(0)
+validators.max(100)
+```
+
+### SmartField for Single Fields
+
+When you need individual fields with auto-type detection:
+
+```tsx
+import { SmartField } from '@prototype/components/ui'
+
+<SmartField name="email" type="email" label="Email" required />
+<SmartField name="price" type="currency" currency="USD" />
+<SmartField name="role" type="enum" options={['admin', 'user']} />
+<SmartField name="birthDate" type="date" locale="ru" />
+```
+
+### Traditional Approach: react-hook-form + Zod
+
+For complex forms with custom logic:
 
 ```tsx
 // src/prototype/components/forms/ProjectForm.tsx

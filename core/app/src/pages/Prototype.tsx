@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Users, Package, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen } from 'lucide-react'
+import { Users, Package, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
 import { Container } from '@/components/ui/container'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -21,6 +21,13 @@ function PrototypeHome() {
       title: 'Products',
       description: 'Product catalog with pricing',
       badge: 'Catalog',
+    },
+    {
+      path: '/ui-kit',
+      icon: Palette,
+      title: 'UI Kit',
+      description: 'Component reference & documentation',
+      badge: 'Docs',
     },
     {
       path: '/docs',
@@ -191,7 +198,7 @@ export default function PrototypePage() {
   if (location.pathname === '/prototype/products') {
     return <ProductsPage />
   }
-  
+
   // Otherwise render the home page
   return <PrototypeHome />
 }
