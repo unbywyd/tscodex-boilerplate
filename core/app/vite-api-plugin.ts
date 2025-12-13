@@ -12,6 +12,8 @@ const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
 const mocksDir = path.join(rootDir, 'src/prototype/mocks')
 const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
+const statusPath = path.join(specDir, 'status.toml')
+const interviewPath = path.join(specDir, 'interview.toml')
 
 // Helper: read and parse TOML file
 async function readTomlFile(filePath: string): Promise<any> {
@@ -515,6 +517,29 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
+      // API: Get interview data (status + interview combined)
+      server.middlewares.use('/api/interview', async (_req, res) => {
+        try {
+          const [status, interview] = await Promise.all([
+            readTomlFile(statusPath),
+            readTomlFile(interviewPath)
+          ])
+
+          sendJson(res, {
+            status: status || null,
+            interview: interview || null,
+            metadata: {
+              statusPath: 'src/spec/status.toml',
+              interviewPath: 'src/spec/interview.toml',
+              generated: new Date().toISOString()
+            }
+          })
+        } catch (error) {
+          console.error('Error loading interview data:', error)
+          sendJson(res, { error: 'Internal server error' }, 500)
+        }
+      })
+
       console.log('\n📚 API endpoints available:')
       console.log('  GET /api/docs/tree       - Documentation structure')
       console.log('  GET /api/docs/file?path= - Specific doc file')
@@ -523,7 +548,8 @@ export function viteApiPlugin(): Plugin {
       console.log('  GET /api/manifest        - Unified manifest for LLM/RAG')
       console.log('  GET /api/prisma/schema   - Prisma schema file')
       console.log('  GET /api/mocks           - List all mocks')
-      console.log('  GET /api/mocks/:name     - Specific mock data\n')
+      console.log('  GET /api/mocks/:name     - Specific mock data')
+      console.log('  GET /api/interview       - Interview status and answers\n')
     },
   }
 }

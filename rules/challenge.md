@@ -14,6 +14,79 @@ Guide users through project specification creation. This is your main workflow.
 5. End with working React prototype
 ```
 
+---
+
+## Interview Workflow
+
+Two files track the interview process:
+- `src/spec/status.toml` — current phase and progress
+- `src/spec/interview.toml` — answers collected from user
+
+### Before Each Phase
+
+1. Read `status.toml` → get `currentPhase`
+2. Read `interview.toml` → find section matching current phase
+3. Ask questions where value = `""` (empty)
+4. Write user's answer to `interview.toml` immediately
+5. When all required answers collected → update `status.toml`
+
+### Question Depth by Profile
+
+| Depth | Profile | Rule |
+|-------|---------|------|
+| Basic fields | all | Always ask |
+| Medium fields | medium, complex | Skip for simple |
+| Complex only fields | complex | Skip for simple/medium |
+
+Check comments in `interview.toml` — fields marked "(complex only)" or "(medium+)".
+
+### Conditional Questions
+
+Some questions depend on previous answers:
+
+| Condition | Then ask |
+|-----------|----------|
+| `platforms = "multiplatform"` | `platformList` |
+| `projectType = "mobile"` | `appSides`, then if dual → `appSidesList` |
+| `aiIntegration = true` | `aiProvider`, `aiFeatures` |
+| `authModel = "authenticated" or "mixed"` | `authMethods`, `socialAuth`, `userTypes` |
+| `authModel = "mixed"` | `publicParts` |
+| `authMethods` contains "phone" | `phoneFormat` |
+| `primaryLanguage` = ar, he, fa, ur | auto-set `rtlSupport = true` |
+| `additionalLanguages` has ar/he/fa/ur | ask `rtlSupport` |
+| `darkMode = true` | consider in colorScheme |
+
+### Data Format Rules
+
+- Use `false` not `""` for boolean fields
+- Use `[]` not `""` for list fields
+- Use `""` for text and enum fields
+- Arrays: `["item1", "item2"]` not `"item1, item2"`
+
+Skip conditional fields if condition not met.
+
+### RTL Support in Prototype
+
+If `rtlSupport = true`:
+- Add `dir="rtl"` to root HTML element
+- Use logical CSS properties (margin-inline-start instead of margin-left)
+- Mirror layouts (flex-direction, text-align)
+- Use i18n library with RTL support (e.g., react-i18next)
+
+### Example Flow
+
+```
+Status: currentPhase = "assessment"
+Interview: assessment.projectType = ""
+
+LLM: "What type of project? (web-app, mobile, api, landing, admin-panel)"
+User: "web-app"
+
+→ Write to interview.toml: projectType = "web-app"
+→ Ask next empty field
+→ When assessment complete: update status.toml, move to discovery
+```
+
 **Profiles:**
 - **Simple** (5 phases): Assessment → Discovery → Data → Features → Prototype
 - **Medium** (8 phases): + Design, Access, Schema
@@ -335,7 +408,20 @@ interfacesSet = true
 
 **Goal:** Working React screens with mock data.
 
+**IMPORTANT: Demo Content Cleanup**
+
+Before generating, clean up demo/example files from `src/prototype/`:
+- Delete: `mocks/users.json`, `mocks/products.json`
+- Delete: `stores/users.store.ts`
+- Delete: `schemas/user.schema.ts`
+- Delete: `components/forms/UserForm.tsx`
+- Delete: example pages (but keep `NotFound.tsx`)
+- Keep: `guards/`, `hooks/`, `config/`, `components/ui/`, `factories/`
+
+These are template examples - generate fresh code based on actual specs.
+
 Actions:
+- Clean up demo content (see above)
 - Generate mock JSON from entities
 - Create page components in `src/prototype/`
 - Implement navigation
@@ -355,6 +441,7 @@ currentPhase = "schema"  # or "done" for simple profile
 status = "completed"
 
 [phases.prototype.checklist]
+demoCleanedUp = true
 mocksGenerated = true
 pagesCreated = true
 navigationWorks = true

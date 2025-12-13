@@ -276,3 +276,65 @@ export async function loadManifest(): Promise<Manifest> {
     return response.json()
   }
 }
+
+// Interview data types
+export interface InterviewPhase {
+  status: 'pending' | 'in_progress' | 'completed'
+  skip?: boolean
+  description?: string
+  checklist?: Record<string, boolean>
+}
+
+export interface InterviewStatus {
+  status: {
+    id: string
+    name: string
+    profile: 'simple' | 'medium' | 'complex'
+    currentPhase: string
+    multiPlatform: boolean
+    lastUpdated: string
+  }
+  phases: Record<string, InterviewPhase>
+}
+
+export interface InterviewAnswers {
+  meta: {
+    projectName: string
+    startedAt: string
+    completedAt: string
+  }
+  assessment: Record<string, any>
+  discovery: Record<string, any>
+  design: Record<string, any>
+  access: Record<string, any>
+  data: Record<string, any>
+  features: Record<string, any>
+  modules: Record<string, any>
+}
+
+export interface InterviewData {
+  status: InterviewStatus | null
+  interview: InterviewAnswers | null
+  metadata: {
+    statusPath: string
+    interviewPath: string
+    generated: string
+  }
+}
+
+// Load interview data (status + answers)
+export async function loadInterview(): Promise<InterviewData> {
+  if (isDev) {
+    const response = await fetch('/api/interview')
+    if (!response.ok) {
+      throw new Error('Failed to load interview data')
+    }
+    return response.json()
+  } else {
+    const response = await fetch('/generated/interview.json')
+    if (!response.ok) {
+      throw new Error('Failed to load interview data')
+    }
+    return response.json()
+  }
+}

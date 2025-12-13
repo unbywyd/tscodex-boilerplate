@@ -18,6 +18,7 @@ const PrismaSchemaPage = lazy(() => import('./pages/PrismaSchema'));
 const AboutPage = lazy(() => import('./pages/About'));
 const ChallengePage = lazy(() => import('./pages/Challenge'));
 const GetStartedPage = lazy(() => import('./pages/GetStarted'));
+const InterviewPage = lazy(() => import('./pages/Interview'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading fallback component
@@ -61,6 +62,7 @@ function App() {
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/challenge" element={<ChallengePage />} />
                 <Route path="/get-started" element={<GetStartedPage />} />
+                <Route path="/interview" element={<InterviewPage />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>

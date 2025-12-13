@@ -1,4 +1,4 @@
-# LLM Boilerplate - LLM Navigation
+# LLM Boilerplate - Cursor Instructions
 
 ## What Is This?
 
@@ -9,10 +9,12 @@ LLM Boilerplate is a file-driven specification system for LLM-assisted developme
 ## Quick Start (Do This First!)
 
 1. **Read `src/spec/status.toml`** — check `currentPhase` and `profile`
-2. **Determine state:**
+2. **Read `src/spec/interview.toml`** — check answers for current phase
+3. **Determine state:**
    - If `currentPhase = "assessment"` and all phases `pending` → **Fresh project, start from scratch**
    - If some phases `completed` → **Continue from `currentPhase`**
-3. **Read `rules/challenge.md`** — full workflow details
+   - If interview has empty fields for current phase → **Ask those questions**
+4. **Read `rules/challenge.md`** — full workflow details
 
 ## Fresh Project Flow
 
@@ -30,6 +32,7 @@ You: "Great! Let me ask a few questions to understand the scope:
 
 [Based on answers → select profile: simple/medium/complex]
 [Update status.toml → profile, currentPhase = "discovery"]
+[Update interview.toml → write answers]
 [Continue to Discovery phase questions...]
 ```
 
@@ -37,35 +40,32 @@ You: "Great! Let me ask a few questions to understand the scope:
 
 | Phase | Your Action | Output |
 |-------|-------------|--------|
-| Assessment | Ask scope questions, select profile | Update `status.toml` |
-| Discovery | Ask "what/who/why" questions | Create `layers/project/about.toml` |
-| Design | Ask visual/UX preferences | Create `layers/project/design.toml` |
-| Access | Ask about roles and permissions | Create `layers/roles/*.toml`, `layers/guards/*.toml` |
-| Data | Ask about entities and fields | Create `layers/entities/*.toml` |
-| Features | Ask about screens and actions | Create `layers/routes/*.toml`, `layers/use-cases/*.toml`, `layers/components/*.toml` |
+| Assessment | Ask scope questions, select profile | Update `status.toml`, `interview.toml` |
+| Discovery | Ask "what/who/why" questions | Update `interview.toml`, create `layers/project/about.toml` |
+| Design | Ask visual/UX preferences | Update `interview.toml`, create `layers/project/design.toml` |
+| Access | Ask about roles and permissions | Update `interview.toml`, create `layers/roles/*.toml`, `layers/guards/*.toml` |
+| Data | Ask about entities and fields | Update `interview.toml`, create `layers/entities/*.toml` |
+| Features | Ask about screens and actions | Update `interview.toml`, create `layers/routes/*.toml`, `layers/use-cases/*.toml`, `layers/components/*.toml` |
 | Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
 | Schema | Generate Prisma schema | Create `prisma/schema.prisma` |
 
 ## Critical Rules
 
-1. **Always update status.toml** after completing each phase
-2. **Ask before generating** — don't assume, clarify requirements
-3. **Create TOML files** in correct folders under `src/spec/layers/`
-4. **Use knowledge layer** — capture every decision as a fact in `layers/knowledge/*.toml`
-5. **Follow profile depth:**
+1. **Always update interview.toml** — write answers immediately after user responds
+2. **Always update status.toml** after completing each phase
+3. **Ask before generating** — don't assume, clarify requirements
+4. **Create TOML files** in correct folders under `src/spec/layers/`
+5. **Use knowledge layer** — capture every decision as a fact in `layers/knowledge/*.toml`
+6. **Follow profile depth:**
    - Simple → shallow questions, minimal files
    - Medium → detailed questions, full specs
    - Complex → deep questions, edge cases, modules
+7. **Data format in interview.toml:**
+   - Arrays `[]` for lists: `["item1", "item2"]`
+   - Boolean `true/false` for yes/no fields
+   - Empty string `""` for text/enum fields
 
-## Key Paths
-- `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
-- `src/spec/docs/` - Markdown documentation
-- `src/prototype/` - React prototype code
-- `rules/` - patterns and instructions
-
-## Adaptive Workflow
-
-**Profiles:** simple | medium | complex
+## Workflow Profiles
 
 ```
 Simple:   Assessment → Discovery → Data → Features → Prototype
@@ -74,6 +74,13 @@ Complex:  Assessment → Discovery → Design → Access → Data → Modules �
 ```
 
 **Always start with Assessment** to determine profile and depth.
+
+## Key Paths
+- `src/spec/status.toml` - current phase, progress tracking
+- `src/spec/interview.toml` - questions and answers for each phase
+- `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
+- `src/prototype/` - React prototype code
+- `rules/challenge.md` - full workflow instructions
 
 ## Rules
 - `rules/challenge.md` - adaptive workflow (READ THIS)
@@ -94,6 +101,22 @@ All project specifications are available as unified manifest:
 Contains all layers (entities, components, routes, etc.) with `_meta.path` for source tracing.
 
 See `rules/docs-pdf.md` for manifest structure and LangChain integration.
+
+## Demo Content (Delete When Starting Real Project)
+
+The `src/prototype/` folder contains **example/demo code** that demonstrates the prototype structure:
+- `mocks/` - example data (users.json, products.json)
+- `stores/` - example stores (users.store.ts, auth.store.ts)
+- `schemas/` - example validation (user.schema.ts)
+- `components/forms/` - example forms (UserForm.tsx)
+- `pages/` - example pages
+
+**When starting a new project:**
+1. Delete all demo content from `src/prototype/` (keep folder structure)
+2. Keep only reusable infrastructure: `guards/`, `hooks/`, `config/`, `components/ui/`
+3. Generate new prototype based on actual specs from `src/spec/layers/`
+
+**Do NOT use demo content as reference** for the real project - generate fresh code based on TOML specifications.
 
 ## Don't Modify
 - `core/` - engine code

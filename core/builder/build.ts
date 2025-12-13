@@ -609,6 +609,50 @@ async function generateManifest(relationsMap: RelationsMap) {
   console.log(`  ✓ manifest.json (${layerCounts}, docs: ${manifest.docs.length})`)
 }
 
+// Generate interview data (status + interview)
+async function generateInterview() {
+  console.log('📋 Generating interview data...')
+
+  const statusPath = path.join(specDir, 'status.toml')
+  const interviewPath = path.join(specDir, 'interview.toml')
+
+  try {
+    const [status, interview] = await Promise.all([
+      readTomlFile(statusPath),
+      readTomlFile(interviewPath)
+    ])
+
+    await fs.writeFile(
+      path.join(outputDir, 'interview.json'),
+      JSON.stringify({
+        status: status || null,
+        interview: interview || null,
+        metadata: {
+          statusPath: 'src/spec/status.toml',
+          interviewPath: 'src/spec/interview.toml',
+          generated: new Date().toISOString()
+        }
+      }, null, 2)
+    )
+    console.log('  ✓ interview.json')
+  } catch (error) {
+    console.error('Error generating interview data:', error)
+    // Write empty placeholder
+    await fs.writeFile(
+      path.join(outputDir, 'interview.json'),
+      JSON.stringify({
+        status: null,
+        interview: null,
+        metadata: {
+          statusPath: 'src/spec/status.toml',
+          interviewPath: 'src/spec/interview.toml',
+          generated: new Date().toISOString()
+        }
+      }, null, 2)
+    )
+  }
+}
+
 // Main build function
 async function build() {
   console.log('\n🚀 LLM Boilerplate Build\n')
@@ -629,6 +673,7 @@ async function build() {
   await generateDocs()
   await generatePrismaSchema()
   await generateMocks()
+  await generateInterview()
 
   // Generate relations map
   const relationsMap = await generateRelationsMap()

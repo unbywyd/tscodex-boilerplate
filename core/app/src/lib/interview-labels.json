@@ -1,0 +1,151 @@
+{
+  "assessment": {
+    "projectType": "Project Type",
+    "projectStage": "Project Stage",
+    "dataComplexity": "Data Complexity",
+    "rolesCount": "Number of User Roles",
+    "integrationsLevel": "Integration Level",
+    "platforms": "Platforms",
+    "platformList": "Platform List",
+    "appSides": "App Sides",
+    "appSidesList": "App Sides List",
+    "existingCodebase": "Existing Codebase",
+    "techConstraints": "Technical Constraints"
+  },
+  "discovery": {
+    "problem": "Problem Statement",
+    "audience": "Target Audience",
+    "coreValue": "Core Value Proposition",
+    "keyFeatures": "Key Features",
+    "inScope": "In Scope (MVP)",
+    "outOfScope": "Out of Scope",
+    "successMetrics": "Success Metrics",
+    "constraints": "Technical Constraints",
+    "existingSystems": "Existing Systems to Integrate",
+    "compliance": "Compliance Requirements",
+    "scale": "Expected Scale",
+    "stakeholders": "Stakeholders",
+    "aiIntegration": "AI Integration",
+    "aiProvider": "AI Provider",
+    "aiFeatures": "AI Features"
+  },
+  "design": {
+    "approach": "Design Approach",
+    "colorScheme": "Color Scheme",
+    "darkMode": "Dark Mode Support",
+    "brandGuidelines": "Brand Guidelines Available",
+    "uiReferences": "UI References",
+    "responsive": "Responsive Design",
+    "accessibilityTarget": "Accessibility Target",
+    "primaryLanguage": "Primary Language",
+    "additionalLanguages": "Additional Languages",
+    "rtlSupport": "RTL Support",
+    "prototypeLanguage": "Prototype Language"
+  },
+  "access": {
+    "authModel": "Authentication Model",
+    "publicParts": "Public Areas",
+    "authMethods": "Authentication Methods",
+    "phoneFormat": "Phone Number Format",
+    "socialAuth": "Social Authentication",
+    "userTypes": "User Types",
+    "rolePermissions": "Role Permissions",
+    "protectedPages": "Protected Pages",
+    "roleHierarchy": "Role Hierarchy",
+    "permissionGranularity": "Permission Granularity",
+    "multiTenant": "Multi-Tenant Support",
+    "guestFlows": "Guest vs Authenticated Flows"
+  },
+  "data": {
+    "mainEntities": "Main Entities",
+    "entityFields": "Entity Fields",
+    "relationships": "Entity Relationships",
+    "requiredFields": "Required Fields",
+    "validationRules": "Validation Rules",
+    "filesAndMedia": "Files and Media",
+    "search": "Search Functionality",
+    "softDelete": "Soft Delete",
+    "importExport": "Import/Export",
+    "fieldPermissions": "Field-Level Permissions",
+    "auditTrails": "Audit Trails",
+    "dataLifecycle": "Data Lifecycle",
+    "retentionPolicy": "Data Retention Policy"
+  },
+  "features": {
+    "screens": "Screens",
+    "navigationMap": "Navigation Structure",
+    "primaryUserJourney": "Primary User Journey",
+    "userStories": "User Stories",
+    "errorHandling": "Error Handling",
+    "emptyStates": "Empty States",
+    "loadingStates": "Loading States",
+    "offlineBehavior": "Offline Behavior",
+    "notifications": "Notifications",
+    "settingsPage": "Settings Page",
+    "analyticsEvents": "Analytics Events"
+  },
+  "modules": {
+    "domains": "Domain Modules",
+    "moduleBoundaries": "Module Boundaries",
+    "interfaces": "Module Interfaces",
+    "sharedComponents": "Shared Components"
+  },
+  "checklist": {
+    "assessment": {
+      "typeIdentified": "Type Identified",
+      "rolesCount": "Roles Count",
+      "dataComplexity": "Data Complexity",
+      "platformsIdentified": "Platforms Identified",
+      "profileSelected": "Profile Selected"
+    },
+    "discovery": {
+      "projectDefined": "Project Defined",
+      "targetAudience": "Target Audience",
+      "coreValue": "Core Value",
+      "keyFeatures": "Key Features",
+      "scopeDefined": "Scope Defined"
+    },
+    "design": {
+      "designApproach": "Design Approach",
+      "colorScheme": "Color Scheme",
+      "responsiveStrategy": "Responsive Strategy",
+      "localization": "Localization"
+    },
+    "access": {
+      "authModelDefined": "Auth Model Defined",
+      "rolesIdentified": "Roles Identified",
+      "permissionsDefined": "Permissions Defined",
+      "guardsCreated": "Guards Created"
+    },
+    "data": {
+      "entitiesListed": "Entities Listed",
+      "fieldsDefined": "Fields Defined",
+      "relationsMapped": "Relations Mapped"
+    },
+    "features": {
+      "useCasesDefined": "Use Cases Defined",
+      "routesCreated": "Routes Created",
+      "pageComponents": "Page Components",
+      "compositions": "Compositions",
+      "platformsDefined": "Platforms Defined"
+    },
+    "modules": {
+      "domainsIdentified": "Domains Identified",
+      "modulesDefined": "Modules Defined",
+      "interfacesSet": "Interfaces Set"
+    },
+    "prototype": {
+      "demoCleanedUp": "Demo Cleaned Up",
+      "mocksGenerated": "Mocks Generated",
+      "pagesCreated": "Pages Created",
+      "navigationWorks": "Navigation Works",
+      "formsWired": "Forms Wired"
+    },
+    "schema": {
+      "prismaGenerated": "Prisma Generated",
+      "relationsValid": "Relations Valid",
+      "indexesAdded": "Indexes Added"
+    }
+  }
+}
+

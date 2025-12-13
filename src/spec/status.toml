@@ -2,19 +2,23 @@
 # ================================================
 # LLM: READ THIS FILE FIRST!
 #
-# If currentPhase = "assessment" and all phases "pending":
-#   → This is a FRESH PROJECT, start from scratch
-#   → Ask user Assessment questions (see rules/challenge.md)
+# Step 1: Check state
+#   - If currentPhase = "assessment" and all phases "pending" → FRESH PROJECT
+#   - If some phases "completed" → CONTINUE from currentPhase
 #
-# If some phases are "completed":
-#   → CONTINUE from currentPhase
-#   → Read existing files in src/spec/layers/
+# Step 2: Read interview.toml
+#   - Find section matching currentPhase
+#   - Ask questions where value = "" or [] (empty)
+#   - Write answers immediately (use arrays for lists)
 #
-# After completing each phase:
+# Step 3: After completing phase
 #   1. Set phase status = "completed"
 #   2. Set currentPhase = next phase
 #   3. Mark checklist items = true
 #   4. Update lastUpdated date
+#
+# See: rules/challenge.md for full workflow
+# See: src/spec/interview.toml for questions/answers
 # ================================================
 
 [status]
@@ -47,6 +51,7 @@ projectDefined = false
 targetAudience = false
 coreValue = false
 keyFeatures = false
+scopeDefined = false  # inScope + outOfScope
 
 # Phase 2: Design (optional for simple)
 [phases.design]
@@ -58,6 +63,7 @@ description = "Visual and UX requirements"
 designApproach = false
 colorScheme = false
 responsiveStrategy = false
+localization = false  # languages + rtl
 
 # Phase 3: Access Control (skip if single role)
 [phases.access]
@@ -66,6 +72,7 @@ skip = false  # set true if single role
 description = "User roles and permissions"
 
 [phases.access.checklist]
+authModelDefined = false
 rolesIdentified = false
 permissionsDefined = false
 guardsCreated = false
@@ -109,6 +116,7 @@ status = "pending"
 description = "Working React screens"
 
 [phases.prototype.checklist]
+demoCleanedUp = false  # delete example/demo files before generating
 mocksGenerated = false
 pagesCreated = false
 navigationWorks = false

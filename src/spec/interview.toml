@@ -1,0 +1,154 @@
+# Interview Answers
+# ================================================
+# LLM Instructions:
+# 1. Read status.toml → get currentPhase
+# 2. Find that phase section here
+# 3. Ask questions where value = "" or [] (empty)
+# 4. Write user's answers immediately
+# 5. When phase complete → update status.toml
+#
+# Format: use arrays [] for lists, "" for text/enum
+# See: rules/challenge.md for conditional questions
+# ================================================
+
+[meta]
+projectName = ""
+startedAt = ""
+completedAt = ""
+
+# ─────────────────────────────────────────────────
+# Phase 0: Assessment
+# Goal: determine profile (simple | medium | complex)
+# ─────────────────────────────────────────────────
+[assessment]
+projectType = ""          # web-app | mobile | api | landing | admin-panel
+projectStage = ""         # idea | redesign | existing-mvp
+dataComplexity = ""       # simple-crud | relational | complex
+rolesCount = ""           # single | 2-3 | many
+integrationsLevel = ""    # none | few-apis | many-services
+platforms = ""            # single | multiplatform
+platformList = []         # if multiplatform: ["customer-app", "admin-panel"]
+appSides = ""             # if mobile: single | dual
+appSidesList = []         # if dual: ["passenger", "driver"]
+existingCodebase = false  # true if adding to existing project
+techConstraints = []      # e.g. ["React only", "PostgreSQL required"]
+
+# ─────────────────────────────────────────────────
+# Phase 1: Discovery
+# Goal: understand what we're building
+# ─────────────────────────────────────────────────
+[discovery]
+# Core
+problem = ""              # What problem does it solve?
+audience = ""             # Who is the target audience?
+coreValue = ""            # Core value proposition
+keyFeatures = []          # Top 5 features: ["feature1", "feature2"]
+# Scope
+inScope = []              # Must be included in MVP
+outOfScope = []           # Explicitly NOT in MVP
+successMetrics = []       # How we measure success
+# Technical
+constraints = ""          # Technical constraints
+existingSystems = []      # Systems to integrate (complex only)
+compliance = []           # ["GDPR", "PCI-DSS"] (complex only)
+scale = ""                # Expected scale (complex only)
+stakeholders = ""         # Who are stakeholders (complex only)
+# AI (if needed)
+aiIntegration = false
+aiProvider = ""           # openai | anthropic | google | custom
+aiFeatures = []           # ["chat", "search", "generation"]
+
+# ─────────────────────────────────────────────────
+# Phase 2: Design
+# Goal: visual and UX requirements
+# ─────────────────────────────────────────────────
+[design]
+# Visual
+approach = ""             # custom | ui-kit | hybrid
+colorScheme = ""          # Color preferences or palette name
+darkMode = false          # Support dark mode?
+brandGuidelines = false   # Has brand guidelines?
+uiReferences = []         # Reference products/links
+# Layout
+responsive = ""           # mobile-first | desktop-first
+accessibilityTarget = ""  # none | wcag-aa | wcag-aaa
+# Localization
+primaryLanguage = ""      # en | ru | ar | he | etc.
+additionalLanguages = []  # ["es", "de"] or []
+rtlSupport = false        # auto-true if ar/he/fa/ur
+prototypeLanguage = ""    # en | same-as-primary
+
+# ─────────────────────────────────────────────────
+# Phase 3: Access
+# Goal: auth and permissions
+# ─────────────────────────────────────────────────
+[access]
+# Auth
+authModel = ""            # public | authenticated | mixed
+publicParts = []          # if mixed: ["landing", "pricing", "docs"]
+authMethods = []          # ["email"] | ["phone"] | ["email", "phone"]
+phoneFormat = ""          # if phone: single-country | multi-country
+socialAuth = []           # ["google", "facebook", "apple"] or []
+# Roles
+userTypes = []            # ["admin", "user", "guest"]
+rolePermissions = ""      # What can each role do?
+protectedPages = []       # Pages requiring auth
+# Advanced (complex only)
+roleHierarchy = ""        # Role inheritance
+permissionGranularity = "" # page | feature | field
+multiTenant = ""          # none | orgs | workspaces
+guestFlows = ""           # Guest vs authenticated flows
+
+# ─────────────────────────────────────────────────
+# Phase 4: Data Model
+# Goal: entities and relationships
+# ─────────────────────────────────────────────────
+[data]
+# Core
+mainEntities = []         # ["User", "Product", "Order"]
+entityFields = ""         # Fields for each entity (structured text)
+relationships = ""        # Relations between entities
+# Validation (medium+)
+requiredFields = ""       # Required vs optional
+validationRules = ""      # Validation rules
+# Features
+filesAndMedia = ""        # none | images | docs | video | mixed
+search = ""               # none | basic | fulltext
+softDelete = false        # Soft delete needed?
+importExport = ""         # none | csv | xlsx | api
+# Advanced (complex only)
+fieldPermissions = ""     # Field-level permissions
+auditTrails = ""          # none | basic | detailed
+dataLifecycle = ""        # Data lifecycle states
+retentionPolicy = ""      # Data retention rules
+
+# ─────────────────────────────────────────────────
+# Phase 5: Features & Screens
+# Goal: what users see and do
+# ─────────────────────────────────────────────────
+[features]
+# Screens
+screens = []              # ["Home", "Dashboard", "Profile", "Settings"]
+navigationMap = ""        # Navigation structure (tabs/sidebar/menu)
+primaryUserJourney = ""   # Main user flow
+# Stories (medium+)
+userStories = ""          # Use cases with user stories
+errorHandling = ""        # Error handling approach
+# States (complex only)
+emptyStates = ""          # Empty state handling
+loadingStates = ""        # Loading state handling
+offlineBehavior = ""      # Offline behavior
+# System
+notifications = ""        # none | in-app | email | push | mixed
+settingsPage = false      # Include settings/profile page?
+analyticsEvents = []      # Events to track
+
+# ─────────────────────────────────────────────────
+# Phase 6: Modules (complex only)
+# Goal: domain decomposition
+# ─────────────────────────────────────────────────
+[modules]
+domains = []              # ["auth", "catalog", "orders", "payments"]
+moduleBoundaries = ""     # Module boundaries
+interfaces = ""           # Module interfaces
+sharedComponents = []     # Shared across modules
