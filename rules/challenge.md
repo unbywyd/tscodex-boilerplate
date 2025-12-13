@@ -426,6 +426,7 @@ Actions:
 - Create page components in `src/prototype/`
 - Implement navigation
 - Wire up forms (no backend)
+- **For mobile projects**: Use `MobileFrame` wrapper (see `rules/mobile.md`)
 
 Output:
 - `src/prototype/mocks/*.json`
