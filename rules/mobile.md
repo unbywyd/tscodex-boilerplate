@@ -1,6 +1,29 @@
 # Mobile Development
 
-**IMPORTANT:** This file is the primary reference for all mobile app development. Read it fully before starting any mobile prototype.
+**⚠️ MANDATORY: Read this ENTIRE file before writing mobile code.**
+
+## Pre-Flight Checklist for Mobile
+
+```
+□ Read this file completely (rules/mobile.md)
+□ Read rules/prototype.md for general rules
+□ Browsed /ui-kit page — use UIKit components, NOT native HTML
+□ Understand the app flow: Splash → Onboarding → Auth → Profile → Permissions → Home
+□ Every screen (except Home) will have back navigation
+```
+
+### Quick Rules
+
+| Rule | Requirement |
+|------|-------------|
+| **UIKit** | `<Button>` not `<button>`, `<Input>` not `<input>` |
+| **Back button** | Every screen except Home |
+| **App flow** | Splash → Onboarding → Auth → Profile → Permissions → Home |
+| **Onboarding** | 2-4 slides, Skip button visible |
+| **Auth** | Email/Phone → OTP (not password) |
+| **Permissions** | One at a time, explain why |
+
+**Skipping these rules = rejected prototype.**
 
 ---
 

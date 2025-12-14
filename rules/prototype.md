@@ -1,6 +1,23 @@
 # Prototype Development Guide
 
-Best practices for building prototypes with LLM Boilerplate.
+**⚠️ READ THIS ENTIRE FILE before writing any prototype code.**
+
+## Pre-Flight Checklist
+
+Before generating ANY code, verify:
+
+```
+□ Read this file completely (rules/prototype.md)
+□ Read rules/mobile.md if building mobile app
+□ Browsed /ui-kit page to see available components
+□ Created TOML specs for entities in src/spec/layers/entities/
+□ Created TOML specs for components in src/spec/layers/components/
+□ Generated Prisma schema (if medium/complex profile)
+```
+
+**Skipping these steps = rejected prototype.**
+
+---
 
 ## CRITICAL: Schema-First Approach
 
@@ -128,6 +145,64 @@ It contains mandatory patterns:
 - OTP-based auth pattern
 - Onboarding slides with skip button
 - Permission request flow
+
+---
+
+## CRITICAL: Use UIKit Components — NO Native HTML
+
+**NEVER use native HTML elements. ALWAYS use UIKit components.**
+
+### Forbidden → Required
+
+| ❌ NEVER USE | ✅ USE INSTEAD |
+|--------------|----------------|
+| `<button>` | `<Button>` |
+| `<input>` | `<Input>` |
+| `<select>` | `<Select>` |
+| `<textarea>` | `<Textarea>` |
+| `<a>` | `<Link>` or `<Button asChild>` |
+| `<img>` | `<Avatar>`, `<img>` with classes |
+| `<div class="card">` | `<Card>` |
+| `<ul><li>` | `<MobileList>`, `<MobileListItem>` |
+| `<dialog>` | `<Dialog>`, `<Modal>`, `<Sheet>` |
+| `<form>` | `<form>` with UIKit inputs |
+| Native checkbox | `<Checkbox>` |
+| Native radio | `<RadioGroup>` |
+| Native toggle | `<Switch>` |
+
+### Import Pattern
+
+```tsx
+// ✅ CORRECT - import from UIKit
+import {
+  Button, Input, Card, Badge, Avatar,
+  Dialog, Sheet, Select, Checkbox, Switch,
+  MobileList, MobileListItem, TopBar, BottomNav,
+} from '@/components/ui'
+
+// ❌ WRONG - native HTML
+<button onClick={...}>Submit</button>
+<input type="text" />
+<div className="card">...</div>
+```
+
+### Why This Matters
+
+1. **Consistent styling** — UIKit follows design system
+2. **Accessibility** — components have ARIA attributes built-in
+3. **Mobile-ready** — touch targets, safe areas handled
+4. **Dark mode** — automatic theme support
+5. **Documentation** — all components documented at `/ui-kit`
+
+### Quick Reference
+
+Check `/ui-kit` page in browser for:
+- All available components
+- Live interactive demos
+- Copy-paste code examples
+- Props documentation
+
+**If a component doesn't exist in UIKit, ask before creating custom HTML.**
 
 ---
 
