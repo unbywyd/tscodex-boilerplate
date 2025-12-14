@@ -89,8 +89,10 @@ You: "Great! Let me ask a few questions to understand the scope:
 | Access | Ask about roles and permissions | Update `interview.toml`, create `layers/roles/*.toml` |
 | Data | Ask about entities and fields | Update `interview.toml`, create `layers/entities/*.toml` |
 | Features | Ask about screens and actions | Update `interview.toml`, create `layers/routes/*.toml`, `layers/use-cases/*.toml` |
-| Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
 | Schema | Generate Prisma schema | Create `prisma/schema.prisma` |
+| Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
+
+**IMPORTANT:** Schema phase comes BEFORE Prototype. This is schema-first approach: define data contracts before building UI.
 
 ## Prototype Tools (USE THESE!)
 

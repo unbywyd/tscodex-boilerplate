@@ -110,10 +110,21 @@ domainsIdentified = false
 modulesDefined = false
 interfacesSet = false
 
-# Phase 7: Prototype
+# Phase 7: Schema (comes BEFORE prototype - schema-first approach)
+[phases.schema]
+status = "pending"
+skip = false  # skip for simple if no backend
+description = "Database schema - defines data contracts before UI"
+
+[phases.schema.checklist]
+prismaGenerated = false
+relationsValid = false
+indexesAdded = false
+
+# Phase 8: Prototype (comes AFTER schema)
 [phases.prototype]
 status = "pending"
-description = "Working React screens"
+description = "Working React screens based on schema"
 
 [phases.prototype.checklist]
 demoCleanedUp = false  # delete example/demo files before generating
@@ -121,14 +132,3 @@ mocksGenerated = false
 pagesCreated = false
 navigationWorks = false
 formsWired = false
-
-# Phase 8: Schema
-[phases.schema]
-status = "pending"
-skip = false  # skip for simple if no backend
-description = "Database schema"
-
-[phases.schema.checklist]
-prismaGenerated = false
-relationsValid = false
-indexesAdded = false

@@ -89,8 +89,10 @@ User: "web-app"
 
 **Profiles:**
 - **Simple** (5 phases): Assessment → Discovery → Data → Features → Prototype
-- **Medium** (8 phases): + Design, Access, Schema
+- **Medium** (8 phases): + Design, Access, Schema (before Prototype)
 - **Complex** (9 phases): + Modules decomposition
+
+**IMPORTANT:** Schema phase comes BEFORE Prototype. This is LLM-first approach: define data structure first, then build UI.
 
 **Key files:**
 - `src/spec/status.toml` — current state (READ THIS FIRST)
@@ -498,7 +500,7 @@ indexesAdded = true
 ## Status Values
 
 ```
-currentPhase: assessment | discovery | design | access | data | modules | features | prototype | schema | done
+currentPhase: assessment | discovery | design | access | data | modules | features | schema | prototype | done
 phase.status: pending | in_progress | completed
 ```
 
@@ -514,14 +516,16 @@ Before moving to next phase, verify:
 | Access | All roles and guards defined | `currentPhase = "data"` |
 | Data Model | All entities valid | `currentPhase = "features"` (or "modules" for complex) |
 | Modules | Boundaries and interfaces set | `currentPhase = "features"` |
-| Features | Routes + page components ready | `currentPhase = "prototype"` |
-| Prototype | All routes render | `currentPhase = "schema"` (or "done" for simple) |
-| Schema | Prisma validates | `currentPhase = "done"` |
+| Features | Routes + page components ready | `currentPhase = "schema"` |
+| Schema | Prisma validates | `currentPhase = "prototype"` |
+| Prototype | All routes render | `currentPhase = "done"` |
 
 ## Quick Reference
 
 ```
 Simple:   Assessment → Discovery → Data → Features → Prototype
-Medium:   Assessment → Discovery → Design → Access → Data → Features → Prototype → Schema
-Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Prototype → Schema
+Medium:   Assessment → Discovery → Design → Access → Data → Features → Schema → Prototype
+Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Schema → Prototype
 ```
+
+**Schema-First Principle:** Generate Prisma schema BEFORE prototype code. The database schema defines the data contract that the UI will consume.

@@ -2,6 +2,31 @@
 
 Best practices for building prototypes with LLM Boilerplate.
 
+## CRITICAL: Schema-First Approach
+
+**Prisma schema MUST be generated BEFORE prototype code.**
+
+This is the LLM-first workflow:
+1. **TOML specs** → define entities in `src/spec/layers/entities/`
+2. **Prisma schema** → generate `prisma/schema.prisma` from entities
+3. **Prototype** → build React UI based on schema types
+
+### Why Schema First?
+- Schema defines the data contract
+- Types from Prisma inform component props
+- Ensures UI matches data structure
+- Prevents mismatch between UI and backend
+
+### Before Starting Prototype
+```
+□ All entities defined in src/spec/layers/entities/*.toml
+□ Prisma schema generated in prisma/schema.prisma
+□ Run: npm run prisma:generate (if using Prisma client)
+□ THEN start building prototype pages
+```
+
+---
+
 ## CRITICAL: Business Component Documentation
 
 **EVERY business component MUST have:**

@@ -31,14 +31,14 @@ const profiles = {
   medium: {
     name: 'Medium',
     description: 'SaaS, e-commerce, multi-role apps, dashboards',
-    phases: ['Assessment', 'Discovery', 'Design', 'Access', 'Data', 'Features', 'Prototype', 'Schema'],
+    phases: ['Assessment', 'Discovery', 'Design', 'Access', 'Data', 'Features', 'Schema', 'Prototype'],
     color: 'blue',
     icon: Layers
   },
   complex: {
     name: 'Complex',
     description: 'ERP, marketplaces, multi-tenant, enterprise',
-    phases: ['Assessment', 'Discovery', 'Design', 'Access', 'Data', 'Modules', 'Features', 'Prototype', 'Schema'],
+    phases: ['Assessment', 'Discovery', 'Design', 'Access', 'Data', 'Modules', 'Features', 'Schema', 'Prototype'],
     color: 'purple',
     icon: GitBranch
   }

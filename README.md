@@ -81,15 +81,15 @@ Define user actions and interfaces.
 
 **Output:** `layers/use-cases/*.toml`, `layers/routes/*.toml`, `layers/components/*.toml`
 
-### Phase 7: Prototype
-Generate working React screens with mock data.
-
-**Output:** `src/prototype/pages/*.tsx`, `src/prototype/mocks/*.json`
-
-### Phase 8: Schema (Medium/Complex)
-Generate Prisma database schema.
+### Phase 7: Schema (Medium/Complex)
+Generate Prisma database schema. **This comes BEFORE prototype** — schema-first approach ensures data contract is defined before UI.
 
 **Output:** `prisma/schema.prisma`
+
+### Phase 8: Prototype
+Generate working React screens with mock data based on the schema.
+
+**Output:** `src/prototype/pages/*.tsx`, `src/prototype/mocks/*.json`
 
 ---
 
@@ -97,9 +97,11 @@ Generate Prisma database schema.
 
 ```
 Simple:   Assessment → Discovery → Data → Features → Prototype
-Medium:   Assessment → Discovery → Design → Access → Data → Features → Prototype → Schema
-Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Prototype → Schema
+Medium:   Assessment → Discovery → Design → Access → Data → Features → Schema → Prototype
+Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Schema → Prototype
 ```
+
+**Schema-First:** For Medium/Complex profiles, Prisma schema is generated BEFORE the prototype to ensure data contracts are defined first.
 
 ---
 
