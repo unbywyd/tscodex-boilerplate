@@ -21,9 +21,5 @@ export const customNavLinks: NavLink[] = [
 
 // Custom home page component
 // Replace the default LLM Boilerplate landing with your own project page
-//
-// Example:
-//   import { MyProjectHome } from '@prototype/pages/Home'
-//   export const CustomHomePage: ComponentType | null = MyProjectHome
-//
-export const CustomHomePage: ComponentType | null = null
+import CustomHome from '@prototype/pages/Home'
+export const CustomHomePage: ComponentType | null = CustomHome

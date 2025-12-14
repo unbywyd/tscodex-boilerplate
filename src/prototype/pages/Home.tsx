@@ -1,3 +1,6 @@
+// Custom Home Page for LLM Boilerplate Demo
+// This overrides the default home page via CustomHomePage in config/nav.ts
+
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { FileText, Box, FolderOpen, GitBranch, Bot, Zap, Sparkles, CheckCircle2, Clock, ExternalLink } from 'lucide-react'
@@ -25,18 +28,18 @@ interface StatusData {
 
 // Phase to docs file mapping
 const phaseDocsMap: Record<string, string> = {
-  assessment: '/docs/status', // status.toml at root
-  discovery: '/docs/layers/project/about', // project about.toml
-  design: '/docs/layers/project/design', // design.toml
-  access: '/docs/layers/roles/admin', // roles - first file
-  data: '/docs/layers/entities/user', // entities - user.toml
-  schema: '/docs/layers/entities/user', // schema from entities
-  modules: '/docs', // modules folder (may be empty, go to docs index)
-  features: '/docs/layers/use-cases/view-documentation', // first use case
-  prototype: '/prototype', // final prototype
+  assessment: '/docs/status',
+  discovery: '/docs/layers/project/about',
+  design: '/docs/layers/project/design',
+  access: '/docs/layers/roles/admin',
+  data: '/docs/layers/entities/user',
+  schema: '/docs/layers/entities/user',
+  modules: '/docs',
+  features: '/docs/layers/use-cases/view-documentation',
+  prototype: '/prototype',
 }
 
-export default function HomePage() {
+export default function CustomHomePage() {
   const navigate = useNavigate()
   const [statusData, setStatusData] = useState<StatusData | null>(null)
   const [statusLoading, setStatusLoading] = useState(true)
@@ -113,6 +116,13 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+            <Button asChild size="lg" className="text-base bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 shadow-lg shadow-purple-500/25">
+              <a href="https://example-boilerplate.tscodex.com/" target="_blank" rel="noopener noreferrer">
+                <Sparkles className="h-5 w-5" />
+                Live Demo
+                <ExternalLink className="h-4 w-4 ml-1" />
+              </a>
+            </Button>
             <Button asChild size="lg" className="text-base">
               <Link to="/docs">
                 <FileText className="h-5 w-5" />
@@ -249,10 +259,10 @@ export default function HomePage() {
 
                 {/* Desktop: Horizontal layout */}
                 <div className="hidden sm:block relative py-6 overflow-visible">
-                  {/* Background track - centered with circles (py-6=24px + half of h-14=28px = 52px) */}
+                  {/* Background track */}
                   <div className="absolute top-[51px] left-0 right-0 h-1 bg-gray-200/50 dark:bg-gray-700/30 rounded-full" />
 
-                  {/* Progress fill - green gradient for completed phases */}
+                  {/* Progress fill */}
                   <div
                     className="absolute top-[51px] left-0 h-1 bg-gradient-to-r from-green-400 via-green-500 to-green-400 rounded-full transition-all duration-700 ease-out"
                     style={{
@@ -296,7 +306,6 @@ export default function HomePage() {
                         >
                           {/* Step circle */}
                           <div className="relative">
-                            {/* Outer glow для активного */}
                             {(isCurrent || isInProgress) && (
                               <div className="absolute inset-0 rounded-full bg-primary/20 animate-ping" style={{ animationDuration: '2s' }} />
                             )}
@@ -367,7 +376,6 @@ export default function HomePage() {
           </div>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {features.map(({ icon: Icon, title, description }, idx) => {
-              // Градиентные цвета из палитры фона
               const gradientColors = [
                 'from-purple-400 to-purple-600',
                 'from-blue-400 to-blue-600',
