@@ -1,10 +1,9 @@
-import { useState } from 'react'
 import { TrendingUp, Users, ShoppingCart, DollarSign, Package } from 'lucide-react'
 import { Badge } from '@/components/ui/Badge'
 import { StatusBadge, StatusDot } from '@/components/ui/StatusBadge'
 import { StatCard, StatGrid, MiniStat } from '@/components/ui/StatCard'
 import { Timeline, DeliveryTracker, OrderStatus } from '@/components/ui/Timeline'
-import { Banner, TopBanner, InlineAlert, Callout } from '@/components/ui/Banner'
+import { Banner, InlineAlert, Callout } from '@/components/ui/Banner'
 import { Button } from '@/components/ui/Button'
 import { CodeBlock } from '../../components/CodeBlock'
 import { SectionHeader } from '../../components/SectionHeader'
@@ -13,7 +12,6 @@ import { useScrollToSection } from '../../hooks/useScrollToSection'
 
 export function DataDisplayDemo() {
   useScrollToSection()
-  const [bannerVisible, setBannerVisible] = useState(true)
 
   return (
     <div className="space-y-8">

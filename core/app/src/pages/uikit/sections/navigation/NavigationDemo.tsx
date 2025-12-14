@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Home, Package, Settings } from 'lucide-react'
+import { Package } from 'lucide-react'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/Tabs'
 import { Breadcrumb, SimpleBreadcrumb } from '@/components/ui/Breadcrumb'
 import { Pagination, SimplePagination, PaginationInfo } from '@/components/ui/Pagination'

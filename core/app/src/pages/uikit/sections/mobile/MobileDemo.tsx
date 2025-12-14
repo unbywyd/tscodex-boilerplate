@@ -6,7 +6,6 @@ import {
   User,
   Settings,
   Share,
-  Edit,
   Trash2,
   Star,
   Bell,
@@ -19,22 +18,22 @@ import {
 } from 'lucide-react'
 import { ActionSheet } from '@/components/ui/ActionSheet'
 import { BottomNav } from '@/components/ui/BottomNav'
-import { BottomSheet, SimpleBottomSheet, OptionSheet } from '@/components/ui/BottomSheet'
-import { CardSlider, ProductSlider, StorySlider, BannerSlider } from '@/components/ui/CardSlider'
+import { SimpleBottomSheet, OptionSheet } from '@/components/ui/BottomSheet'
+import { ProductSlider } from '@/components/ui/CardSlider'
 import { CartBadge, NotificationBadge, WishlistBadge } from '@/components/ui/CartBadge'
 import { FilterChips, RemovableChips, FilterButton } from '@/components/ui/FilterChips'
 import { FloatingButton } from '@/components/ui/FloatingButton'
 import { HorizontalScroll, ScrollTabs } from '@/components/ui/HorizontalScroll'
 import { MobileCard, ProductCard, HorizontalCard, StoryCard } from '@/components/ui/MobileCard'
-import { MobileFrame, SimpleFrame } from '@/components/ui/MobileFrame'
-import { MobileLayout, MobileContent, Screen, ScreenHeader, ScreenBody, ScreenFooter } from '@/components/ui/MobileLayout'
+import { MobileFrame } from '@/components/ui/MobileFrame'
+import { Screen, ScreenHeader, ScreenBody, ScreenFooter } from '@/components/ui/MobileLayout'
 import { MobileList, MobileListItem } from '@/components/ui/MobileList'
 import { MobileToastProvider, useToast, Snackbar, InlineToast } from '@/components/ui/MobileToast'
-import { PageIndicator, ProgressDots, NumberedIndicator } from '@/components/ui/PageIndicator'
-import { ProductGallery, SimpleGallery } from '@/components/ui/ProductGallery'
+import { PageIndicator, NumberedIndicator } from '@/components/ui/PageIndicator'
+import { ProductGallery } from '@/components/ui/ProductGallery'
 import { SearchBar, SearchHeader, SearchSuggestions } from '@/components/ui/SearchBar'
 import { SegmentedControl, SimpleSegment, IconSegment } from '@/components/ui/SegmentedControl'
-import { SuccessAnimation, FullScreenResult, Confetti } from '@/components/ui/SuccessAnimation'
+import { FullScreenResult, Confetti } from '@/components/ui/SuccessAnimation'
 import { SwipeActions, SwipeableListItem, createDeleteAction, createArchiveAction } from '@/components/ui/SwipeActions'
 import { TopBar, TopBarAction } from '@/components/ui/TopBar'
 import { CodeBlock } from '../../components/CodeBlock'

@@ -122,39 +122,40 @@ const MobileFrame = React.forwardRef<HTMLDivElement, MobileFrameProps>(
           {/* Screen */}
           <div
             className={cn(
-              'relative overflow-hidden bg-white dark:bg-gray-950',
+              'relative flex flex-col overflow-hidden bg-white dark:bg-gray-950',
               device === 'iphone' && 'rounded-[2.5rem]',
               device === 'android' && 'rounded-[1.5rem]',
               device === 'minimal' && 'rounded-[1.5rem]'
             )}
             style={{ width, height }}
           >
-            {/* Notch/Dynamic Island */}
-            {device === 'iphone' && showNotch && (
-              size === 'lg' ? <DynamicIsland /> : <Notch />
-            )}
-
-            {/* Status bar */}
-            {showStatusBar && (
-              <div className={cn(
-                'relative z-20',
-                device === 'iphone' && showNotch && 'pt-8'
-              )}>
-                <StatusBar />
+            {/* Top safe area: Notch + StatusBar - part of frame layout, NOT absolute */}
+            {(showStatusBar || (device === 'iphone' && showNotch)) && (
+              <div className="flex-shrink-0 relative">
+                {/* Notch/Dynamic Island - absolute within top safe area */}
+                {device === 'iphone' && showNotch && (
+                  size === 'lg' ? <DynamicIsland /> : <Notch />
+                )}
+                {/* Status bar with padding for notch */}
+                {showStatusBar && (
+                  <div className={cn(device === 'iphone' && showNotch && 'pt-7')}>
+                    <StatusBar />
+                  </div>
+                )}
               </div>
             )}
 
-            {/* Content area */}
-            <div className={cn(
-              'h-full overflow-auto',
-              showStatusBar && 'pt-0',
-              showHomeIndicator && 'pb-6'
-            )}>
+            {/* Content area - fills remaining space, app renders here in SAFE ZONE */}
+            <div className="flex-1 min-h-0 relative overflow-hidden">
               {children}
             </div>
 
-            {/* Home indicator */}
-            {device === 'iphone' && showHomeIndicator && <HomeIndicator />}
+            {/* Bottom safe area: Home indicator - part of frame layout, NOT absolute */}
+            {device === 'iphone' && showHomeIndicator && (
+              <div className="flex-shrink-0 h-6 flex items-center justify-center">
+                <div className="w-32 h-1 bg-black/20 dark:bg-white/20 rounded-full" />
+              </div>
+            )}
           </div>
         </div>
       </div>

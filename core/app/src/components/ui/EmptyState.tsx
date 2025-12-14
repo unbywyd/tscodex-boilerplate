@@ -1,10 +1,10 @@
 // EmptyState - Placeholder for empty content with icon, message and action
 import * as React from 'react'
 import { cn } from '@/lib/utils'
-import { Inbox, Search, FileX, Users, ShoppingCart, Bell, FolderOpen, Image, FileText } from 'lucide-react'
+import { Inbox, Search, FileX, Users, ShoppingCart, Bell, FolderOpen, Image, FileText, Package, History } from 'lucide-react'
 import { Button } from './Button'
 
-type EmptyStatePreset = 'default' | 'search' | 'no-data' | 'no-users' | 'empty-cart' | 'no-notifications' | 'no-files' | 'no-images' | 'no-documents'
+type EmptyStatePreset = 'default' | 'search' | 'no-results' | 'no-data' | 'no-users' | 'empty-cart' | 'no-notifications' | 'no-files' | 'no-images' | 'no-documents' | 'no-orders' | 'no-history'
 
 interface EmptyStateProps extends React.HTMLAttributes<HTMLDivElement> {
   // Preset icons
@@ -77,6 +77,21 @@ const presetConfig: Record<EmptyStatePreset, { icon: React.ElementType; title: s
     icon: FileText,
     title: 'No documents',
     description: 'Create or upload documents.',
+  },
+  'no-results': {
+    icon: Search,
+    title: 'No results',
+    description: 'No matching results found. Try different criteria.',
+  },
+  'no-orders': {
+    icon: Package,
+    title: 'No orders yet',
+    description: 'Your orders will appear here.',
+  },
+  'no-history': {
+    icon: History,
+    title: 'No history',
+    description: 'Your activity history will appear here.',
   },
 }
 

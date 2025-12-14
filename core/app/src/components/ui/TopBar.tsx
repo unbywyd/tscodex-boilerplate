@@ -10,6 +10,8 @@ interface TopBarProps extends React.HTMLAttributes<HTMLDivElement> {
   close?: boolean | (() => void)
   leftAction?: React.ReactNode
   rightAction?: React.ReactNode
+  /** @deprecated Use 'rightAction' instead */
+  action?: React.ReactNode
   transparent?: boolean
   border?: boolean
 }
@@ -24,12 +26,15 @@ const TopBar = React.forwardRef<HTMLDivElement, TopBarProps>(
       close,
       leftAction,
       rightAction,
+      action,
       transparent = false,
       border = true,
       ...props
     },
     ref
   ) => {
+    // Support deprecated 'action' prop
+    const resolvedRightAction = rightAction ?? action
     const handleBack = () => {
       if (typeof back === 'function') {
         back()
@@ -90,7 +95,7 @@ const TopBar = React.forwardRef<HTMLDivElement, TopBarProps>(
 
         {/* Right side */}
         <div className="flex items-center justify-end min-w-[60px] gap-1">
-          {rightAction}
+          {resolvedRightAction}
         </div>
       </header>
     )

@@ -117,7 +117,7 @@ const ScreenHeader = React.forwardRef<HTMLDivElement, ScreenHeaderProps>(
     <div
       ref={ref}
       className={cn(
-        'flex-shrink-0 z-10',
+        'flex-shrink-0 z-30', // z-30 to be above MobileFrame StatusBar (z-20)
         !transparent && 'bg-background',
         border && 'border-b',
         className

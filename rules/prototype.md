@@ -2,6 +2,95 @@
 
 Best practices for building prototypes with LLM Boilerplate.
 
+## CRITICAL: Business Component Documentation
+
+**EVERY business component MUST have:**
+
+1. **TOML specification** in `src/spec/layers/components/[name].toml`
+2. **Doc wrapper** in JSX using `<Doc of="components.[name]" entityId={id}>`
+
+### Mandatory Checklist for Business Components
+
+```
+□ Created src/spec/layers/components/[name].toml
+□ Added <Doc of="components.[name]"> wrapper in render
+□ Page has <Doc of="pages.[name]" floating /> at top
+□ Ran npm run build to generate docs JSON
+```
+
+### Example: Creating UserCard Component
+
+**Step 1: Create TOML spec FIRST**
+```toml
+# src/spec/layers/components/user-card.toml
+[component]
+id = "user-card"
+name = "User Card"
+description = "Displays user information with avatar, name, role"
+
+[component.props]
+user = "UserEntity"
+onDelete = "(id: string) => void"
+
+[component.features]
+list = ["Avatar display", "Role badge", "Delete action"]
+
+[relations]
+entities = ["user"]
+pages = ["users"]
+
+[implementation]
+file = "src/prototype/components/UserCard.tsx"
+status = "implemented"
+```
+
+**Step 2: Create React component**
+```tsx
+// src/prototype/components/UserCard.tsx
+import { Doc, Card, Badge, Button } from '@/components/ui'
+
+export function UserCard({ user, onDelete }) {
+  return (
+    <Doc of="components.user-card" entityId={user.id}>
+      <Card>
+        <img src={user.avatar} />
+        <h3>{user.name}</h3>
+        <Badge>{user.role}</Badge>
+        <Button onClick={() => onDelete(user.id)}>Delete</Button>
+      </Card>
+    </Doc>
+  )
+}
+```
+
+**Step 3: Use in page with page-level Doc**
+```tsx
+// src/prototype/pages/Users.tsx
+export default function UsersPage() {
+  return (
+    <>
+      <Doc of="pages.users" floating position="bottom-right" />
+      <Container>
+        {users.map(user => (
+          <UserCard key={user.id} user={user} onDelete={handleDelete} />
+        ))}
+      </Container>
+    </>
+  )
+}
+```
+
+### Why This Is Important
+
+| Without Doc | With Doc |
+|-------------|----------|
+| LLM can't trace component to spec | `data-doc-url` enables MCP integration |
+| No documentation link | Click "?" → see TOML spec |
+| No entity tracking | `data-entity-id` for testing/automation |
+| Orphaned component | Full traceability |
+
+**DO NOT skip Doc wrappers. They are NOT optional.**
+
 ## Architecture Overview
 
 ```
