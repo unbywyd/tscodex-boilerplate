@@ -7,9 +7,10 @@ import { ErrorBoundary } from './components/ErrorBoundary';
 import { loadEvents } from './lib/docs-loader';
 import { registerEvents } from './lib/events';
 import { Skeleton, Container } from './components/ui';
+import { CustomHomePage } from '@prototype/config/nav';
 
 // Lazy load pages for better performance
-const HomePage = lazy(() => import('./pages/Home'));
+const DefaultHomePage = lazy(() => import('./pages/Home'));
 const DocsIndex = lazy(() => import('./pages/DocsIndex'));
 const DocViewer = lazy(() => import('./pages/DocViewer'));
 const PrototypePage = lazy(() => import('./pages/Prototype'));
@@ -20,6 +21,9 @@ const GetStartedPage = lazy(() => import('./pages/GetStarted'));
 const InterviewPage = lazy(() => import('./pages/Interview'));
 const UIKitPage = lazy(() => import('./pages/uikit'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+
+// Use custom home page if provided, otherwise default
+const HomePage = CustomHomePage || DefaultHomePage;
 
 // Loading fallback component
 function PageLoader() {

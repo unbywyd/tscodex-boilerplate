@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Box, Home, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Palette } from 'lucide-react'
+import { FileText, Box, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Palette } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Container } from './ui'
+import { customNavLinks } from '@prototype/config/nav'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -17,18 +18,22 @@ export default function Layout({ children }: LayoutProps) {
     return location.pathname.startsWith(path)
   }
 
+  // Project links (PRIMARY - left side, prominent)
+  // Custom links from prototype config come first
   const mainNavLinks = [
-    { path: '/', label: 'Home', icon: Home },
+    ...customNavLinks,
+    { path: '/prototype', label: 'Prototype', icon: Box },
+    { path: '/interview', label: 'Interview', icon: ClipboardList },
+    { path: '/docs', label: 'Docs', icon: FileText },
+    { path: '/schema', label: 'Schema', icon: Database },
+  ]
+
+  // Engine/docs links (SECONDARY - right side, muted background)
+  // Note: Home is accessed via logo click, no need for separate Home link
+  const projectNavLinks = [
     { path: '/about', label: 'About', icon: Info },
     { path: '/challenge', label: 'Challenge', icon: GitBranch },
     { path: '/get-started', label: 'Get Started', icon: Rocket },
-  ]
-
-  const projectNavLinks = [
-    { path: '/interview', label: 'Interview', icon: ClipboardList },
-    { path: '/docs', label: 'Docs', icon: FileText },
-    { path: '/prototype', label: 'Prototype', icon: Box },
-    { path: '/schema', label: 'Schema', icon: Database },
     { path: '/ui-kit', label: 'UIKit', icon: Palette },
   ]
 
