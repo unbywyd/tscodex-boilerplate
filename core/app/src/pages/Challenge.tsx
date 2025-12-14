@@ -1,8 +1,9 @@
 import { Link } from 'react-router-dom'
-import { 
-  FileText, 
-  Layers, 
-  Code2, 
+import { useState, useEffect } from 'react'
+import {
+  FileText,
+  Layers,
+  Code2,
   Database,
   Sparkles,
   Target,
@@ -19,6 +20,7 @@ import {
 } from 'lucide-react'
 import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { loadManifest, type Manifest } from '@/lib/docs-loader'
 
 const profiles = {
   simple: {
@@ -139,6 +141,16 @@ const phaseDetails: Record<string, {
 }
 
 export default function ChallengePage() {
+  const [manifest, setManifest] = useState<Manifest | null>(null)
+
+  useEffect(() => {
+    loadManifest().then(setManifest).catch(console.error)
+  }, [])
+
+  // Get project info from manifest or use defaults
+  const projectName = manifest?.project?.name || 'LLM Boilerplate'
+  const projectDescription = manifest?.project?.description || 'File-driven specification system for LLM-assisted development'
+
   return (
     <>
       <AnimatedBackground />
@@ -148,11 +160,11 @@ export default function ChallengePage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Bot className="h-8 w-8 text-primary" />
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              How It Works with LLM
+              {projectName}
             </h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Demonstration of how the tool works and interacts with LLM through the file system
+            {projectDescription}
           </p>
         </section>
 

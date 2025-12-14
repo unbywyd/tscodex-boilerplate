@@ -69,11 +69,6 @@ const MobileFrame = React.forwardRef<HTMLDivElement, MobileFrameProps>(
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[40%] h-7 bg-black rounded-b-2xl z-10" />
     )
 
-    // Home indicator (iPhone style)
-    const HomeIndicator = () => (
-      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1 bg-black/20 dark:bg-white/20 rounded-full" />
-    )
-
     // Dynamic Island (newer iPhones)
     const DynamicIsland = () => (
       <div className="absolute top-3 left-1/2 -translate-x-1/2 w-[30%] h-8 bg-black rounded-full z-10" />
