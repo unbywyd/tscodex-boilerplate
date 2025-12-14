@@ -1,10 +1,5 @@
 {
   "byId": {
-    "product-card": {
-      "path": "layers/components/product-card.toml",
-      "folder": "components",
-      "title": "Product Card"
-    },
     "user-card": {
       "path": "layers/components/user-card.toml",
       "folder": "components",
@@ -140,7 +135,6 @@
   },
   "byFolder": {
     "components": [
-      "product-card",
       "user-card"
     ],
     "entities": [
@@ -195,16 +189,6 @@
     ]
   },
   "referencedBy": {
-    "product": [
-      "product-card",
-      "cart-add",
-      "products"
-    ],
-    "products": [
-      "product-card",
-      "product",
-      "uc_view_prototype"
-    ],
     "user": [
       "user-card",
       "user",
@@ -230,6 +214,10 @@
       "category",
       "product"
     ],
+    "products": [
+      "product",
+      "uc_view_prototype"
+    ],
     "product-card": [
       "product",
       "products"
@@ -242,6 +230,10 @@
     "user-card": [
       "user",
       "users"
+    ],
+    "product": [
+      "cart-add",
+      "products"
     ],
     "route_product_detail": [
       "cart-add"
@@ -303,14 +295,6 @@
     ]
   },
   "relations": {
-    "product-card": {
-      "entities": [
-        "product"
-      ],
-      "pages": [
-        "products"
-      ]
-    },
     "user-card": {
       "entities": [
         "user"

@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "generated": "2025-12-14T13:02:39.860Z",
+  "generated": "2025-12-14T13:45:32.825Z",
   "project": {
     "id": "llm-boilerplate",
     "name": "LLM Boilerplate",
@@ -277,61 +277,33 @@
     ],
     "components": [
       {
-        "id": "product-card",
-        "name": "Product Card",
-        "description": "Displays product/pricing plan with features list and selection button",
-        "props": {
-          "product": "Product",
-          "onSelect": "(id: number) => void"
-        },
-        "features": {
-          "list": [
-            "Product name and description",
-            "Price with currency formatting",
-            "Features checklist",
-            "Popular badge indicator",
-            "Select plan button"
-          ]
-        },
-        "styling": {
-          "hover": "shadow-lg transition",
-          "popular": "border-primary shadow-md",
-          "responsive": true
-        },
-        "implementation": {
-          "component": "ProductCard",
-          "file": "core/app/src/pages/prototype/ProductsPage.tsx",
-          "preview": "/prototype/products",
-          "status": "implemented"
-        },
-        "_meta": {
-          "path": "layers/components/product-card.toml"
-        }
-      },
-      {
         "id": "user-card",
         "name": "User Card",
-        "description": "Displays user information in a card format with avatar, name, email, role badge and actions",
+        "description": "Reusable card component that displays user information with avatar, name, email, role badge and actions",
         "props": {
-          "user": "UserEntity",
-          "onDelete": "(id: string) => void"
+          "user": "{ id: string, name: string, email: string, role: string, avatar: string, createdAt?: string }",
+          "onDelete": "(id: string) => void",
+          "showDelete": "boolean (default: true)"
         },
         "features": {
           "list": [
-            "User avatar display",
-            "Name and email",
-            "Role badge (admin/user)",
-            "Join date",
-            "Delete action on hover"
+            "User avatar with fallback initials",
+            "Name and email display",
+            "Role badge (admin/user/moderator)",
+            "Join date formatting",
+            "Delete action on hover (optional)"
           ]
         },
         "styling": {
           "hover": "shadow-lg transition",
           "responsive": true
+        },
+        "usage": {
+          "code": "import { UserCard } from '@/prototype/components/UserCard'\n\n<UserCard\n  user={{ id: '1', name: 'John', email: 'john@example.com', role: 'admin', avatar: '...' }}\n  onDelete={(id) => console.log('Delete', id)}\n  showDelete={true}\n/>\n"
         },
         "implementation": {
           "component": "UserCard",
-          "file": "core/app/src/pages/prototype/UsersPage.tsx",
+          "file": "src/prototype/components/UserCard.tsx",
           "preview": "/prototype/users",
           "status": "implemented"
         },
@@ -1026,11 +998,6 @@
   ],
   "relations": {
     "byId": {
-      "product-card": {
-        "path": "layers/components/product-card.toml",
-        "folder": "components",
-        "title": "Product Card"
-      },
       "user-card": {
         "path": "layers/components/user-card.toml",
         "folder": "components",
@@ -1165,14 +1132,6 @@
       }
     },
     "graph": {
-      "product-card": {
-        "entities": [
-          "product"
-        ],
-        "pages": [
-          "products"
-        ]
-      },
       "user-card": {
         "entities": [
           "user"

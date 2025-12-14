@@ -80,21 +80,12 @@
           "name": "components",
           "files": [
             {
-              "path": "layers/components/product-card.toml",
-              "name": "product-card.toml",
-              "type": "toml",
-              "metadata": {
-                "size": 710,
-                "modified": "2025-12-11T08:13:00.669Z"
-              }
-            },
-            {
               "path": "layers/components/user-card.toml",
               "name": "user-card.toml",
               "type": "toml",
               "metadata": {
-                "size": 644,
-                "modified": "2025-12-11T08:12:58.648Z"
+                "size": 1094,
+                "modified": "2025-12-14T13:38:58.856Z"
               }
             }
           ],
