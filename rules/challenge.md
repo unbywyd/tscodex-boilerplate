@@ -619,7 +619,12 @@ Actions:
 - Validate
 
 Output:
-- `prisma/schema.prisma`
+- `src/prisma/schema.prisma`
+
+**CRITICAL:**
+- Schema location: `src/prisma/schema.prisma` (NOT `prisma/` in project root!)
+- **NEVER run `prisma init`** — schema file already exists
+- Just edit the existing schema file directly
 
 **Status Update:**
 ```toml

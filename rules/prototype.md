@@ -31,7 +31,7 @@ Before generating ANY code, verify:
 
 This is the LLM-first workflow:
 1. **TOML specs** → define entities in `src/spec/layers/entities/`
-2. **Prisma schema** → generate `prisma/schema.prisma` from entities
+2. **Prisma schema** → generate `src/prisma/schema.prisma` from entities
 3. **Prototype** → build React UI based on schema types
 
 ### Why Schema First?
@@ -40,10 +40,17 @@ This is the LLM-first workflow:
 - Ensures UI matches data structure
 - Prevents mismatch between UI and backend
 
+### Prisma Setup
+
+**CRITICAL:**
+- Schema location: `src/prisma/schema.prisma` (NOT `prisma/` in project root!)
+- **NEVER run `prisma init`** — schema file already exists
+- Just edit the existing schema file directly
+
 ### Before Starting Prototype
 ```
 □ All entities defined in src/spec/layers/entities/*.toml
-□ Prisma schema generated in prisma/schema.prisma
+□ Prisma schema generated in src/prisma/schema.prisma
 □ Run: npm run prisma:generate (if using Prisma client)
 □ THEN start building prototype pages
 ```

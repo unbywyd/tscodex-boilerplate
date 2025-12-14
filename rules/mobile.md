@@ -1116,3 +1116,102 @@ function MyMobileApp() {
 | **Fullscreen app** (no frame) | Default (no inline) |
 | **Inside MobileFrame** | `inline` prop on all overlays |
 | **Multi-app preview** | Each app uses `inline` |
+
+---
+
+## CRITICAL: Toast/Notification Usage
+
+**Use toasts for errors, NOT for success.**
+
+### Why?
+- Success toasts interrupt user flow and feel patronizing
+- Users expect actions to succeed — confirming obvious success is noise
+- Error toasts are essential — users need to know when something fails
+
+### Rules
+
+| Action Result | Feedback Type |
+|---------------|---------------|
+| **Success** | Visual change in UI (checkmark, state update, navigation) |
+| **Error** | Toast with error message |
+| **Warning** | Toast (optional, for non-blocking issues) |
+| **Loading** | Spinner/skeleton, NOT toast |
+
+### Examples
+
+```tsx
+// ❌ WRONG - Success toast is annoying
+const handleSave = async () => {
+  await saveData()
+  toast.show({ message: 'Saved successfully!', type: 'success' })  // DON'T
+}
+
+// ✅ CORRECT - Show error only
+const handleSave = async () => {
+  try {
+    await saveData()
+    // Success: navigate away, update UI, show checkmark — no toast
+    navigate('/list')
+  } catch (error) {
+    toast.show({ message: 'Failed to save. Try again.', type: 'error' })
+  }
+}
+```
+
+```tsx
+// ❌ WRONG - Toast for every action
+<Button onClick={() => {
+  addToCart(item)
+  toast.show({ message: 'Added to cart!', type: 'success' })
+}}>
+  Add to Cart
+</Button>
+
+// ✅ CORRECT - Visual feedback without toast
+<Button onClick={() => {
+  addToCart(item)
+  // Cart badge updates, button shows checkmark briefly
+}}>
+  {added ? <Check /> : 'Add to Cart'}
+</Button>
+```
+
+### When to Use Toasts
+
+| Use Toast | Don't Use Toast |
+|-----------|-----------------|
+| API/network errors | Successful saves |
+| Validation failures | Item added to cart |
+| Permission denied | Form submitted |
+| Timeout/connection issues | Profile updated |
+| Destructive action confirmation | Navigation success |
+
+### Good Error Toast Patterns
+
+```tsx
+// Actionable error
+toast.show({
+  message: 'Connection lost',
+  type: 'error',
+  action: { label: 'Retry', onClick: retry }
+})
+
+// Brief, clear error
+toast.show({ message: 'Payment failed. Check your card.', type: 'error' })
+
+// With duration for important errors
+toast.show({
+  message: 'Session expired. Please log in again.',
+  type: 'error',
+  duration: 5000
+})
+```
+
+### Success Feedback Alternatives
+
+Instead of success toasts, use:
+- **Navigation** — go to next screen after success
+- **UI state change** — button turns to checkmark, item appears in list
+- **Inline message** — "Changes saved" text near the action
+- **Animation** — brief success animation (SuccessAnimation component)
+- **Badge update** — cart count increases, notification dot appears

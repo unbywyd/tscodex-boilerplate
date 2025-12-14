@@ -113,6 +113,13 @@ export default function HomePage() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+            <Button asChild size="lg" className="text-base bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 border-0 shadow-lg shadow-purple-500/25">
+              <a href="https://example-boilerplate.tscodex.com/" target="_blank" rel="noopener noreferrer">
+                <Sparkles className="h-5 w-5" />
+                Live Demo
+                <ExternalLink className="h-4 w-4 ml-1" />
+              </a>
+            </Button>
             <Button asChild size="lg" className="text-base">
               <Link to="/docs">
                 <FileText className="h-5 w-5" />
