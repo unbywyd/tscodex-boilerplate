@@ -206,7 +206,7 @@ registerFactory<User>('users', () => ({
 - `rules/prototype.md` - prototype development (useRepo, factories, linking to docs)
 - `rules/docs-pdf.md` - PDF documentation, MCP integration, manifest
 - `rules/web.md` - web-specific
-- `rules/mobile.md` - mobile-specific
+- `rules/mobile.md` - **MANDATORY for mobile projects** (app flow, onboarding, auth, navigation)
 
 ## LLM/RAG Integration
 

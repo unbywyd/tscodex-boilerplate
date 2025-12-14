@@ -116,6 +116,21 @@ export default function UsersPage() {
 
 **DO NOT skip Doc wrappers. They are NOT optional.**
 
+---
+
+## CRITICAL: Mobile Projects
+
+**If building a mobile app, READ `rules/mobile.md` FIRST.**
+
+It contains mandatory patterns:
+- Standard app flow (splash → onboarding → auth → profile → permissions → home)
+- Back navigation on EVERY screen (except home)
+- OTP-based auth pattern
+- Onboarding slides with skip button
+- Permission request flow
+
+---
+
 ## Architecture Overview
 
 ```

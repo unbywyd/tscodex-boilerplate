@@ -1,5 +1,382 @@
 # Mobile Development
 
+**IMPORTANT:** This file is the primary reference for all mobile app development. Read it fully before starting any mobile prototype.
+
+---
+
+## CRITICAL: Standard Mobile App Flow
+
+Every mobile app MUST follow this launch sequence:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  1. SPLASH SCREEN (1-2 sec)                                 │
+│     └─ App logo, loading indicator                          │
+├─────────────────────────────────────────────────────────────┤
+│  2. ONBOARDING (skippable, 2-4 slides)                      │
+│     └─ First launch only, explain value proposition         │
+│     └─ "Skip" button always visible                         │
+│     └─ Store completion in localStorage/AsyncStorage        │
+├─────────────────────────────────────────────────────────────┤
+│  3. AUTH (if required)                                      │
+│     ├─ Email/Phone input → OTP verification                 │
+│     ├─ Social auth buttons (Google, Apple, etc.)            │
+│     └─ Guest mode if applicable                             │
+├─────────────────────────────────────────────────────────────┤
+│  4. PROFILE SETUP (first-time after auth)                   │
+│     └─ Name, avatar, preferences                            │
+│     └─ Can be minimal, more fields later                    │
+├─────────────────────────────────────────────────────────────┤
+│  5. PERMISSIONS (request one-by-one, explain why)           │
+│     ├─ Push Notifications                                   │
+│     ├─ Location (if needed)                                 │
+│     ├─ Contacts (if needed)                                 │
+│     └─ Camera/Photos (if needed)                            │
+├─────────────────────────────────────────────────────────────┤
+│  6. HOME SCREEN                                             │
+│     └─ Main app content, bottom navigation                  │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### Flow Decision Tree
+
+```
+App Launch
+    │
+    ├─ First launch? ──YES──→ Show Onboarding → Mark as seen
+    │       │
+    │      NO
+    │       │
+    ├─ Auth required? ──YES──→ Is logged in? ──NO──→ Auth Screen
+    │       │                        │
+    │      NO                       YES
+    │       │                        │
+    │       ├─ Profile complete? ──NO──→ Profile Setup
+    │       │         │
+    │       │        YES
+    │       │         │
+    │       └─ Permissions granted? ──NO──→ Permission Requests
+    │                 │
+    │                YES
+    │                 │
+    └────────────────→ HOME SCREEN
+```
+
+### Implementation Pattern
+
+```tsx
+// src/prototype/apps/[appname]/App.tsx
+function App() {
+  const [step, setStep] = useState<
+    'splash' | 'onboarding' | 'auth' | 'profile' | 'permissions' | 'home'
+  >('splash')
+
+  const { isAuthenticated, user } = useAuth()
+  const hasSeenOnboarding = localStorage.getItem('onboarding_complete')
+  const hasGrantedPermissions = localStorage.getItem('permissions_granted')
+
+  useEffect(() => {
+    // Splash timeout
+    const timer = setTimeout(() => {
+      if (!hasSeenOnboarding) {
+        setStep('onboarding')
+      } else if (!isAuthenticated) {
+        setStep('auth')
+      } else if (!user?.profileComplete) {
+        setStep('profile')
+      } else if (!hasGrantedPermissions) {
+        setStep('permissions')
+      } else {
+        setStep('home')
+      }
+    }, 1500)
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <Screen>
+      {step === 'splash' && <SplashScreen />}
+      {step === 'onboarding' && <OnboardingSlider onComplete={() => setStep('auth')} onSkip={() => setStep('auth')} />}
+      {step === 'auth' && <AuthScreen onSuccess={() => setStep('profile')} />}
+      {step === 'profile' && <ProfileSetup onComplete={() => setStep('permissions')} />}
+      {step === 'permissions' && <PermissionsScreen onComplete={() => setStep('home')} />}
+      {step === 'home' && <HomeScreen />}
+    </Screen>
+  )
+}
+```
+
+### Auth Screen Pattern (OTP-based)
+
+```tsx
+function AuthScreen({ onSuccess }) {
+  const [stage, setStage] = useState<'input' | 'otp'>('input')
+  const [contact, setContact] = useState('')
+
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar title={stage === 'input' ? 'Sign In' : 'Verify'} />
+      </ScreenHeader>
+      <ScreenBody padding="lg">
+        {stage === 'input' && (
+          <>
+            <Input
+              placeholder="Email or Phone"
+              value={contact}
+              onChange={e => setContact(e.target.value)}
+            />
+            <Button onClick={() => setStage('otp')}>Continue</Button>
+          </>
+        )}
+        {stage === 'otp' && (
+          <>
+            <p>Enter code sent to {contact}</p>
+            <OTPInput length={6} onComplete={onSuccess} />
+            <Button variant="ghost" onClick={() => setStage('input')}>
+              Change number
+            </Button>
+          </>
+        )}
+      </ScreenBody>
+    </Screen>
+  )
+}
+```
+
+---
+
+## CRITICAL: Back Navigation
+
+**EVERY screen (except Home) MUST have back navigation.**
+
+### Rules
+
+1. **TopBar `back` prop** — always provide on non-root screens
+2. **Hardware back button** — handle on Android (React Native)
+3. **Swipe gesture** — iOS edge swipe should work
+4. **Modal dismiss** — swipe down or X button
+
+### Pattern
+
+```tsx
+// ✅ CORRECT - back navigation present
+function ProductScreen({ onBack }) {
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar title="Product" back={onBack} />
+      </ScreenHeader>
+      <ScreenBody>...</ScreenBody>
+    </Screen>
+  )
+}
+
+// ❌ WRONG - no back navigation
+function ProductScreen() {
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar title="Product" />  {/* Missing back! */}
+      </ScreenHeader>
+      ...
+    </Screen>
+  )
+}
+```
+
+### Navigation State Pattern
+
+```tsx
+function App() {
+  const [history, setHistory] = useState<string[]>(['home'])
+  const currentScreen = history[history.length - 1]
+
+  const navigate = (screen: string) => {
+    setHistory([...history, screen])
+  }
+
+  const goBack = () => {
+    if (history.length > 1) {
+      setHistory(history.slice(0, -1))
+    }
+  }
+
+  const canGoBack = history.length > 1
+
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar
+          title={titles[currentScreen]}
+          back={canGoBack ? goBack : undefined}
+        />
+      </ScreenHeader>
+      <ScreenBody>
+        {currentScreen === 'home' && <Home onNavigate={navigate} />}
+        {currentScreen === 'product' && <Product onBack={goBack} />}
+        {currentScreen === 'cart' && <Cart onBack={goBack} />}
+      </ScreenBody>
+    </Screen>
+  )
+}
+```
+
+---
+
+## CRITICAL: Onboarding Slides
+
+### Requirements
+
+- **2-4 slides maximum** — don't overwhelm users
+- **Skip button always visible** — respect user's time
+- **Progress indicator** — dots or progress bar
+- **Last slide has CTA** — "Get Started" button
+
+### Pattern
+
+```tsx
+interface OnboardingSlide {
+  image: string
+  title: string
+  description: string
+}
+
+function OnboardingSlider({ onComplete, onSkip }: { onComplete: () => void; onSkip: () => void }) {
+  const [current, setCurrent] = useState(0)
+
+  const slides: OnboardingSlide[] = [
+    { image: '/onboarding-1.svg', title: 'Welcome', description: 'Discover amazing features' },
+    { image: '/onboarding-2.svg', title: 'Easy to Use', description: 'Simple and intuitive interface' },
+    { image: '/onboarding-3.svg', title: 'Get Started', description: 'Create your account now' },
+  ]
+
+  const isLast = current === slides.length - 1
+
+  const handleNext = () => {
+    if (isLast) {
+      localStorage.setItem('onboarding_complete', 'true')
+      onComplete()
+    } else {
+      setCurrent(current + 1)
+    }
+  }
+
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar rightAction={<Button variant="ghost" onClick={onSkip}>Skip</Button>} />
+      </ScreenHeader>
+      <ScreenBody className="flex flex-col items-center justify-center text-center p-8">
+        <img src={slides[current].image} className="w-64 h-64 mb-8" />
+        <h2 className="text-2xl font-bold mb-2">{slides[current].title}</h2>
+        <p className="text-muted-foreground mb-8">{slides[current].description}</p>
+
+        {/* Progress dots */}
+        <div className="flex gap-2 mb-8">
+          {slides.map((_, i) => (
+            <div
+              key={i}
+              className={cn(
+                'w-2 h-2 rounded-full transition-colors',
+                i === current ? 'bg-primary' : 'bg-muted'
+              )}
+            />
+          ))}
+        </div>
+
+        <Button onClick={handleNext} className="w-full">
+          {isLast ? 'Get Started' : 'Next'}
+        </Button>
+      </ScreenBody>
+    </Screen>
+  )
+}
+```
+
+---
+
+## CRITICAL: Permissions Screen
+
+### Rules
+
+1. **Request one at a time** — don't ask all at once
+2. **Explain why** — show benefit before system dialog
+3. **Allow skip** — "Maybe Later" option
+4. **Remember choice** — don't ask again if denied
+
+### Pattern
+
+```tsx
+interface Permission {
+  id: string
+  title: string
+  description: string
+  icon: LucideIcon
+}
+
+function PermissionsScreen({ onComplete }: { onComplete: () => void }) {
+  const [current, setCurrent] = useState(0)
+
+  const permissions: Permission[] = [
+    {
+      id: 'notifications',
+      title: 'Stay Updated',
+      description: 'Get notified about orders, messages, and special offers',
+      icon: Bell,
+    },
+    {
+      id: 'location',
+      title: 'Find Nearby',
+      description: 'Discover stores and services near you',
+      icon: MapPin,
+    },
+  ]
+
+  const handleAllow = async () => {
+    // In real app: request actual permission
+    // await Permissions.request(permissions[current].id)
+    if (current < permissions.length - 1) {
+      setCurrent(current + 1)
+    } else {
+      localStorage.setItem('permissions_granted', 'true')
+      onComplete()
+    }
+  }
+
+  const handleSkip = () => {
+    if (current < permissions.length - 1) {
+      setCurrent(current + 1)
+    } else {
+      localStorage.setItem('permissions_granted', 'true')
+      onComplete()
+    }
+  }
+
+  const perm = permissions[current]
+  const Icon = perm.icon
+
+  return (
+    <Screen>
+      <ScreenBody className="flex flex-col items-center justify-center text-center p-8">
+        <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mb-6">
+          <Icon className="w-10 h-10 text-primary" />
+        </div>
+        <h2 className="text-2xl font-bold mb-2">{perm.title}</h2>
+        <p className="text-muted-foreground mb-8">{perm.description}</p>
+
+        <div className="w-full space-y-3">
+          <Button onClick={handleAllow} className="w-full">Allow</Button>
+          <Button variant="ghost" onClick={handleSkip} className="w-full">Maybe Later</Button>
+        </div>
+      </ScreenBody>
+    </Screen>
+  )
+}
+```
+
+---
+
 ## Stack Options
 - React Native + Expo
 - Flutter

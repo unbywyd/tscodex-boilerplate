@@ -124,6 +124,8 @@ Questions:
 - Multiple platforms? (single | 2-3 apps | many subsystems)
 - Team size? (solo | small | large)
 
+**IMPORTANT:** If project type is `mobile`, you MUST read `rules/mobile.md` before proceeding. It contains mandatory patterns for app flow, onboarding, auth, and navigation.
+
 Based on answers, select profile:
 
 ### Profile: Simple
