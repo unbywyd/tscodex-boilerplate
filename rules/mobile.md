@@ -588,6 +588,34 @@ export function DualPreview() {
 }
 ```
 
+### Namespaced Auth (CRITICAL for Dual-App)
+
+**Each app MUST use its own auth namespace** to avoid conflicts:
+
+```tsx
+// Driver app - stored in localStorage as 'auth-driver'
+function DriverApp() {
+  const { user, login, logout } = useAuth<Driver>({ namespace: 'driver' })
+  // ...
+}
+
+// Passenger app - stored in localStorage as 'auth-passenger'
+function PassengerApp() {
+  const { user, login, logout } = useAuth<Passenger>({ namespace: 'passenger' })
+  // ...
+}
+```
+
+**Why namespace?** Without it, both apps share one auth state — logging in as driver would also log in as passenger.
+
+| Without namespace | With namespace |
+|-------------------|----------------|
+| Single `auth` key in localStorage | `auth-driver` + `auth-passenger` separate keys |
+| Login in one app affects other | Independent auth states |
+| Can't test both apps simultaneously | Each app has own session |
+
+---
+
 ### Shared State Pattern (Zustand)
 ```tsx
 // src/prototype/shared/state/useOrderState.ts

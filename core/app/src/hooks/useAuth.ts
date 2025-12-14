@@ -1,7 +1,8 @@
 // Universal auth hook for prototypes
 // Provides simple authentication state with localStorage persistence
+// Supports namespaces for dual-app scenarios (driver/passenger, etc.)
 
-import { create } from 'zustand'
+import { create, type StoreApi, type UseBoundStore } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 interface AuthStore {
@@ -9,8 +10,28 @@ interface AuthStore {
   setUser: (user: Record<string, unknown> | null) => void
 }
 
-// Internal store - singleton for the app
-const useAuthStore = create<AuthStore>()(
+// Cache of stores by namespace
+const storeCache = new Map<string, UseBoundStore<StoreApi<AuthStore>>>()
+
+// Factory to get or create store by namespace
+function getAuthStore(namespace: string): UseBoundStore<StoreApi<AuthStore>> {
+  if (!storeCache.has(namespace)) {
+    const store = create<AuthStore>()(
+      persist(
+        (set) => ({
+          user: null,
+          setUser: (user) => set({ user }),
+        }),
+        { name: `auth-${namespace}` }
+      )
+    )
+    storeCache.set(namespace, store)
+  }
+  return storeCache.get(namespace)!
+}
+
+// Default store for backward compatibility (no namespace)
+const defaultStore = create<AuthStore>()(
   persist(
     (set) => ({
       user: null,
@@ -23,6 +44,12 @@ const useAuthStore = create<AuthStore>()(
 interface UseAuthConfig<T> {
   /** Extract role from user object. Default: (user) => user.role ?? 'user' */
   getRole?: (user: T) => string
+  /**
+   * Namespace for separate auth storage.
+   * Use for dual-app scenarios: 'driver', 'passenger', 'admin', etc.
+   * Each namespace gets its own localStorage key: `auth-{namespace}`
+   */
+  namespace?: string
 }
 
 /**
@@ -46,6 +73,16 @@ interface UseAuthConfig<T> {
  * if (hasRole('admin')) { ... }
  *
  * @example
+ * // Dual-app with namespace (driver/passenger)
+ * // Driver app - stored in localStorage as 'auth-driver'
+ * const driverAuth = useAuth<Driver>({ namespace: 'driver' })
+ *
+ * // Passenger app - stored in localStorage as 'auth-passenger'
+ * const passengerAuth = useAuth<Passenger>({ namespace: 'passenger' })
+ *
+ * // Both can be logged in simultaneously with different users
+ *
+ * @example
  * // Custom role field
  * interface Seller {
  *   id: string
@@ -60,8 +97,10 @@ interface UseAuthConfig<T> {
  * if (hasRole('pro')) { ... }
  */
 export function useAuth<T extends { id: string }>(config?: UseAuthConfig<T>) {
-  const user = useAuthStore((s) => s.user) as T | null
-  const setUser = useAuthStore((s) => s.setUser)
+  // Use namespaced store or default store
+  const store = config?.namespace ? getAuthStore(config.namespace) : defaultStore
+  const user = store((s) => s.user) as T | null
+  const setUser = store((s) => s.setUser)
 
   const getRole = config?.getRole ?? ((u: T) => (u as Record<string, unknown>).role as string ?? 'user')
 
