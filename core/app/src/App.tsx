@@ -13,7 +13,7 @@ import { CustomHomePage } from '@prototype/config/nav';
 const DefaultHomePage = lazy(() => import('./pages/Home'));
 const DocsIndex = lazy(() => import('./pages/DocsIndex'));
 const DocViewer = lazy(() => import('./pages/DocViewer'));
-const PrototypePage = lazy(() => import('./pages/Prototype'));
+const PrototypePage = lazy(() => import('@prototype/pages'));
 const PrismaSchemaPage = lazy(() => import('./pages/PrismaSchema'));
 const AboutPage = lazy(() => import('./pages/About'));
 const ChallengePage = lazy(() => import('./pages/Challenge'));

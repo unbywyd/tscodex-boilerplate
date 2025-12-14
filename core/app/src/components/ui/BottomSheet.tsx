@@ -138,7 +138,7 @@ const BottomSheet = React.forwardRef<HTMLDivElement, BottomSheetProps>(
         {/* Backdrop */}
         <div
           className={cn(
-            'fixed inset-0 z-50 bg-black/50 transition-opacity',
+            'absolute inset-0 z-50 bg-black/50 transition-opacity',
             open ? 'opacity-100' : 'opacity-0'
           )}
           onClick={closeOnBackdrop ? onClose : undefined}
@@ -148,7 +148,7 @@ const BottomSheet = React.forwardRef<HTMLDivElement, BottomSheetProps>(
         <div
           ref={ref}
           className={cn(
-            'fixed inset-x-0 bottom-0 z-50 bg-background rounded-t-2xl shadow-xl',
+            'absolute inset-x-0 bottom-0 z-50 bg-background rounded-t-2xl shadow-xl',
             !isDragging && 'transition-all duration-300 ease-out',
             className
           )}
@@ -214,7 +214,7 @@ const SimpleBottomSheet = React.forwardRef<HTMLDivElement, SimpleBottomSheetProp
       <>
         {/* Backdrop */}
         <div
-          className="fixed inset-0 z-50 bg-black/50 animate-in fade-in"
+          className="absolute inset-0 z-50 bg-black/50 animate-in fade-in"
           onClick={onClose}
         />
 
@@ -222,7 +222,7 @@ const SimpleBottomSheet = React.forwardRef<HTMLDivElement, SimpleBottomSheetProp
         <div
           ref={ref}
           className={cn(
-            'fixed inset-x-0 bottom-0 z-50 bg-background rounded-t-2xl shadow-xl',
+            'absolute inset-x-0 bottom-0 z-50 bg-background rounded-t-2xl shadow-xl',
             'animate-in slide-in-from-bottom duration-300',
             'max-h-[90vh] flex flex-col',
             className

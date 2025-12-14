@@ -1,17 +1,13 @@
-import { Link, useLocation } from 'react-router-dom'
-import { Users, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
-import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
-import UsersPage from '@prototype/pages/Users'
+// Prototype entry point
+// This is the main page for /prototype/* routes
+// Build your prototype here - the entire routing is yours to control
 
-function PrototypeHome() {
+import { Link } from 'react-router-dom'
+import { ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
+
+export default function PrototypePage() {
   const pages = [
-    {
-      path: '/prototype/users',
-      icon: Users,
-      title: 'Users',
-      description: 'User management with mock data',
-      badge: 'CRUD',
-    },
     {
       path: '/ui-kit',
       icon: Palette,
@@ -73,20 +69,18 @@ function PrototypeHome() {
         <h2 className="text-xl font-semibold mb-4">Available Pages</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {pages.map(({ path, icon: Icon, title, description, badge }) => (
-            <Link
-              key={path}
-              to={path}
-              className="group"
-            >
+            <Link key={path} to={path} className="group">
               <Card className="h-full hover:shadow-lg hover:border-primary/50 transition-all">
                 <CardHeader>
                   <div className="flex items-start justify-between mb-2">
                     <div className="rounded-md bg-primary/10 p-2.5">
                       <Icon className="h-5 w-5 text-primary" />
                     </div>
-                    <span className="text-xs font-medium px-2 py-1 rounded-full bg-muted text-muted-foreground">
-                      {badge}
-                    </span>
+                    {badge && (
+                      <span className="text-xs font-medium px-2 py-1 rounded-full bg-muted text-muted-foreground">
+                        {badge}
+                      </span>
+                    )}
                   </div>
                   <CardTitle className="text-lg">{title}</CardTitle>
                   <CardDescription>{description}</CardDescription>
@@ -175,16 +169,4 @@ function PrototypeHome() {
       </Card>
     </Container>
   )
-}
-
-export default function PrototypePage() {
-  const location = useLocation()
-  
-  // If we're on a sub-route, render the appropriate component
-  if (location.pathname === '/prototype/users') {
-    return <UsersPage />
-  }
-  
-  // Otherwise render the home page
-  return <PrototypeHome />
 }

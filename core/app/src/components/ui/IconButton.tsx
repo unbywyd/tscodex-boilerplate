@@ -111,9 +111,9 @@ interface FABProps extends Omit<IconButtonProps, 'size' | 'shape'> {
 const FAB = React.forwardRef<HTMLButtonElement, FABProps>(
   ({ className, position = 'bottom-right', extended, label, children, ...props }, ref) => {
     const positionClasses: Record<string, string> = {
-      'bottom-right': 'fixed bottom-6 right-6',
-      'bottom-left': 'fixed bottom-6 left-6',
-      'bottom-center': 'fixed bottom-6 left-1/2 -translate-x-1/2',
+      'bottom-right': 'absolute bottom-6 right-6',
+      'bottom-left': 'absolute bottom-6 left-6',
+      'bottom-center': 'absolute bottom-6 left-1/2 -translate-x-1/2',
     }
 
     if (extended && label) {

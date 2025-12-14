@@ -19,12 +19,13 @@ const SheetPortal = DialogPrimitive.Portal
 
 const SheetOverlay = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DialogPrimitive.Overlay> & { inline?: boolean }
+>(({ className, inline, ...props }, ref) => (
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      'fixed inset-0 z-50 bg-black/50',
+      inline ? 'absolute' : 'fixed',
+      'inset-0 z-50 bg-black/50 overflow-hidden',
       'data-[state=open]:animate-in data-[state=closed]:animate-out',
       'data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0',
       className
@@ -44,36 +45,51 @@ const sheetVariants = {
 interface SheetContentProps extends React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content> {
   side?: SheetSide
   showClose?: boolean
+  /** Render inline (absolute) instead of in portal. Use for MobileFrame. */
+  inline?: boolean
+  /** Custom container for portal. If not provided, uses body. */
+  container?: HTMLElement | null
 }
 
 const SheetContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   SheetContentProps
->(({ side = 'right', showClose = true, className, children, ...props }, ref) => (
-  <SheetPortal>
-    <SheetOverlay />
-    <SheetContext.Provider value={{ side }}>
-      <DialogPrimitive.Content
-        ref={ref}
-        className={cn(
-          'fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out',
-          'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300',
-          sheetVariants[side],
-          className
-        )}
-        {...props}
-      >
-        {children}
-        {showClose && (
-          <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </DialogPrimitive.Close>
-        )}
-      </DialogPrimitive.Content>
-    </SheetContext.Provider>
-  </SheetPortal>
-))
+>(({ side = 'right', showClose = true, inline, container, className, children, ...props }, ref) => {
+  const content = (
+    <>
+      <SheetOverlay inline={inline} />
+      <SheetContext.Provider value={{ side }}>
+        <DialogPrimitive.Content
+          ref={ref}
+          className={cn(
+            inline ? 'absolute' : 'fixed',
+            'z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out',
+            'data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-300',
+            sheetVariants[side],
+            className
+          )}
+          {...props}
+        >
+          {children}
+          {showClose && (
+            <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </DialogPrimitive.Close>
+          )}
+        </DialogPrimitive.Content>
+      </SheetContext.Provider>
+    </>
+  )
+
+  // Inline mode - no portal, render in place
+  if (inline) {
+    return content
+  }
+
+  // Portal mode (default)
+  return <SheetPortal container={container}>{content}</SheetPortal>
+})
 SheetContent.displayName = 'SheetContent'
 
 const SheetHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

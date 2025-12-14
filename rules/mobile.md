@@ -503,65 +503,94 @@ use-cases/*.toml → User flows
 guards/*.toml → Auth gates
 ```
 
-## Dual-App Architecture (Multi-Side Mobile)
+## Multi-App Architecture (2+ Apps)
 
-For apps with multiple user roles viewing same flow (driver/passenger, customer/courier, buyer/seller).
+For projects with multiple user-facing apps sharing the same data (driver/passenger, customer/courier/admin, patient/doctor/clinic).
+
+### Common Configurations
+
+| Config | Apps | Example |
+|--------|------|---------|
+| **Dual** | 2 mobile | Taxi: passenger + driver |
+| **Triple** | 2 mobile + admin | Delivery: customer + courier + admin panel |
+| **Quad** | 2 mobile + 2 web | Marketplace: buyer app + seller app + buyer web + admin |
 
 ### When to Use
 When `interview.toml` has:
 ```toml
-appSides = "dual"
-appSidesList = ["passenger", "driver"]
+appSides = "multi"                           # "single" | "dual" | "multi"
+appSidesList = ["customer", "courier", "admin"]
 ```
 
 ### Directory Structure
 ```
 src/prototype/
 ├── apps/
-│   ├── driver/
-│   │   ├── screens/
-│   │   │   ├── HomeScreen.tsx
-│   │   │   ├── OrderScreen.tsx
-│   │   │   └── RideScreen.tsx
-│   │   └── DriverApp.tsx
-│   └── passenger/
-│       ├── screens/
-│       │   ├── HomeScreen.tsx
-│       │   ├── BookingScreen.tsx
-│       │   └── RideScreen.tsx
-│       └── PassengerApp.tsx
+│   ├── customer/                 # Mobile app
+│   │   ├── CustomerApp.tsx
+│   │   └── screens/
+│   ├── courier/                  # Mobile app
+│   │   ├── CourierApp.tsx
+│   │   └── screens/
+│   └── admin/                    # Web panel (no MobileFrame)
+│       ├── AdminApp.tsx
+│       └── pages/
+├── pages/
+│   ├── MultiAppPreview.tsx       # Desktop: all apps side-by-side
+│   ├── customer/
+│   │   └── index.tsx             # Mobile: fullscreen
+│   ├── courier/
+│   │   └── index.tsx             # Mobile: fullscreen
+│   └── admin/
+│       └── index.tsx             # Web: fullscreen
 ├── shared/
-│   ├── state/           # Shared Zustand stores
-│   │   └── useOrderState.ts
-│   ├── types/           # Shared TypeScript types
-│   │   └── order.types.ts
-│   └── components/      # Shared UI components
-└── layouts/
-    └── DualAppLayout.tsx
+│   └── types/
+│       └── order.types.ts        # Shared TypeScript types
+└── factories/
+    └── index.ts                  # Shared entity factories + useRepo
 ```
 
-### DualAppLayout Component
+### MultiAppPreview Component (Desktop)
+
 ```tsx
-// src/prototype/layouts/DualAppLayout.tsx
-import { MobileFrame } from '@/components/ui/MobileFrame'
+// src/prototype/pages/MultiAppPreview.tsx
+import { MobileFrame } from '@/components/ui'
+import { CustomerApp } from '@prototype/apps/customer/CustomerApp'
+import { CourierApp } from '@prototype/apps/courier/CourierApp'
+import { AdminApp } from '@prototype/apps/admin/AdminApp'
 
-interface DualAppLayoutProps {
-  apps: Array<{
-    id: string
-    title: string
-    component: React.ComponentType
-  }>
-}
+export function MultiAppPreview() {
+  const apps = [
+    { id: 'customer', title: 'Customer App', component: CustomerApp, type: 'mobile' },
+    { id: 'courier', title: 'Courier App', component: CourierApp, type: 'mobile' },
+    { id: 'admin', title: 'Admin Panel', component: AdminApp, type: 'web' },
+  ]
 
-export function DualAppLayout({ apps }: DualAppLayoutProps) {
   return (
-    <div className="flex gap-8 justify-center p-8 min-h-screen bg-muted/30">
+    <div className="flex gap-8 justify-center p-8 min-h-screen bg-muted/30 flex-wrap">
       {apps.map(app => (
         <div key={app.id} className="flex flex-col items-center gap-4">
           <h2 className="font-semibold text-lg">{app.title}</h2>
-          <MobileFrame device="iphone" size="md">
-            <app.component />
-          </MobileFrame>
+
+          {/* Mobile apps in MobileFrame, web apps in BrowserFrame */}
+          {app.type === 'mobile' ? (
+            <MobileFrame device="iphone" size="md">
+              <app.component />
+            </MobileFrame>
+          ) : (
+            <BrowserFrame width={400} height={600}>
+              <app.component />
+            </BrowserFrame>
+          )}
+
+          {/* Deep link for standalone testing */}
+          <a
+            href={`/prototype/${app.id}`}
+            className="text-sm text-primary hover:underline"
+            target="_blank"
+          >
+            Open fullscreen →
+          </a>
         </div>
       ))}
     </div>
@@ -569,50 +598,41 @@ export function DualAppLayout({ apps }: DualAppLayoutProps) {
 }
 ```
 
-### Usage in Prototype
-```tsx
-// src/prototype/pages/DualPreview.tsx
-import { DualAppLayout } from '@/layouts/DualAppLayout'
-import { DriverApp } from '@/apps/driver/DriverApp'
-import { PassengerApp } from '@/apps/passenger/PassengerApp'
+### App Types
 
-export function DualPreview() {
-  return (
-    <DualAppLayout
-      apps={[
-        { id: 'passenger', title: 'Passenger', component: PassengerApp },
-        { id: 'driver', title: 'Driver', component: DriverApp },
-      ]}
-    />
-  )
-}
-```
+| Type | Frame | Use For |
+|------|-------|---------|
+| `mobile` | MobileFrame (iPhone/Android) | Customer apps, driver apps |
+| `web` | BrowserFrame | Admin panels, dashboards |
 
-### Namespaced Auth (CRITICAL for Dual-App)
+### Namespaced Auth (CRITICAL)
 
 **Each app MUST use its own auth namespace** to avoid conflicts:
 
 ```tsx
-// Driver app - stored in localStorage as 'auth-driver'
-function DriverApp() {
-  const { user, login, logout } = useAuth<Driver>({ namespace: 'driver' })
-  // ...
+// Customer app - stored as 'auth-customer'
+function CustomerApp() {
+  const { user, login, logout } = useAuth<Customer>({ namespace: 'customer' })
 }
 
-// Passenger app - stored in localStorage as 'auth-passenger'
-function PassengerApp() {
-  const { user, login, logout } = useAuth<Passenger>({ namespace: 'passenger' })
-  // ...
+// Courier app - stored as 'auth-courier'
+function CourierApp() {
+  const { user, login, logout } = useAuth<Courier>({ namespace: 'courier' })
+}
+
+// Admin app - stored as 'auth-admin'
+function AdminApp() {
+  const { user, login, logout } = useAuth<Admin>({ namespace: 'admin' })
 }
 ```
 
-**Why namespace?** Without it, both apps share one auth state — logging in as driver would also log in as passenger.
+**Why namespace?** Without it, all apps share one auth state — logging in as courier would also log in as customer.
 
 | Without namespace | With namespace |
 |-------------------|----------------|
-| Single `auth` key in localStorage | `auth-driver` + `auth-passenger` separate keys |
-| Login in one app affects other | Independent auth states |
-| Can't test both apps simultaneously | Each app has own session |
+| Single `auth` key | `auth-customer` + `auth-courier` + `auth-admin` |
+| Login affects all apps | Independent auth per app |
+| Can't test simultaneously | Each app has own session |
 
 ---
 
@@ -721,10 +741,378 @@ function PassengerApp() {
 }
 ```
 
+### Key Rules Summary
+
+| Rule | Requirement |
+|------|-------------|
+| **Auth** | `useAuth({ namespace: 'appname' })` — separate auth per app |
+| **Data** | `useRepo('collection')` — shared repo for cross-app interaction |
+| **Architecture** | App component works in Frame AND standalone fullscreen |
+| **Links** | Each framed app shows direct link for testing |
+| **Mobile apps** | Use `MobileFrame` (iPhone/Android frame) |
+| **Web apps** | Use `BrowserFrame` (admin panels, dashboards) |
+
+---
+
+### CRITICAL: Shared useRepo for Cross-App Data
+
+**Use `useRepo` (not separate Zustand stores) for shared data** — this demonstrates real-world interaction where both apps work with the same database.
+
+```tsx
+// Both apps use the SAME repository — changes sync automatically
+// Driver app
+function DriverApp() {
+  const orders = useRepo<Order>('orders')
+  const pendingOrders = orders.data.filter(o => o.status === 'pending')
+
+  const acceptOrder = (order: Order) => {
+    orders.update(order.id, {
+      status: 'accepted',
+      driverId: currentDriver.id
+    })
+    dispatchEvent('order.accepted', { orderId: order.id })
+  }
+}
+
+// Passenger app — sees the SAME data
+function PassengerApp() {
+  const orders = useRepo<Order>('orders')
+  const myOrder = orders.data.find(o => o.passengerId === currentUser.id)
+
+  // When driver accepts, myOrder.status changes automatically
+  // No need for separate Zustand sync — useRepo handles it
+}
+```
+
+**Why useRepo over Zustand for shared data:**
+- Single source of truth (localStorage)
+- Automatic sync between apps
+- Built-in CRUD operations
+- Matches real backend behavior (shared DB)
+
+**When to use Zustand:**
+- App-specific UI state (current screen, modals)
+- Ephemeral state that shouldn't persist
+
+---
+
+### CRITICAL: Standalone Mode Architecture
+
+**Every app MUST work both in MobileFrame AND as fullscreen page.**
+
+This allows:
+1. Side-by-side preview on desktop (in frames)
+2. Direct testing on real mobile device (fullscreen, no frame)
+
+#### App Component Pattern
+
+```tsx
+// src/prototype/apps/driver/DriverApp.tsx
+// This component renders ONLY the app content — no frame!
+
+export function DriverApp() {
+  const { user, login, logout } = useAuth<Driver>({ namespace: 'driver' })
+  const [screen, setScreen] = useState<'home' | 'order' | 'ride'>('home')
+
+  // App flow logic here...
+
+  return (
+    <Screen>
+      <ScreenHeader>
+        <TopBar title={titles[screen]} back={...} />
+      </ScreenHeader>
+      <ScreenBody>
+        {/* screens */}
+      </ScreenBody>
+      <ScreenFooter>
+        <BottomNav items={navItems} />
+      </ScreenFooter>
+    </Screen>
+  )
+}
+```
+
+#### Dual Preview Page (Desktop — with frames)
+
+```tsx
+// src/prototype/pages/DualPreview.tsx
+import { DriverApp } from '@prototype/apps/driver/DriverApp'
+import { PassengerApp } from '@prototype/apps/passenger/PassengerApp'
+
+export function DualPreview() {
+  return (
+    <div className="flex gap-8 justify-center p-8 min-h-screen bg-muted/30">
+      {/* Passenger App */}
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="font-semibold text-lg">Passenger</h2>
+        <MobileFrame device="iphone" size="md">
+          <PassengerApp />
+        </MobileFrame>
+        <a
+          href="/prototype/passenger"
+          className="text-sm text-primary hover:underline"
+          target="_blank"
+        >
+          Open fullscreen →
+        </a>
+      </div>
+
+      {/* Driver App */}
+      <div className="flex flex-col items-center gap-4">
+        <h2 className="font-semibold text-lg">Driver</h2>
+        <MobileFrame device="iphone" size="md">
+          <DriverApp />
+        </MobileFrame>
+        <a
+          href="/prototype/driver"
+          className="text-sm text-primary hover:underline"
+          target="_blank"
+        >
+          Open fullscreen →
+        </a>
+      </div>
+    </div>
+  )
+}
+```
+
+#### Standalone Pages (Mobile — fullscreen)
+
+```tsx
+// src/prototype/pages/driver/index.tsx
+// Route: /prototype/driver
+import { DriverApp } from '@prototype/apps/driver/DriverApp'
+
+export default function DriverStandalone() {
+  return (
+    <div className="h-screen w-screen">
+      <DriverApp />
+    </div>
+  )
+}
+```
+
+```tsx
+// src/prototype/pages/passenger/index.tsx
+// Route: /prototype/passenger
+import { PassengerApp } from '@prototype/apps/passenger/PassengerApp'
+
+export default function PassengerStandalone() {
+  return (
+    <div className="h-screen w-screen">
+      <PassengerApp />
+    </div>
+  )
+}
+```
+
+#### Route Configuration
+
+```tsx
+// In App.tsx or routes config
+<Route path="/prototype" element={<DualPreview />} />
+<Route path="/prototype/driver/*" element={<DriverStandalone />} />
+<Route path="/prototype/passenger/*" element={<PassengerStandalone />} />
+```
+
+---
+
+### Testing Flow
+
+1. **Desktop Preview:** Open `/prototype` — see all apps side by side in frames
+2. **Mobile Testing:**
+   - Scan QR code or type URL on phone
+   - Open `/prototype/customer` — fullscreen customer app
+   - Open `/prototype/courier` — fullscreen courier app
+3. **Admin Testing:** Open `/prototype/admin` — fullscreen admin panel (web)
+4. **Cross-App Sync:** Actions in one app reflect in others (shared useRepo)
+
+---
+
+### Directory Structure (Complete - Triple App Example)
+
+```
+src/prototype/
+├── apps/
+│   ├── customer/                   # Mobile app
+│   │   ├── CustomerApp.tsx         # Main component (no frame!)
+│   │   └── screens/
+│   │       ├── HomeScreen.tsx
+│   │       ├── OrderScreen.tsx
+│   │       └── TrackingScreen.tsx
+│   ├── courier/                    # Mobile app
+│   │   ├── CourierApp.tsx
+│   │   └── screens/
+│   │       ├── HomeScreen.tsx
+│   │       ├── DeliveryScreen.tsx
+│   │       └── EarningsScreen.tsx
+│   └── admin/                      # Web panel
+│       ├── AdminApp.tsx
+│       └── pages/
+│           ├── Dashboard.tsx
+│           ├── Orders.tsx
+│           └── Users.tsx
+├── pages/
+│   ├── MultiAppPreview.tsx         # Desktop: all apps in frames
+│   ├── customer/
+│   │   └── index.tsx               # Mobile: fullscreen
+│   ├── courier/
+│   │   └── index.tsx               # Mobile: fullscreen
+│   └── admin/
+│       └── index.tsx               # Web: fullscreen
+├── shared/
+│   └── types/
+│       └── order.types.ts          # Shared TypeScript types
+└── factories/
+    └── index.ts                    # Shared entity factories
+```
+
 ### Key Points
-- **Single React app** - no iframes, shared bundle, shared state
-- **Zustand for sync** - changes in driver app reflect instantly in passenger app
-- **State-based navigation** - simpler than react-router for prototypes
-- **Side-by-side view** - DualAppLayout renders both MobileFrames
-- **Shared types** - common interfaces in `shared/types/`
-- **Independent screens** - each app has own screen flow
+- **Single React app** - no iframes, shared bundle
+- **useRepo for data** - shared state syncs between apps automatically
+- **useAuth with namespace** - separate auth per app
+- **Standalone architecture** - app works in frame AND fullscreen
+- **Deep links** - each app has direct URL for testing
+- **Frame types** - MobileFrame for mobile apps, BrowserFrame for web panels
+
+---
+
+## CRITICAL: Frame-Scoped Components
+
+When rendering inside `MobileFrame`, overlay components (dialogs, sheets, toasts) MUST render **inside the frame**, not globally in body.
+
+### The Problem
+
+```tsx
+// ❌ WRONG - Dialog appears outside MobileFrame (in body)
+<MobileFrame>
+  <Dialog>
+    <DialogContent>  {/* Uses fixed positioning + portal to body */}
+      ...
+    </DialogContent>
+  </Dialog>
+</MobileFrame>
+```
+
+### The Solution: `inline` prop
+
+All overlay components support `inline` prop for frame-scoped rendering:
+
+```tsx
+// ✅ CORRECT - Dialog renders inside MobileFrame
+<MobileFrame>
+  <Screen className="relative">  {/* MUST have relative or position container */}
+    <Dialog>
+      <DialogContent inline>  {/* Uses absolute positioning, no portal */}
+        ...
+      </DialogContent>
+    </Dialog>
+  </Screen>
+</MobileFrame>
+```
+
+### Components with `inline` support
+
+| Component | Prop | Effect |
+|-----------|------|--------|
+| `DialogContent` | `inline` | Renders absolute, no portal |
+| `AlertDialogContent` | `inline` | Renders absolute, no portal |
+| `SheetContent` | `inline` | Renders absolute, no portal |
+| `DrawerContent` | `inline` | Renders absolute, no portal |
+
+### How it works
+
+- **Default (no inline):** `position: fixed` + renders via portal to `<body>` — for fullscreen apps
+- **With inline:** `position: absolute` + renders in place — for MobileFrame
+
+### Requirements for `inline` mode
+
+1. **Parent must have `position: relative`** — Screen component already has this
+2. **Parent must have defined dimensions** — MobileFrame provides this
+
+### Toast/Snackbar in Frame
+
+Use `MobileToastProvider` instead of Sonner:
+
+```tsx
+<MobileFrame>
+  <MobileToastProvider position="bottom">
+    <Screen>
+      <MyApp />
+    </Screen>
+  </MobileToastProvider>
+</MobileFrame>
+
+// Inside MyApp:
+function MyApp() {
+  const { show } = useToast()
+
+  return (
+    <Button onClick={() => show({ message: 'Saved!', type: 'success' })}>
+      Save
+    </Button>
+  )
+}
+```
+
+### Full Example with Frame-Scoped Dialog
+
+```tsx
+function MyMobileApp() {
+  const [dialogOpen, setDialogOpen] = useState(false)
+
+  return (
+    <MobileFrame device="iphone" size="md">
+      <Screen className="relative">
+        <ScreenHeader>
+          <TopBar title="Settings" />
+        </ScreenHeader>
+        <ScreenBody>
+          <Button onClick={() => setDialogOpen(true)}>
+            Delete Account
+          </Button>
+
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+            <DialogContent inline>  {/* KEY: inline prop */}
+              <DialogHeader>
+                <DialogTitle>Are you sure?</DialogTitle>
+              </DialogHeader>
+              <DialogFooter>
+                <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                  Cancel
+                </Button>
+                <Button variant="destructive">Delete</Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        </ScreenBody>
+      </Screen>
+    </MobileFrame>
+  )
+}
+```
+
+### Common Mistakes
+
+```tsx
+// ❌ Missing inline - dialog escapes frame
+<DialogContent>...</DialogContent>
+
+// ❌ Missing relative parent - absolute won't work
+<div>  {/* no position: relative */}
+  <DialogContent inline>...</DialogContent>
+</div>
+
+// ✅ Correct
+<div className="relative h-full">
+  <DialogContent inline>...</DialogContent>
+</div>
+```
+
+### Rule Summary
+
+| Context | Use |
+|---------|-----|
+| **Fullscreen app** (no frame) | Default (no inline) |
+| **Inside MobileFrame** | `inline` prop on all overlays |
+| **Multi-app preview** | Each app uses `inline` |

@@ -2,7 +2,6 @@ import { lazy, Suspense } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { UIKitLayout } from './UIKitLayout'
 import { Spinner } from '@/components/ui/LoadingOverlay'
-import { Toaster } from '@/components/ui/Toaster'
 
 // Lazy load all sections
 // Forms
@@ -109,7 +108,6 @@ export default function UIKit() {
           <Route path="mobile/*" element={<MobileDemo />} />
         </Routes>
       </Suspense>
-      <Toaster />
     </UIKitLayout>
   )
 }

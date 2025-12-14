@@ -17,36 +17,54 @@ const DrawerClose = DrawerPrimitive.Close
 
 const DrawerOverlay = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Overlay>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Overlay> & { inline?: boolean }
+>(({ className, inline, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
-    className={cn('fixed inset-0 z-50 bg-black/50', className)}
+    className={cn(inline ? 'absolute' : 'fixed', 'inset-0 z-50 bg-black/50 overflow-hidden', className)}
     {...props}
   />
 ))
 DrawerOverlay.displayName = 'DrawerOverlay'
 
+interface DrawerContentProps extends React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content> {
+  /** Render inline (absolute) instead of in portal. Use for MobileFrame. */
+  inline?: boolean
+  /** Custom container for portal. If not provided, uses body. */
+  container?: HTMLElement | null
+}
+
 const DrawerContent = React.forwardRef<
   React.ElementRef<typeof DrawerPrimitive.Content>,
-  React.ComponentPropsWithoutRef<typeof DrawerPrimitive.Content>
->(({ className, children, ...props }, ref) => (
-  <DrawerPortal>
-    <DrawerOverlay />
-    <DrawerPrimitive.Content
-      ref={ref}
-      className={cn(
-        'fixed inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-xl border bg-background',
-        className
-      )}
-      {...props}
-    >
-      {/* Handle bar */}
-      <div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-muted" />
-      {children}
-    </DrawerPrimitive.Content>
-  </DrawerPortal>
-))
+  DrawerContentProps
+>(({ className, children, inline, container, ...props }, ref) => {
+  const content = (
+    <>
+      <DrawerOverlay inline={inline} />
+      <DrawerPrimitive.Content
+        ref={ref}
+        className={cn(
+          inline ? 'absolute' : 'fixed',
+          'inset-x-0 bottom-0 z-50 mt-24 flex h-auto flex-col rounded-t-xl border bg-background',
+          className
+        )}
+        {...props}
+      >
+        {/* Handle bar */}
+        <div className="mx-auto mt-4 h-1.5 w-12 rounded-full bg-muted" />
+        {children}
+      </DrawerPrimitive.Content>
+    </>
+  )
+
+  // Inline mode - no portal, render in place
+  if (inline) {
+    return content
+  }
+
+  // Portal mode (default)
+  return <DrawerPortal container={container}>{content}</DrawerPortal>
+})
 DrawerContent.displayName = 'DrawerContent'
 
 const DrawerHeader = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (

@@ -1,4 +1,4 @@
-// Custom navigation and home page configuration
+// Custom navigation and page configuration
 //
 // Available icons: import from 'lucide-react'
 // Example: import { ShoppingCart, Users, Settings } from 'lucide-react'

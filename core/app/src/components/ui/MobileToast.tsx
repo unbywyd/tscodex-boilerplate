@@ -1,5 +1,8 @@
 // MobileToast / Snackbar - Mobile notifications
+// Renders toasts inside the nearest positioned ancestor (not in body like Sonner)
+// Perfect for multi-app layouts where each MobileFrame needs its own toasts
 import * as React from 'react'
+import { createPortal } from 'react-dom'
 import { cn } from '@/lib/utils'
 import { X, CheckCircle, AlertCircle, Info, AlertTriangle } from 'lucide-react'
 
@@ -50,14 +53,18 @@ interface MobileToastProviderProps {
   children: React.ReactNode
   position?: 'top' | 'bottom'
   offset?: number
+  /** Container element or ref to render toasts into (via portal). If not provided, renders inline. */
+  container?: HTMLElement | React.RefObject<HTMLElement> | null
 }
 
 const MobileToastProvider = ({
   children,
   position = 'bottom',
   offset = 16,
+  container,
 }: MobileToastProviderProps) => {
   const [toasts, setToasts] = React.useState<Toast[]>([])
+  const containerRef = React.useRef<HTMLDivElement>(null)
 
   const show = React.useCallback((toast: Omit<Toast, 'id'>) => {
     const id = Math.random().toString(36).substr(2, 9)
@@ -88,10 +95,24 @@ const MobileToastProvider = ({
     setToasts([])
   }, [])
 
+  // Resolve container element
+  const portalTarget = container
+    ? ('current' in container ? container.current : container)
+    : null
+
+  const toastContainer = (
+    <ToastContainer toasts={toasts} position={position} offset={offset} onDismiss={dismiss} />
+  )
+
   return (
     <ToastContext.Provider value={{ toasts, show, dismiss, dismissAll }}>
-      {children}
-      <ToastContainer toasts={toasts} position={position} offset={offset} onDismiss={dismiss} />
+      <div ref={containerRef} className="relative w-full h-full">
+        {children}
+        {portalTarget
+          ? createPortal(toastContainer, portalTarget)
+          : toastContainer
+        }
+      </div>
     </ToastContext.Provider>
   )
 }
@@ -113,7 +134,7 @@ const ToastContainer = ({ toasts, position, offset, onDismiss }: ToastContainerP
   return (
     <div
       className={cn(
-        'fixed left-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none',
+        'absolute left-4 right-4 z-[100] flex flex-col gap-2 pointer-events-none',
         position === 'top' ? 'top-0' : 'bottom-0'
       )}
       style={{ [position === 'top' ? 'paddingTop' : 'paddingBottom']: offset }}
@@ -226,7 +247,7 @@ const Snackbar = ({
   return (
     <div
       className={cn(
-        'fixed left-4 right-4 z-[100]',
+        'absolute left-4 right-4 z-[100]',
         'animate-in fade-in duration-200',
         position === 'top' ? 'top-4 slide-in-from-top-2' : 'bottom-4 slide-in-from-bottom-2'
       )}

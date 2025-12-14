@@ -127,7 +127,7 @@ function DocLinkPopover({ docPath, title, description }: DocLinkPopoverProps) {
 }
 
 // ============================================
-// FloatingDocButton (fixed position anywhere)
+// FloatingDocButton (absolute position within parent)
 // ============================================
 
 type Position = 'bottom-right' | 'bottom-left' | 'top-right' | 'top-left'
@@ -162,12 +162,12 @@ function FloatingDocButton({ docPath, title, description, position }: FloatingDo
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
 
-  // Position classes for button
+  // Position classes for button (absolute to nearest positioned ancestor)
   const positionClasses: Record<Position, string> = {
-    'bottom-right': 'fixed bottom-6 right-6',
-    'bottom-left': 'fixed bottom-6 left-6',
-    'top-right': 'fixed top-20 right-6',
-    'top-left': 'fixed top-20 left-6',
+    'bottom-right': 'absolute bottom-2 right-2',
+    'bottom-left': 'absolute bottom-2 left-2',
+    'top-right': 'absolute top-2 right-2',
+    'top-left': 'absolute top-2 left-2',
   }
 
   // Position classes for popover (opens in opposite direction)
@@ -267,9 +267,9 @@ interface DocPropsWrapper extends DocPropsBase {
 }
 
 interface DocPropsFloating extends DocPropsBase {
-  /** When true, renders fixed button without wrapping children */
+  /** When true, renders absolute-positioned button without wrapping children */
   floating: true
-  /** Position of the fixed button */
+  /** Position of the button within parent */
   position?: Position
   children?: never
   className?: never
@@ -286,7 +286,7 @@ type DocProps = DocPropsWrapper | DocPropsFloating
  *   <Card>...</Card>
  * </Doc>
  *
- * **Floating mode**: renders fixed button at specified position
+ * **Floating mode**: renders absolute-positioned button at specified position
  * @example
  * <Doc of="pages.users" floating position="bottom-right" />
  */

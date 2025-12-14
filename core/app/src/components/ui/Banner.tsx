@@ -239,7 +239,7 @@ interface CookieBannerProps {
 const CookieBanner = ({ onAccept, onDecline, onCustomize, className }: CookieBannerProps) => (
   <div
     className={cn(
-      'fixed bottom-0 inset-x-0 z-50 bg-background border-t shadow-lg p-4',
+      'absolute bottom-0 inset-x-0 z-50 bg-background border-t shadow-lg p-4',
       className
     )}
   >

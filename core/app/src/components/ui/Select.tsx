@@ -194,11 +194,19 @@ const SelectSeparator = React.forwardRef<
 ))
 SelectSeparator.displayName = SelectPrimitive.Separator.displayName
 
+// Value display (for custom trigger usage)
+const SelectValue = SelectPrimitive.Value
+
+// Group for organizing items
+const SelectGroup = SelectPrimitive.Group
+
 export {
   Select,
   SelectTrigger,
   SelectContent,
   SelectItem,
+  SelectValue,
+  SelectGroup,
   SelectLabel,
   SelectSeparator,
   SelectScrollUpButton,
