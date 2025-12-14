@@ -26,6 +26,16 @@ interface StatusData {
   }>
 }
 
+// Project about data types
+interface AboutData {
+  project: {
+    id: string
+    name: string
+    type: string
+    description: string
+  }
+}
+
 // Phase to docs file mapping
 const phaseDocsMap: Record<string, string> = {
   assessment: '/docs/status',
@@ -42,6 +52,7 @@ const phaseDocsMap: Record<string, string> = {
 export default function CustomHomePage() {
   const navigate = useNavigate()
   const [statusData, setStatusData] = useState<StatusData | null>(null)
+  const [aboutData, setAboutData] = useState<AboutData | null>(null)
   const [statusLoading, setStatusLoading] = useState(true)
 
   const handlePhaseClick = (phaseId: string) => {
@@ -52,6 +63,7 @@ export default function CustomHomePage() {
   }
 
   useEffect(() => {
+    // Load status.toml
     loadDocFile('status.toml')
       .then((file) => {
         if (file.content) {
@@ -63,6 +75,17 @@ export default function CustomHomePage() {
       })
       .finally(() => {
         setStatusLoading(false)
+      })
+
+    // Load about.toml for project name and description
+    loadDocFile('layers/project/about.toml')
+      .then((file) => {
+        if (file.content) {
+          setAboutData(file.content as AboutData)
+        }
+      })
+      .catch((err) => {
+        console.error('Failed to load about:', err)
       })
   }, [])
 
@@ -108,11 +131,11 @@ export default function CustomHomePage() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Sparkles className="h-8 w-8 text-primary" />
             <h1 className="text-5xl font-bold tracking-tight sm:text-6xl lg:text-7xl bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-              LLM Boilerplate
+              {aboutData?.project?.name || 'LLM Boilerplate'}
             </h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            File-driven specification system for LLM-assisted development. Define your project in TOML/Markdown, get documentation portal + working prototype.
+            {aboutData?.project?.description || 'File-driven specification system for LLM-assisted development. Define your project in TOML/Markdown, get documentation portal + working prototype.'}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
