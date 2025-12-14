@@ -249,12 +249,12 @@ export default function HomePage() {
 
                 {/* Desktop: Horizontal layout */}
                 <div className="hidden sm:block relative py-6 overflow-visible">
-                  {/* Background track */}
-                  <div className="absolute top-8 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-muted/30 to-transparent rounded-full" />
+                  {/* Background track - centered with circles (py-6=24px + half of h-14=28px = 52px) */}
+                  <div className="absolute top-[51px] left-0 right-0 h-1 bg-gray-200/50 dark:bg-gray-700/30 rounded-full" />
 
-                  {/* Progress fill - градиентный */}
+                  {/* Progress fill - green gradient for completed phases */}
                   <div
-                    className="absolute top-8 left-0 h-1 bg-gradient-to-r from-primary/70 via-primary to-primary/70 rounded-full transition-all duration-700 ease-out"
+                    className="absolute top-[51px] left-0 h-1 bg-gradient-to-r from-green-400 via-green-500 to-green-400 rounded-full transition-all duration-700 ease-out"
                     style={{
                       width: (() => {
                         const activePhases = workflowPhases.filter(p => !statusData.phases[p.id]?.skip)
