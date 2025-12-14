@@ -17,15 +17,6 @@ export interface UserEntity extends BaseEntity {
   avatar: string
 }
 
-export interface ProductEntity extends BaseEntity {
-  name: string
-  description: string
-  price: number
-  category: string
-  image: string
-  stock: number
-}
-
 export interface OrderEntity extends BaseEntity {
   userId: string
   status: string
@@ -66,15 +57,6 @@ registerFactory<UserEntity>('users', () => ({
   email: faker.internet.email(),
   role: faker.helpers.arrayElement(['admin', 'user', 'moderator']),
   avatar: faker.image.avatar(),
-}))
-
-registerFactory<ProductEntity>('products', () => ({
-  name: faker.commerce.productName(),
-  description: faker.commerce.productDescription(),
-  price: parseFloat(faker.commerce.price({ min: 10, max: 500 })),
-  category: faker.commerce.department(),
-  image: faker.image.urlPicsumPhotos({ width: 400, height: 300 }),
-  stock: faker.number.int({ min: 0, max: 100 }),
 }))
 
 registerFactory<OrderEntity>('orders', () => ({

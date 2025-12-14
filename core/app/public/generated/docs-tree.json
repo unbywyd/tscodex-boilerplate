@@ -3,12 +3,21 @@
   "name": "spec",
   "files": [
     {
+      "path": "interview.toml",
+      "name": "interview.toml",
+      "type": "toml",
+      "metadata": {
+        "size": 7661,
+        "modified": "2025-12-13T18:37:29.330Z"
+      }
+    },
+    {
       "path": "status.toml",
       "name": "status.toml",
       "type": "toml",
       "metadata": {
-        "size": 3058,
-        "modified": "2025-12-11T09:41:15.686Z"
+        "size": 3390,
+        "modified": "2025-12-13T18:53:00.392Z"
       }
     }
   ],
@@ -70,42 +79,6 @@
           "path": "layers/components",
           "name": "components",
           "files": [
-            {
-              "path": "layers/components/badge.toml",
-              "name": "badge.toml",
-              "type": "toml",
-              "metadata": {
-                "size": 1071,
-                "modified": "2025-12-08T19:43:28.178Z"
-              }
-            },
-            {
-              "path": "layers/components/button.toml",
-              "name": "button.toml",
-              "type": "toml",
-              "metadata": {
-                "size": 1718,
-                "modified": "2025-12-08T19:43:26.202Z"
-              }
-            },
-            {
-              "path": "layers/components/card.toml",
-              "name": "card.toml",
-              "type": "toml",
-              "metadata": {
-                "size": 1124,
-                "modified": "2025-12-08T19:43:30.063Z"
-              }
-            },
-            {
-              "path": "layers/components/input.toml",
-              "name": "input.toml",
-              "type": "toml",
-              "metadata": {
-                "size": 1571,
-                "modified": "2025-12-08T19:43:31.983Z"
-              }
-            },
             {
               "path": "layers/components/product-card.toml",
               "name": "product-card.toml",

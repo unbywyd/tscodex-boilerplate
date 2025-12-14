@@ -15,10 +15,7 @@ import {
   ChevronDown,
   ChevronRight
 } from 'lucide-react'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Skeleton } from '@/components/ui'
 import { loadInterview, type InterviewData } from '@/lib/docs-loader'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { cn } from '@/lib/utils'

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText, Box, Home, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Palette } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Container } from './ui/container'
+import { Container } from './ui'
 
 interface LayoutProps {
   children: React.ReactNode

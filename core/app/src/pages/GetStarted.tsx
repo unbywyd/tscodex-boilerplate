@@ -7,9 +7,7 @@ import {
   Copy,
   Check
 } from 'lucide-react'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 import { useState } from 'react'
 

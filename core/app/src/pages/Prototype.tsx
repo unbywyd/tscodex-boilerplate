@@ -1,10 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Users, Package, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import UsersPage from './prototype/UsersPage'
-import ProductsPage from './prototype/ProductsPage'
+import { Users, ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
+import UsersPage from '@prototype/pages/Users'
 
 function PrototypeHome() {
   const pages = [
@@ -14,13 +11,6 @@ function PrototypeHome() {
       title: 'Users',
       description: 'User management with mock data',
       badge: 'CRUD',
-    },
-    {
-      path: '/prototype/products',
-      icon: Package,
-      title: 'Products',
-      description: 'Product catalog with pricing',
-      badge: 'Catalog',
     },
     {
       path: '/ui-kit',
@@ -195,10 +185,6 @@ export default function PrototypePage() {
     return <UsersPage />
   }
   
-  if (location.pathname === '/prototype/products') {
-    return <ProductsPage />
-  }
-
   // Otherwise render the home page
   return <PrototypeHome />
 }

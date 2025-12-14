@@ -1,9 +1,6 @@
 import { useEffect, useState } from 'react'
 import PrismaSchemaRenderer from '../components/renderers/PrismaSchemaRenderer'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Container, Card, CardContent, CardHeader, CardTitle, Button, Skeleton } from '@/components/ui'
 import { loadPrismaSchema, type PrismaSchemaData } from '@/lib/docs-loader'
 
 export default function PrismaSchemaPage() {

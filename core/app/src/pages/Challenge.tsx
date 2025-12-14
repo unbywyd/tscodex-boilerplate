@@ -17,10 +17,7 @@ import {
   Settings,
   PlayCircle
 } from 'lucide-react'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Badge } from '@/components/ui'
-import { Button } from '@/components/ui/button'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Button } from '@/components/ui'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
 
 const profiles = {

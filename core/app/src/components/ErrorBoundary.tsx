@@ -1,7 +1,5 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react'
-import { Container } from './ui/container'
-import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
-import { Button } from './ui/button'
+import { Component, ErrorInfo, ReactNode } from 'react'
+import { Container, Card, CardContent, CardHeader, CardTitle, Button } from './ui'
 import { AlertTriangle, RefreshCw, Home } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
@@ -105,5 +103,6 @@ export function ErrorBoundary({ children, fallback }: Props) {
   return <ErrorBoundaryClass fallback={fallback}>{children}</ErrorBoundaryClass>
 }
 
-export default ErrorBoundary
+// Export class component as default for direct usage if needed
+export default ErrorBoundaryClass
 

@@ -6,10 +6,7 @@ import DocFileRenderer from '../components/renderers/DocFileRenderer';
 import DocSidebar from '../components/DocSidebar';
 import Breadcrumbs from '../components/Breadcrumbs';
 import type { DocFile, DocFolder } from '../lib/docs-loader';
-import { Container } from '@/components/ui/container';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader } from '@/components/ui/card';
-import { Skeleton } from '@/components/ui/skeleton';
+import { Container, Button, Card, CardContent, CardHeader, Skeleton } from '@/components/ui';
 
 // Helper function to find folder by path in tree
 function findFolderByPath(tree: DocFolder, targetPath: string): DocFolder | null {

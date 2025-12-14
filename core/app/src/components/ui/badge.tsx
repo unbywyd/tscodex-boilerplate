@@ -1,36 +1,49 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+// Badge component for status indicators
+import { forwardRef, HTMLAttributes, ReactNode } from 'react'
+import { cn } from '@/lib/utils'
 
-import { cn } from "@/lib/utils"
+type BadgeVariant = 'default' | 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'outline' | 'destructive'
+type BadgeSize = 'sm' | 'md'
 
-const badgeVariants = cva(
-  "inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
-  {
-    variants: {
-      variant: {
-        default:
-          "border-transparent bg-primary text-primary-foreground hover:bg-primary/80",
-        secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive:
-          "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
-      },
-    },
-    defaultVariants: {
-      variant: "default",
-    },
+interface BadgeProps extends HTMLAttributes<HTMLSpanElement> {
+  variant?: BadgeVariant
+  size?: BadgeSize
+  children: ReactNode
+}
+
+const variants: Record<BadgeVariant, string> = {
+  default: 'bg-muted text-muted-foreground',
+  primary: 'bg-primary text-primary-foreground',
+  secondary: 'bg-secondary text-secondary-foreground',
+  success: 'bg-green-100 text-green-800',
+  warning: 'bg-yellow-100 text-yellow-800',
+  error: 'bg-red-100 text-red-800',
+  outline: 'border border-input bg-background text-foreground',
+  destructive: 'bg-destructive text-destructive-foreground',
+}
+
+const sizes: Record<BadgeSize, string> = {
+  sm: 'px-1.5 py-0.5 text-xs',
+  md: 'px-2 py-0.5 text-sm',
+}
+
+export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
+  ({ className, variant = 'default', size = 'md', children, ...props }, ref) => {
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          'inline-flex items-center rounded-full font-medium',
+          variants[variant],
+          sizes[size],
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </span>
+    )
   }
 )
 
-export interface BadgeProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
-
-function Badge({ className, variant, ...props }: BadgeProps) {
-  return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
-  )
-}
-
-export { Badge, badgeVariants }
+Badge.displayName = 'Badge'

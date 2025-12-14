@@ -6,8 +6,7 @@ import { DocProvider } from './components/documented';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { loadEvents } from './lib/docs-loader';
 import { registerEvents } from './lib/events';
-import { Skeleton } from './components/ui/skeleton';
-import { Container } from './components/ui/container';
+import { Skeleton, Container } from './components/ui';
 
 // Lazy load pages for better performance
 const HomePage = lazy(() => import('./pages/Home'));
@@ -19,7 +18,7 @@ const AboutPage = lazy(() => import('./pages/About'));
 const ChallengePage = lazy(() => import('./pages/Challenge'));
 const GetStartedPage = lazy(() => import('./pages/GetStarted'));
 const InterviewPage = lazy(() => import('./pages/Interview'));
-const UIKitPage = lazy(() => import('./pages/UIKit'));
+const UIKitPage = lazy(() => import('./pages/uikit'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 // Loading fallback component
@@ -48,30 +47,32 @@ function App() {
   }, [])
 
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <DocProvider>
-          <EventToast />
-          <Layout>
-            <Suspense fallback={<PageLoader />}>
-              <Routes>
-                <Route path="/" element={<HomePage />} />
-                <Route path="/docs" element={<DocsIndex />} />
-                <Route path="/docs/*" element={<DocViewer />} />
-                <Route path="/prototype/*" element={<PrototypePage />} />
-                <Route path="/schema" element={<PrismaSchemaPage />} />
-                <Route path="/about" element={<AboutPage />} />
-                <Route path="/challenge" element={<ChallengePage />} />
-                <Route path="/get-started" element={<GetStartedPage />} />
-                <Route path="/interview" element={<InterviewPage />} />
-                <Route path="/ui-kit/*" element={<UIKitPage />} />
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-            </Suspense>
-          </Layout>
-        </DocProvider>
-      </BrowserRouter>
-    </ErrorBoundary>
+    <BrowserRouter>
+      <ErrorBoundary>
+        <div>
+          <DocProvider>
+            <EventToast />
+            <Layout>
+              <Suspense fallback={<PageLoader />}>
+                <Routes>
+                  <Route path="/" element={<HomePage />} />
+                  <Route path="/docs" element={<DocsIndex />} />
+                  <Route path="/docs/*" element={<DocViewer />} />
+                  <Route path="/prototype/*" element={<PrototypePage />} />
+                  <Route path="/schema" element={<PrismaSchemaPage />} />
+                  <Route path="/about" element={<AboutPage />} />
+                  <Route path="/challenge" element={<ChallengePage />} />
+                  <Route path="/get-started" element={<GetStartedPage />} />
+                  <Route path="/interview" element={<InterviewPage />} />
+                  <Route path="/ui-kit/*" element={<UIKitPage />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </Suspense>
+            </Layout>
+          </DocProvider>
+        </div>
+      </ErrorBoundary>
+    </BrowserRouter>
   );
 }
 

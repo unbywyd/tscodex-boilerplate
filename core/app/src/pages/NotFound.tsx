@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { Container, Card, CardContent, Button } from '@/components/ui'
 import { Home, FileQuestion } from 'lucide-react'
 
 export default function NotFound() {

@@ -1,25 +1,5 @@
 {
   "byId": {
-    "badge": {
-      "path": "layers/components/badge.toml",
-      "folder": "components",
-      "title": "Badge"
-    },
-    "button": {
-      "path": "layers/components/button.toml",
-      "folder": "components",
-      "title": "Button"
-    },
-    "card": {
-      "path": "layers/components/card.toml",
-      "folder": "components",
-      "title": "Card"
-    },
-    "input": {
-      "path": "layers/components/input.toml",
-      "folder": "components",
-      "title": "Input"
-    },
     "product-card": {
       "path": "layers/components/product-card.toml",
       "folder": "components",
@@ -160,10 +140,6 @@
   },
   "byFolder": {
     "components": [
-      "badge",
-      "button",
-      "card",
-      "input",
       "product-card",
       "user-card"
     ],

@@ -6,6 +6,50 @@ LLM Boilerplate is a file-driven specification system for LLM-assisted developme
 
 **Your Role:** Interview the user about their project, create TOML specifications in `src/spec/layers/`, and generate a React prototype.
 
+## Architecture: Core vs Prototype
+
+### Правило разделения
+
+| Критерий | Ядро (`core/`) | Прототип (`src/prototype/`) |
+|----------|----------------|----------------------------|
+| **LLM меняет?** | НЕТ, только использует | ДА, создаёт/редактирует |
+| **Назначение** | Инструменты | Бизнес-логика проекта |
+
+### Ядро (`core/`) - НЕ МЕНЯТЬ
+
+Инструменты и инфраструктура для построения прототипов:
+
+```
+core/app/src/
+├── components/
+│   ├── ui/           # UI Kit (60+ компонентов)
+│   ├── mobile/       # Mobile компоненты (20+)
+│   ├── documented/   # Doc компонент
+│   └── renderers/    # Рендеры документации
+├── hooks/
+│   ├── useRepo.ts    # CRUD с localStorage
+│   ├── useAuth.ts    # Универсальная авторизация
+│   └── useForm.ts    # Обёртка react-hook-form
+├── lib/
+│   ├── repository.ts # Хранилище данных
+│   ├── data-factory.ts # Генерация фейков
+│   └── events.ts     # Система событий
+└── pages/            # Страницы ядра (Home, Docs, UIKit, Prototype)
+```
+
+### Прототип (`src/prototype/`) - LLM СОЗДАЁТ
+
+Бизнес-логика конкретного проекта:
+
+```
+src/prototype/
+├── pages/            # Страницы проекта (Users.tsx, Products.tsx, Login.tsx)
+├── mocks/            # JSON данные проекта
+├── stores/           # Zustand сторы проекта (если нужны)
+├── factories/        # Фабрики данных проекта
+└── components/       # Кастомные компоненты проекта (НЕ ui!)
+```
+
 ## Quick Start (Do This First!)
 
 1. **Read `src/spec/status.toml`** — check `currentPhase` and `profile`
@@ -42,46 +86,118 @@ You: "Great! Let me ask a few questions to understand the scope:
 | Assessment | Ask scope questions, select profile | Update `status.toml`, `interview.toml` |
 | Discovery | Ask "what/who/why" questions | Update `interview.toml`, create `layers/project/about.toml` |
 | Design | Ask visual/UX preferences | Update `interview.toml`, create `layers/project/design.toml` |
-| Access | Ask about roles and permissions | Update `interview.toml`, create `layers/roles/*.toml`, `layers/guards/*.toml` |
+| Access | Ask about roles and permissions | Update `interview.toml`, create `layers/roles/*.toml` |
 | Data | Ask about entities and fields | Update `interview.toml`, create `layers/entities/*.toml` |
-| Features | Ask about screens and actions | Update `interview.toml`, create `layers/routes/*.toml`, `layers/use-cases/*.toml`, `layers/components/*.toml` |
+| Features | Ask about screens and actions | Update `interview.toml`, create `layers/routes/*.toml`, `layers/use-cases/*.toml` |
 | Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
 | Schema | Generate Prisma schema | Create `prisma/schema.prisma` |
 
-## Critical Rules
+## Prototype Tools (USE THESE!)
 
-1. **Always update interview.toml** — write answers immediately after user responds
-2. **Always update status.toml** after completing each phase
-3. **Ask before generating** — don't assume, clarify requirements
-4. **Create TOML files** in correct folders under `src/spec/layers/`
-5. **Use knowledge layer** — capture every decision as a fact in `layers/knowledge/*.toml`
-6. **Follow profile depth:**
-   - Simple → shallow questions, minimal files
-   - Medium → detailed questions, full specs
-   - Complex → deep questions, edge cases, modules
-7. **Data format in interview.toml:**
-   - Arrays `[]` for lists: `["item1", "item2"]`
-   - Boolean `true/false` for yes/no fields
-   - Empty string `""` for text/enum fields
+### UI Components - импорт из ядра
 
-## Workflow Profiles
-
-```
-Simple:   Assessment → Discovery → Data → Features → Prototype
-Medium:   Assessment → Discovery → Design → Access → Data → Features → Prototype → Schema
-Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Prototype → Schema
+```tsx
+import {
+  Button, Card, Input, Badge,
+  DataTable, Modal, Tabs,
+  // ... 60+ компонентов
+} from '@/components/ui'
 ```
 
-**Always start with Assessment** to determine profile and depth.
+### useRepo - CRUD with persistence
+
+```tsx
+import { useRepo } from '@/hooks/useRepo'
+
+const users = useRepo<User>('users')
+
+// State
+users.data          // T[]
+users.loading       // boolean
+users.count         // number
+
+// CRUD
+users.create({ name: 'John', email: '...' })
+users.update(id, { name: 'Jane' })
+users.delete(id)
+
+// Fake data
+users.populate(20)
+```
+
+### useAuth - универсальная авторизация
+
+```tsx
+import { useAuth } from '@/hooks/useAuth'
+
+// Определи тип пользователя
+interface User {
+  id: string
+  name: string
+  email: string
+  role: 'admin' | 'user'
+}
+
+// Используй
+const { user, isAuthenticated, login, logout, hasRole } = useAuth<User>()
+
+// Login
+login({ id: '1', name: 'Admin', email: 'admin@test.com', role: 'admin' })
+
+// Check
+if (hasRole('admin')) { ... }
+
+// Logout
+logout()
+```
+
+### registerFactory - fake data
+
+```tsx
+import { registerFactory, faker } from '@/hooks/useRepo'
+
+registerFactory<User>('users', () => ({
+  name: faker.person.fullName(),
+  email: faker.internet.email(),
+  role: faker.helpers.arrayElement(['admin', 'user']),
+}))
+```
+
+## Добавление страниц прототипа
+
+1. **Создай страницу** в `src/prototype/pages/`:
+   ```
+   src/prototype/pages/Orders.tsx
+   src/prototype/pages/admin/Dashboard.tsx
+   ```
+
+2. **Добавь роут** в `core/app/src/pages/Prototype.tsx`:
+   ```tsx
+   import OrdersPage from '@prototype/pages/Orders'
+
+   // В PrototypePage():
+   if (location.pathname === '/prototype/orders') {
+     return <OrdersPage />
+   }
+   ```
+
+3. **Добавь карточку** в PrototypeHome (опционально):
+   ```tsx
+   const pages = [
+     { path: '/prototype/orders', title: 'Orders', icon: ShoppingCart },
+   ]
+   ```
 
 ## Key Paths
+
 - `src/spec/status.toml` - current phase, progress tracking
 - `src/spec/interview.toml` - questions and answers for each phase
-- `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
+- `src/spec/layers/` - TOML specs (project, entities, roles, routes, use-cases, knowledge)
 - `src/prototype/` - React prototype code
 - `rules/challenge.md` - full workflow instructions
 
 ## Rules
+
 - `rules/challenge.md` - adaptive workflow (READ THIS)
 - `rules/layers.md` - layer structure reference
 - `rules/patterns.md` - code patterns (Doc component, events, page building)
@@ -99,67 +215,7 @@ All project specifications are available as unified manifest:
 
 Contains all layers (entities, components, routes, etc.) with `_meta.path` for source tracing.
 
-See `rules/docs-pdf.md` for manifest structure and LangChain integration.
-
-## Prototype Tools (USE THESE!)
-
-When generating prototype code, use the built-in infrastructure:
-
-### useRepo - CRUD with persistence
-
-```tsx
-import { useRepo } from '@/hooks/useRepo'
-
-const users = useRepo<User>('users')
-
-// State
-users.data          // T[]
-users.loading       // boolean
-users.count         // number
-
-// CRUD (types exclude id/timestamps automatically)
-users.create({ name: 'John', email: '...' })
-users.update(id, { name: 'Jane' })
-users.delete(id)
-
-// Query
-users.getById(id)
-users.getWhere(u => u.role === 'admin')
-
-// Fake data (uses registerFactory)
-users.populate(20)
-```
-
-### registerFactory - fake data
-
-```tsx
-import { registerFactory, faker } from '@/hooks/useRepo'
-
-registerFactory<User>('users', () => ({
-  name: faker.person.fullName(),
-  email: faker.internet.email(),
-  role: faker.helpers.arrayElement(['admin', 'user']),
-}))
-```
-
-**Full docs:** `rules/prototype.md`
-
-## Demo Content (Delete When Starting Real Project)
-
-The `src/prototype/` folder contains **example/demo code** that demonstrates the prototype structure:
-- `mocks/` - example data (users.json, products.json)
-- `stores/` - example stores (users.store.ts, auth.store.ts)
-- `schemas/` - example validation (user.schema.ts)
-- `components/forms/` - example forms (UserForm.tsx)
-- `pages/` - example pages
-
-**When starting a new project:**
-1. Delete all demo content from `src/prototype/` (keep folder structure)
-2. Keep only reusable infrastructure: `guards/`, `hooks/`, `config/`, `components/ui/`
-3. Generate new prototype based on actual specs from `src/spec/layers/`
-
-**Do NOT use demo content as reference** for the real project - generate fresh code based on TOML specifications.
-
 ## Don't Modify
-- `core/` - engine code
+
+- `core/` - engine code (UI kit, hooks, lib)
 - `dist/` - build output

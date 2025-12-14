@@ -30,7 +30,8 @@
           "projectDefined": false,
           "targetAudience": false,
           "coreValue": false,
-          "keyFeatures": false
+          "keyFeatures": false,
+          "scopeDefined": false
         }
       },
       "design": {
@@ -40,7 +41,8 @@
         "checklist": {
           "designApproach": false,
           "colorScheme": false,
-          "responsiveStrategy": false
+          "responsiveStrategy": false,
+          "localization": false
         }
       },
       "access": {
@@ -48,6 +50,7 @@
         "skip": false,
         "description": "User roles and permissions",
         "checklist": {
+          "authModelDefined": false,
           "rolesIdentified": false,
           "permissionsDefined": false,
           "guardsCreated": false
@@ -87,6 +90,7 @@
         "status": "pending",
         "description": "Working React screens",
         "checklist": {
+          "demoCleanedUp": false,
           "mocksGenerated": false,
           "pagesCreated": false,
           "navigationWorks": false,
@@ -105,9 +109,9 @@
       }
     }
   },
-  "rawContent": "# Project Status\n# ================================================\n# LLM: READ THIS FILE FIRST!\n#\n# If currentPhase = \"assessment\" and all phases \"pending\":\n#   → This is a FRESH PROJECT, start from scratch\n#   → Ask user Assessment questions (see rules/challenge.md)\n#\n# If some phases are \"completed\":\n#   → CONTINUE from currentPhase\n#   → Read existing files in src/spec/layers/\n#\n# After completing each phase:\n#   1. Set phase status = \"completed\"\n#   2. Set currentPhase = next phase\n#   3. Mark checklist items = true\n#   4. Update lastUpdated date\n# ================================================\n\n[status]\nid = \"status\"\nname = \"Project Status\"\nprofile = \"medium\"  # simple | medium | complex\ncurrentPhase = \"assessment\"\nmultiPlatform = false  # true if 2+ platforms (customer-app, admin-panel, etc.)\nlastUpdated = \"2024-01-01\"\n\n# Phase 0: Assessment\n[phases.assessment]\nstatus = \"pending\"  # pending | in_progress | completed\ndescription = \"Determine project scope and profile\"\n\n[phases.assessment.checklist]\ntypeIdentified = false\nrolesCount = false\ndataComplexity = false\nplatformsIdentified = false\nprofileSelected = false\n\n# Phase 1: Discovery\n[phases.discovery]\nstatus = \"pending\"\ndescription = \"Understanding the project\"\n\n[phases.discovery.checklist]\nprojectDefined = false\ntargetAudience = false\ncoreValue = false\nkeyFeatures = false\n\n# Phase 2: Design (optional for simple)\n[phases.design]\nstatus = \"pending\"\nskip = false  # set true for simple projects\ndescription = \"Visual and UX requirements\"\n\n[phases.design.checklist]\ndesignApproach = false\ncolorScheme = false\nresponsiveStrategy = false\n\n# Phase 3: Access Control (skip if single role)\n[phases.access]\nstatus = \"pending\"\nskip = false  # set true if single role\ndescription = \"User roles and permissions\"\n\n[phases.access.checklist]\nrolesIdentified = false\npermissionsDefined = false\nguardsCreated = false\n\n# Phase 4: Data Model\n[phases.data]\nstatus = \"pending\"\ndescription = \"Entities and relationships\"\n\n[phases.data.checklist]\nentitiesListed = false\nfieldsDefined = false\nrelationsMapped = false\n\n# Phase 5: Features & Screens\n[phases.features]\nstatus = \"pending\"\ndescription = \"Use cases, routes, components\"\n\n[phases.features.checklist]\nuseCasesDefined = false\nroutesCreated = false\npageComponents = false\ncompositions = false\nplatformsDefined = false  # if multiPlatform = true\n\n# Phase 6: Modules (complex only)\n[phases.modules]\nstatus = \"pending\"\nskip = true  # only for complex profile\ndescription = \"Domain decomposition\"\n\n[phases.modules.checklist]\ndomainsIdentified = false\nmodulesDefined = false\ninterfacesSet = false\n\n# Phase 7: Prototype\n[phases.prototype]\nstatus = \"pending\"\ndescription = \"Working React screens\"\n\n[phases.prototype.checklist]\nmocksGenerated = false\npagesCreated = false\nnavigationWorks = false\nformsWired = false\n\n# Phase 8: Schema\n[phases.schema]\nstatus = \"pending\"\nskip = false  # skip for simple if no backend\ndescription = \"Database schema\"\n\n[phases.schema.checklist]\nprismaGenerated = false\nrelationsValid = false\nindexesAdded = false\n",
+  "rawContent": "# Project Status\n# ================================================\n# LLM: READ THIS FILE FIRST!\n#\n# Step 1: Check state\n#   - If currentPhase = \"assessment\" and all phases \"pending\" → FRESH PROJECT\n#   - If some phases \"completed\" → CONTINUE from currentPhase\n#\n# Step 2: Read interview.toml\n#   - Find section matching currentPhase\n#   - Ask questions where value = \"\" or [] (empty)\n#   - Write answers immediately (use arrays for lists)\n#\n# Step 3: After completing phase\n#   1. Set phase status = \"completed\"\n#   2. Set currentPhase = next phase\n#   3. Mark checklist items = true\n#   4. Update lastUpdated date\n#\n# See: rules/challenge.md for full workflow\n# See: src/spec/interview.toml for questions/answers\n# ================================================\n\n[status]\nid = \"status\"\nname = \"Project Status\"\nprofile = \"medium\"  # simple | medium | complex\ncurrentPhase = \"assessment\"\nmultiPlatform = false  # true if 2+ platforms (customer-app, admin-panel, etc.)\nlastUpdated = \"2024-01-01\"\n\n# Phase 0: Assessment\n[phases.assessment]\nstatus = \"pending\"  # pending | in_progress | completed\ndescription = \"Determine project scope and profile\"\n\n[phases.assessment.checklist]\ntypeIdentified = false\nrolesCount = false\ndataComplexity = false\nplatformsIdentified = false\nprofileSelected = false\n\n# Phase 1: Discovery\n[phases.discovery]\nstatus = \"pending\"\ndescription = \"Understanding the project\"\n\n[phases.discovery.checklist]\nprojectDefined = false\ntargetAudience = false\ncoreValue = false\nkeyFeatures = false\nscopeDefined = false  # inScope + outOfScope\n\n# Phase 2: Design (optional for simple)\n[phases.design]\nstatus = \"pending\"\nskip = false  # set true for simple projects\ndescription = \"Visual and UX requirements\"\n\n[phases.design.checklist]\ndesignApproach = false\ncolorScheme = false\nresponsiveStrategy = false\nlocalization = false  # languages + rtl\n\n# Phase 3: Access Control (skip if single role)\n[phases.access]\nstatus = \"pending\"\nskip = false  # set true if single role\ndescription = \"User roles and permissions\"\n\n[phases.access.checklist]\nauthModelDefined = false\nrolesIdentified = false\npermissionsDefined = false\nguardsCreated = false\n\n# Phase 4: Data Model\n[phases.data]\nstatus = \"pending\"\ndescription = \"Entities and relationships\"\n\n[phases.data.checklist]\nentitiesListed = false\nfieldsDefined = false\nrelationsMapped = false\n\n# Phase 5: Features & Screens\n[phases.features]\nstatus = \"pending\"\ndescription = \"Use cases, routes, components\"\n\n[phases.features.checklist]\nuseCasesDefined = false\nroutesCreated = false\npageComponents = false\ncompositions = false\nplatformsDefined = false  # if multiPlatform = true\n\n# Phase 6: Modules (complex only)\n[phases.modules]\nstatus = \"pending\"\nskip = true  # only for complex profile\ndescription = \"Domain decomposition\"\n\n[phases.modules.checklist]\ndomainsIdentified = false\nmodulesDefined = false\ninterfacesSet = false\n\n# Phase 7: Prototype\n[phases.prototype]\nstatus = \"pending\"\ndescription = \"Working React screens\"\n\n[phases.prototype.checklist]\ndemoCleanedUp = false  # delete example/demo files before generating\nmocksGenerated = false\npagesCreated = false\nnavigationWorks = false\nformsWired = false\n\n# Phase 8: Schema\n[phases.schema]\nstatus = \"pending\"\nskip = false  # skip for simple if no backend\ndescription = \"Database schema\"\n\n[phases.schema.checklist]\nprismaGenerated = false\nrelationsValid = false\nindexesAdded = false\n",
   "metadata": {
-    "size": 3058,
-    "modified": "2025-12-11T09:41:15.686Z"
+    "size": 3390,
+    "modified": "2025-12-13T18:53:00.392Z"
   }
 }

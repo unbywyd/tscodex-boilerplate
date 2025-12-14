@@ -4,9 +4,7 @@ import { loadDocsStructure, getRouteFromPath } from '@/lib/docs-loader'
 import type { DocFolder } from '@/lib/docs-loader'
 import { ChevronRight, ChevronDown, FileText, Settings, Folder, FolderOpen } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Container } from '@/components/ui/container'
-import { Card, CardContent } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
+import { Container, Card, CardContent, Skeleton } from '@/components/ui'
 
 interface FolderTreeProps {
   folder: DocFolder

@@ -1,0 +1,108 @@
+{
+  "path": "interview.toml",
+  "name": "interview.toml",
+  "type": "toml",
+  "content": {
+    "meta": {
+      "projectName": "",
+      "startedAt": "",
+      "completedAt": ""
+    },
+    "assessment": {
+      "projectType": "",
+      "projectStage": "",
+      "dataComplexity": "",
+      "rolesCount": "",
+      "integrationsLevel": "",
+      "platforms": "",
+      "platformList": [],
+      "appSides": "",
+      "appSidesList": [],
+      "existingCodebase": false,
+      "techConstraints": []
+    },
+    "discovery": {
+      "problem": "",
+      "audience": "",
+      "coreValue": "",
+      "keyFeatures": [],
+      "inScope": [],
+      "outOfScope": [],
+      "successMetrics": [],
+      "constraints": "",
+      "existingSystems": [],
+      "compliance": [],
+      "scale": "",
+      "stakeholders": "",
+      "aiIntegration": false,
+      "aiProvider": "",
+      "aiFeatures": []
+    },
+    "design": {
+      "approach": "",
+      "colorScheme": "",
+      "darkMode": false,
+      "brandGuidelines": false,
+      "uiReferences": [],
+      "responsive": "",
+      "accessibilityTarget": "",
+      "primaryLanguage": "",
+      "additionalLanguages": [],
+      "rtlSupport": false,
+      "prototypeLanguage": ""
+    },
+    "access": {
+      "authModel": "",
+      "publicParts": [],
+      "authMethods": [],
+      "phoneFormat": "",
+      "socialAuth": [],
+      "userTypes": [],
+      "rolePermissions": "",
+      "protectedPages": [],
+      "roleHierarchy": "",
+      "permissionGranularity": "",
+      "multiTenant": "",
+      "guestFlows": ""
+    },
+    "data": {
+      "mainEntities": [],
+      "entityFields": "",
+      "relationships": "",
+      "requiredFields": "",
+      "validationRules": "",
+      "filesAndMedia": "",
+      "search": "",
+      "softDelete": false,
+      "importExport": "",
+      "fieldPermissions": "",
+      "auditTrails": "",
+      "dataLifecycle": "",
+      "retentionPolicy": ""
+    },
+    "features": {
+      "screens": [],
+      "navigationMap": "",
+      "primaryUserJourney": "",
+      "userStories": "",
+      "errorHandling": "",
+      "emptyStates": "",
+      "loadingStates": "",
+      "offlineBehavior": "",
+      "notifications": "",
+      "settingsPage": false,
+      "analyticsEvents": []
+    },
+    "modules": {
+      "domains": [],
+      "moduleBoundaries": "",
+      "interfaces": "",
+      "sharedComponents": []
+    }
+  },
+  "rawContent": "# Interview Answers\n# ================================================\n# LLM Instructions:\n# 1. Read status.toml → get currentPhase\n# 2. Find that phase section here\n# 3. Ask questions where value = \"\" or [] (empty)\n# 4. Write user's answers immediately\n# 5. When phase complete → update status.toml\n#\n# Format: use arrays [] for lists, \"\" for text/enum\n# See: rules/challenge.md for conditional questions\n# ================================================\n\n[meta]\nprojectName = \"\"\nstartedAt = \"\"\ncompletedAt = \"\"\n\n# ─────────────────────────────────────────────────\n# Phase 0: Assessment\n# Goal: determine profile (simple | medium | complex)\n# ─────────────────────────────────────────────────\n[assessment]\nprojectType = \"\"          # web-app | mobile | api | landing | admin-panel\nprojectStage = \"\"         # idea | redesign | existing-mvp\ndataComplexity = \"\"       # simple-crud | relational | complex\nrolesCount = \"\"           # single | 2-3 | many\nintegrationsLevel = \"\"    # none | few-apis | many-services\nplatforms = \"\"            # single | multiplatform\nplatformList = []         # if multiplatform: [\"customer-app\", \"admin-panel\"]\nappSides = \"\"             # if mobile: single | dual\nappSidesList = []         # if dual: [\"passenger\", \"driver\"]\nexistingCodebase = false  # true if adding to existing project\ntechConstraints = []      # e.g. [\"React only\", \"PostgreSQL required\"]\n\n# ─────────────────────────────────────────────────\n# Phase 1: Discovery\n# Goal: understand what we're building\n# ─────────────────────────────────────────────────\n[discovery]\n# Core\nproblem = \"\"              # What problem does it solve?\naudience = \"\"             # Who is the target audience?\ncoreValue = \"\"            # Core value proposition\nkeyFeatures = []          # Top 5 features: [\"feature1\", \"feature2\"]\n# Scope\ninScope = []              # Must be included in MVP\noutOfScope = []           # Explicitly NOT in MVP\nsuccessMetrics = []       # How we measure success\n# Technical\nconstraints = \"\"          # Technical constraints\nexistingSystems = []      # Systems to integrate (complex only)\ncompliance = []           # [\"GDPR\", \"PCI-DSS\"] (complex only)\nscale = \"\"                # Expected scale (complex only)\nstakeholders = \"\"         # Who are stakeholders (complex only)\n# AI (if needed)\naiIntegration = false\naiProvider = \"\"           # openai | anthropic | google | custom\naiFeatures = []           # [\"chat\", \"search\", \"generation\"]\n\n# ─────────────────────────────────────────────────\n# Phase 2: Design\n# Goal: visual and UX requirements\n# ─────────────────────────────────────────────────\n[design]\n# Visual\napproach = \"\"             # custom | ui-kit | hybrid\ncolorScheme = \"\"          # Color preferences or palette name\ndarkMode = false          # Support dark mode?\nbrandGuidelines = false   # Has brand guidelines?\nuiReferences = []         # Reference products/links\n# Layout\nresponsive = \"\"           # mobile-first | desktop-first\naccessibilityTarget = \"\"  # none | wcag-aa | wcag-aaa\n# Localization\nprimaryLanguage = \"\"      # en | ru | ar | he | etc.\nadditionalLanguages = []  # [\"es\", \"de\"] or []\nrtlSupport = false        # auto-true if ar/he/fa/ur\nprototypeLanguage = \"\"    # en | same-as-primary\n\n# ─────────────────────────────────────────────────\n# Phase 3: Access\n# Goal: auth and permissions\n# ─────────────────────────────────────────────────\n[access]\n# Auth\nauthModel = \"\"            # public | authenticated | mixed\npublicParts = []          # if mixed: [\"landing\", \"pricing\", \"docs\"]\nauthMethods = []          # [\"email\"] | [\"phone\"] | [\"email\", \"phone\"]\nphoneFormat = \"\"          # if phone: single-country | multi-country\nsocialAuth = []           # [\"google\", \"facebook\", \"apple\"] or []\n# Roles\nuserTypes = []            # [\"admin\", \"user\", \"guest\"]\nrolePermissions = \"\"      # What can each role do?\nprotectedPages = []       # Pages requiring auth\n# Advanced (complex only)\nroleHierarchy = \"\"        # Role inheritance\npermissionGranularity = \"\" # page | feature | field\nmultiTenant = \"\"          # none | orgs | workspaces\nguestFlows = \"\"           # Guest vs authenticated flows\n\n# ─────────────────────────────────────────────────\n# Phase 4: Data Model\n# Goal: entities and relationships\n# ─────────────────────────────────────────────────\n[data]\n# Core\nmainEntities = []         # [\"User\", \"Product\", \"Order\"]\nentityFields = \"\"         # Fields for each entity (structured text)\nrelationships = \"\"        # Relations between entities\n# Validation (medium+)\nrequiredFields = \"\"       # Required vs optional\nvalidationRules = \"\"      # Validation rules\n# Features\nfilesAndMedia = \"\"        # none | images | docs | video | mixed\nsearch = \"\"               # none | basic | fulltext\nsoftDelete = false        # Soft delete needed?\nimportExport = \"\"         # none | csv | xlsx | api\n# Advanced (complex only)\nfieldPermissions = \"\"     # Field-level permissions\nauditTrails = \"\"          # none | basic | detailed\ndataLifecycle = \"\"        # Data lifecycle states\nretentionPolicy = \"\"      # Data retention rules\n\n# ─────────────────────────────────────────────────\n# Phase 5: Features & Screens\n# Goal: what users see and do\n# ─────────────────────────────────────────────────\n[features]\n# Screens\nscreens = []              # [\"Home\", \"Dashboard\", \"Profile\", \"Settings\"]\nnavigationMap = \"\"        # Navigation structure (tabs/sidebar/menu)\nprimaryUserJourney = \"\"   # Main user flow\n# Stories (medium+)\nuserStories = \"\"          # Use cases with user stories\nerrorHandling = \"\"        # Error handling approach\n# States (complex only)\nemptyStates = \"\"          # Empty state handling\nloadingStates = \"\"        # Loading state handling\nofflineBehavior = \"\"      # Offline behavior\n# System\nnotifications = \"\"        # none | in-app | email | push | mixed\nsettingsPage = false      # Include settings/profile page?\nanalyticsEvents = []      # Events to track\n\n# ─────────────────────────────────────────────────\n# Phase 6: Modules (complex only)\n# Goal: domain decomposition\n# ─────────────────────────────────────────────────\n[modules]\ndomains = []              # [\"auth\", \"catalog\", \"orders\", \"payments\"]\nmoduleBoundaries = \"\"     # Module boundaries\ninterfaces = \"\"           # Module interfaces\nsharedComponents = []     # Shared across modules\n",
+  "metadata": {
+    "size": 7661,
+    "modified": "2025-12-13T18:37:29.330Z"
+  }
+}

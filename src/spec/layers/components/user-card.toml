@@ -1,24 +1,36 @@
 [component]
 id = "user-card"
 name = "User Card"
-description = "Displays user information in a card format with avatar, name, email, role badge and actions"
+description = "Reusable card component that displays user information with avatar, name, email, role badge and actions"
 
 [component.props]
-user = "UserEntity"
+user = "{ id: string, name: string, email: string, role: string, avatar: string, createdAt?: string }"
 onDelete = "(id: string) => void"
+showDelete = "boolean (default: true)"
 
 [component.features]
 list = [
-  "User avatar display",
-  "Name and email",
-  "Role badge (admin/user)",
-  "Join date",
-  "Delete action on hover"
+  "User avatar with fallback initials",
+  "Name and email display",
+  "Role badge (admin/user/moderator)",
+  "Join date formatting",
+  "Delete action on hover (optional)"
 ]
 
 [component.styling]
 hover = "shadow-lg transition"
 responsive = true
+
+[component.usage]
+code = """
+import { UserCard } from '@/prototype/components/UserCard'
+
+<UserCard
+  user={{ id: '1', name: 'John', email: 'john@example.com', role: 'admin', avatar: '...' }}
+  onDelete={(id) => console.log('Delete', id)}
+  showDelete={true}
+/>
+"""
 
 [relations]
 entities = ["user"]
@@ -26,6 +38,6 @@ pages = ["users"]
 
 [implementation]
 component = "UserCard"
-file = "core/app/src/pages/prototype/UsersPage.tsx"
+file = "src/prototype/components/UserCard.tsx"
 preview = "/prototype/users"
 status = "implemented"
