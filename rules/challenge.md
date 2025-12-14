@@ -410,9 +410,117 @@ interfacesSet = true
 
 ## Phase 7: Prototype
 
-**Goal:** Working React screens with mock data.
+**Goal:** Working React screens with mock data and full event documentation.
 
-**IMPORTANT: Demo Content Cleanup**
+### ⚠️ CRITICAL: Three Parallel Streams
+
+Prototype phase has THREE streams that run IN PARALLEL, not sequentially:
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  PROTOTYPE PHASE = 3 PARALLEL STREAMS                           │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│  Stream 1: DOCUMENTATION (TOML specs)                           │
+│  ──────────────────────────────────────                         │
+│  Create specs BEFORE writing TSX:                               │
+│  • src/spec/layers/components/*.toml                            │
+│  • src/spec/layers/pages/*.toml                                 │
+│  • src/spec/layers/events/*.toml                                │
+│                                                                 │
+│  Stream 2: COMPONENTS (React TSX)                               │
+│  ─────────────────────────────────                              │
+│  Build components WITH Doc wrappers:                            │
+│  • <Doc of="components.user-card" entityId={id}>                │
+│  • <Doc of="pages.users" floating />                            │
+│  • Import from @/components/ui (NO native HTML!)                │
+│                                                                 │
+│  Stream 3: EVENTS (dispatchEvent calls)                         │
+│  ─────────────────────────────────────                          │
+│  EVERY user action triggers event:                              │
+│  • dispatchEvent('auth.otp_sent', { message: '...' })           │
+│  • dispatchEvent('cart.item_added', { productId: '...' })       │
+│  • Events document what happens on backend                      │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### Workflow Per Component
+
+For EACH component you create:
+
+```
+1. TOML FIRST
+   └─ Create src/spec/layers/components/user-card.toml
+
+2. TSX WITH DOC
+   └─ Create component with <Doc of="components.user-card"> wrapper
+
+3. EVENTS ON ACTIONS
+   └─ Every onClick/onSubmit has dispatchEvent('domain.action', {...})
+```
+
+### Example: Creating UserCard
+
+**Step 1: TOML spec**
+```toml
+# src/spec/layers/components/user-card.toml
+[component]
+id = "user-card"
+name = "User Card"
+description = "Displays user with delete action"
+
+[relations]
+entities = ["user"]
+```
+
+**Step 2: TSX with Doc wrapper**
+```tsx
+import { Doc, Card, Button } from '@/components/ui'
+import { dispatchEvent } from '@/lib/events'
+
+export function UserCard({ user, onDelete }) {
+  const handleDelete = () => {
+    onDelete(user.id)
+    dispatchEvent('user.deleted', {
+      userId: user.id,
+      message: 'User soft-deleted, data retained 30 days'
+    })
+  }
+
+  return (
+    <Doc of="components.user-card" entityId={user.id}>
+      <Card>
+        <h3>{user.name}</h3>
+        <Button onClick={handleDelete}>Delete</Button>
+      </Card>
+    </Doc>
+  )
+}
+```
+
+**Step 3: Event TOML** (if not exists)
+```toml
+# src/spec/layers/events/user.toml
+[event]
+id = "user.deleted"
+name = "User Deleted"
+description = "User soft-deleted from system"
+category = "user"
+```
+
+### Checklist Per Component
+
+```
+□ TOML spec exists in src/spec/layers/components/
+□ Component wrapped in <Doc of="...">
+□ All Button onClick have dispatchEvent
+□ All form onSubmit have dispatchEvent
+□ Event message explains BACKEND behavior
+□ Using UIKit components (no <button>, <input>)
+```
+
+### Demo Content Cleanup
 
 Before generating, clean up demo/example files from `src/prototype/`:
 - Delete: `mocks/users.json`, `mocks/products.json`
@@ -422,20 +530,62 @@ Before generating, clean up demo/example files from `src/prototype/`:
 - Delete: example pages (but keep `NotFound.tsx`)
 - Keep: `guards/`, `hooks/`, `config/`, `components/ui/`, `factories/`
 
-These are template examples - generate fresh code based on actual specs.
+### Actions Summary
 
-Actions:
-- Clean up demo content (see above)
-- Generate mock JSON from entities
-- Create page components in `src/prototype/`
-- Implement navigation
-- Wire up forms (no backend)
-- **For mobile projects**: Use `MobileFrame` wrapper (see `rules/mobile.md`)
+1. Clean up demo content
+2. For EACH screen/component:
+   - Create TOML spec first
+   - Create TSX with Doc wrapper
+   - Add dispatchEvent to ALL user actions
+3. Generate mock JSON from entities
+4. Implement navigation
+5. Wire up forms (no backend)
+6. **For mobile**: Read `rules/mobile.md` first!
 
-Output:
-- `src/prototype/mocks/*.json`
-- `src/prototype/pages/*.tsx`
-- `src/prototype/components/**/*.tsx`
+### Output Files
+
+```
+src/spec/layers/
+├── components/*.toml    # Component specs
+├── pages/*.toml         # Page specs
+└── events/*.toml        # Event specs
+
+src/prototype/
+├── mocks/*.json         # Mock data
+├── pages/*.tsx          # Page components (with Doc floating)
+└── components/**/*.tsx  # Business components (with Doc wrapper)
+```
+
+### Common Mistakes (REJECTED CODE)
+
+```tsx
+// ❌ WRONG: No TOML spec created
+export function UserCard() { ... }
+
+// ❌ WRONG: No Doc wrapper
+export function UserCard() {
+  return <Card>...</Card>
+}
+
+// ❌ WRONG: No event on action
+<Button onClick={() => deleteUser(id)}>Delete</Button>
+
+// ❌ WRONG: Native HTML
+<button onClick={...}>Submit</button>
+
+// ✅ CORRECT: All three streams
+// 1. TOML exists: src/spec/layers/components/user-card.toml
+// 2. Doc wrapper present
+// 3. Event dispatched
+<Doc of="components.user-card" entityId={user.id}>
+  <Card>
+    <Button onClick={() => {
+      deleteUser(id)
+      dispatchEvent('user.deleted', { message: '...' })
+    }}>Delete</Button>
+  </Card>
+</Doc>
+```
 
 **Status Update:**
 ```toml
@@ -447,6 +597,9 @@ status = "completed"
 
 [phases.prototype.checklist]
 demoCleanedUp = true
+tomlSpecsCreated = true      # NEW: all components have TOML
+docWrappersAdded = true      # NEW: all components have Doc
+eventsDispatched = true      # NEW: all actions have events
 mocksGenerated = true
 pagesCreated = true
 navigationWorks = true

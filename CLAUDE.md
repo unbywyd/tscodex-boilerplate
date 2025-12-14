@@ -18,9 +18,12 @@
 |------|----------|------------|
 | UIKit | `<button>`, `<input>` | `<Button>`, `<Input>` from `@/components/ui` |
 | Doc wrapper | No wrapper | `<Doc of="components.name">` on business components |
+| **Events** | `onClick={() => action()}` | `onClick={() => { action(); dispatchEvent('...') }}` |
 | Schema | Prototype first | Prisma schema BEFORE prototype |
 | Mobile back | No back button | `<TopBar back={goBack}>` on every screen (except home) |
 | TOML first | Write TSX directly | Create `src/spec/layers/components/*.toml` first |
+
+**⚠️ CRITICAL: Every user action (button click, form submit, toggle) MUST have `dispatchEvent()` describing what happens on backend.**
 
 ## Architecture
 
@@ -66,6 +69,24 @@ Complex:  + Modules phase before Features
 
 **Schema comes BEFORE Prototype** (schema-first approach).
 
+## Prototype Phase = 3 Parallel Streams
+
+```
+For EACH component:
+┌─────────────────────────────────────────────────┐
+│ 1. TOML FIRST                                   │
+│    └─ src/spec/layers/components/name.toml      │
+│                                                 │
+│ 2. TSX WITH DOC                                 │
+│    └─ <Doc of="components.name" entityId={id}>  │
+│                                                 │
+│ 3. EVENTS ON ACTIONS                            │
+│    └─ dispatchEvent('domain.action', {...})     │
+└─────────────────────────────────────────────────┘
+```
+
+**All three are REQUIRED. Code without any of them = rejected.**
+
 ## Key Imports
 
 ```tsx
@@ -81,6 +102,22 @@ import { useAuth } from '@/hooks/useAuth'
 
 // Doc wrapper (for business components)
 import { Doc } from '@/components/ui'
+
+// Events (REQUIRED for every action)
+import { dispatchEvent } from '@/lib/events'
+```
+
+## Event Pattern (Required)
+
+```tsx
+// Every action MUST dispatch an event describing backend behavior
+const handleAddToCart = () => {
+  cart.add(product)
+  dispatchEvent('cart.item_added', {
+    productId: product.id,
+    message: 'Added to cart, stock reserved for 15 min'
+  })
+}
 ```
 
 ## Don't Modify

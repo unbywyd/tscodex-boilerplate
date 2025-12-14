@@ -12,8 +12,14 @@ Before generating ANY code, verify:
 □ Browsed /ui-kit page to see available components
 □ Created TOML specs for entities in src/spec/layers/entities/
 □ Created TOML specs for components in src/spec/layers/components/
+□ Created TOML specs for events in src/spec/layers/events/
 □ Generated Prisma schema (if medium/complex profile)
 ```
+
+**Non-negotiable requirements:**
+- UIKit components only (no native HTML)
+- Doc wrappers on all business components
+- **dispatchEvent on EVERY user action** (buttons, forms, toggles)
 
 **Skipping these steps = rejected prototype.**
 
@@ -203,6 +209,196 @@ Check `/ui-kit` page in browser for:
 - Props documentation
 
 **If a component doesn't exist in UIKit, ask before creating custom HTML.**
+
+---
+
+## CRITICAL: Event Documentation — EVERY Action Needs dispatchEvent
+
+**EVERY user action MUST trigger a dispatchEvent call.** This is NOT optional logging — it's core functionality that documents what happens on the backend.
+
+### Why Events Are Mandatory
+
+Events provide visual feedback showing "what would happen on the backend":
+- User sees toast: "SMS sent to +7***1234"
+- User understands the flow without real backend
+- Stakeholders can review business logic
+- QA can verify expected behavior
+
+### Rule: No onClick Without dispatchEvent
+
+```tsx
+// ❌ WRONG - action without event
+<Button onClick={() => login(phone)}>
+  Sign In
+</Button>
+
+// ✅ CORRECT - action with event describing backend behavior
+<Button onClick={() => {
+  login(phone)
+  dispatchEvent('auth.otp_sent', { phone, message: 'SMS sent with 6-digit code' })
+}}>
+  Sign In
+</Button>
+```
+
+### Common Event Patterns
+
+| User Action | Event | Message (что происходит на бэке) |
+|-------------|-------|----------------------------------|
+| Enter phone → Continue | `auth.otp_sent` | "SMS sent to +7***1234" |
+| Enter OTP → Verify | `auth.login_success` | "User authenticated, session created" |
+| Fill form → Submit | `order.created` | "Order #123 created, notification sent to seller" |
+| Click "Add to cart" | `cart.item_added` | "Added to cart, stock reserved for 15 min" |
+| Click "Pay" | `payment.initiated` | "Payment request sent to Stripe" |
+| Click "Delete" | `user.deleted` | "User soft-deleted, data retained 30 days" |
+| Toggle switch | `settings.updated` | "Push notifications enabled" |
+| Upload file | `file.uploaded` | "File uploaded to S3, thumbnail generated" |
+
+### Auth Flow Example (Complete)
+
+```tsx
+function AuthScreen({ onSuccess }) {
+  const [stage, setStage] = useState<'phone' | 'otp'>('phone')
+  const [phone, setPhone] = useState('')
+  const { login } = useAuth()
+
+  const handleSendOTP = () => {
+    setStage('otp')
+    dispatchEvent('auth.otp_sent', {
+      phone: phone.slice(0, -4) + '****',
+      message: 'SMS sent with 6-digit verification code'
+    })
+  }
+
+  const handleVerifyOTP = (code: string) => {
+    login({ id: '1', phone })
+    dispatchEvent('auth.login_success', {
+      message: 'User authenticated, JWT token issued, session started'
+    })
+    onSuccess()
+  }
+
+  return (
+    <Screen>
+      {stage === 'phone' && (
+        <>
+          <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="Phone" />
+          <Button onClick={handleSendOTP}>Continue</Button>
+        </>
+      )}
+      {stage === 'otp' && (
+        <>
+          <OTPInput onComplete={handleVerifyOTP} />
+          <Button variant="ghost" onClick={() => {
+            setStage('phone')
+            dispatchEvent('auth.otp_resend_requested', { message: 'User requested new code' })
+          }}>
+            Resend code
+          </Button>
+        </>
+      )}
+    </Screen>
+  )
+}
+```
+
+### Order Flow Example
+
+```tsx
+function OrderForm() {
+  const orders = useRepo<Order>('orders')
+
+  const handleSubmit = (data: OrderData) => {
+    const order = orders.create(data)
+
+    dispatchEvent('order.created', {
+      orderId: order.id,
+      message: `Order #${order.id} created`
+    })
+
+    dispatchEvent('notification.sent', {
+      to: 'seller',
+      message: 'Push notification sent to seller'
+    })
+
+    dispatchEvent('inventory.reserved', {
+      items: data.items.length,
+      message: `${data.items.length} items reserved for 30 minutes`
+    })
+  }
+
+  return <QuickForm fields={orderFields} onSubmit={handleSubmit} />
+}
+```
+
+### Cart Example
+
+```tsx
+function ProductCard({ product }) {
+  const cart = useCart()
+
+  const handleAddToCart = () => {
+    cart.add(product)
+    dispatchEvent('cart.item_added', {
+      productId: product.id,
+      productName: product.name,
+      message: `Added "${product.name}" to cart, stock reserved`
+    })
+  }
+
+  return (
+    <Card>
+      <h3>{product.name}</h3>
+      <Button onClick={handleAddToCart}>Add to Cart</Button>
+    </Card>
+  )
+}
+```
+
+### Event Naming Convention
+
+```
+[domain].[action]
+
+auth.otp_sent
+auth.login_success
+auth.logout
+
+order.created
+order.confirmed
+order.cancelled
+
+cart.item_added
+cart.item_removed
+cart.cleared
+
+payment.initiated
+payment.success
+payment.failed
+
+user.created
+user.updated
+user.deleted
+
+notification.sent
+notification.read
+
+file.uploaded
+file.deleted
+```
+
+### Checklist Before Submitting Code
+
+```
+□ Every Button onClick has dispatchEvent
+□ Every form onSubmit has dispatchEvent
+□ Every toggle/switch onChange has dispatchEvent
+□ Every delete action has dispatchEvent
+□ Event message explains WHAT HAPPENS on backend
+□ Events defined in src/spec/layers/events/*.toml
+```
+
+**Code without events = rejected. Events are the primary documentation of business logic.**
 
 ---
 

@@ -122,12 +122,16 @@ relationsValid = false
 indexesAdded = false
 
 # Phase 8: Prototype (comes AFTER schema)
+# THREE PARALLEL STREAMS: 1) TOML specs, 2) Doc wrappers, 3) Events
 [phases.prototype]
 status = "pending"
-description = "Working React screens based on schema"
+description = "Working React screens with TOML specs, Doc wrappers, and events"
 
 [phases.prototype.checklist]
-demoCleanedUp = false  # delete example/demo files before generating
+demoCleanedUp = false      # delete example/demo files before generating
+tomlSpecsCreated = false   # all components have src/spec/layers/components/*.toml
+docWrappersAdded = false   # all components wrapped in <Doc of="...">
+eventsDispatched = false   # all actions have dispatchEvent()
 mocksGenerated = false
 pagesCreated = false
 navigationWorks = false
