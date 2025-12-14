@@ -136,7 +136,7 @@ export function OTPInput({
         </label>
       )}
 
-      <div className={cn('flex gap-2 justify-center', className)}>
+      <div className={cn('flex gap-1.5 sm:gap-2 justify-center', className)}>
         {otp.map((digit, index) => (
           <input
             key={index}
@@ -153,7 +153,7 @@ export function OTPInput({
             onFocus={() => handleFocus(index)}
             disabled={disabled}
             className={cn(
-              'w-12 h-14 text-center text-xl font-semibold rounded-lg border border-input bg-background',
+              'w-10 h-12 sm:w-12 sm:h-14 text-center text-lg sm:text-xl font-semibold rounded-lg border border-input bg-background',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-primary',
               'disabled:cursor-not-allowed disabled:opacity-50',
               'transition-all',
