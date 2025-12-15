@@ -1,0 +1,56 @@
+{
+  "path": "layers/events/availability-added.toml",
+  "name": "availability-added.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "availability.added",
+      "name": "Availability Slot Added",
+      "description": "Specialist added a new availability time slot",
+      "category": "availability"
+    },
+    "trigger": {
+      "action": "click",
+      "element": "Add Slot button in dialog"
+    },
+    "payload": [
+      {
+        "name": "specialistId",
+        "type": "string",
+        "description": "Specialist who added the slot"
+      },
+      {
+        "name": "date",
+        "type": "string",
+        "description": "Date of availability"
+      },
+      {
+        "name": "startTime",
+        "type": "string",
+        "description": "Slot start time (HH:MM)"
+      },
+      {
+        "name": "endTime",
+        "type": "string",
+        "description": "Slot end time (HH:MM)"
+      }
+    ],
+    "backend": {
+      "description": "Creates availability record, updates specialist calendar, makes slot visible for order assignment"
+    },
+    "relations": {
+      "entities": [
+        "availability",
+        "specialist"
+      ],
+      "routes": [
+        "specialist-availability"
+      ]
+    }
+  },
+  "rawContent": "[event]\nid = \"availability.added\"\nname = \"Availability Slot Added\"\ndescription = \"Specialist added a new availability time slot\"\ncategory = \"availability\"\n\n[trigger]\naction = \"click\"\nelement = \"Add Slot button in dialog\"\n\n[[payload]]\nname = \"specialistId\"\ntype = \"string\"\ndescription = \"Specialist who added the slot\"\n\n[[payload]]\nname = \"date\"\ntype = \"string\"\ndescription = \"Date of availability\"\n\n[[payload]]\nname = \"startTime\"\ntype = \"string\"\ndescription = \"Slot start time (HH:MM)\"\n\n[[payload]]\nname = \"endTime\"\ntype = \"string\"\ndescription = \"Slot end time (HH:MM)\"\n\n[backend]\ndescription = \"Creates availability record, updates specialist calendar, makes slot visible for order assignment\"\n\n[relations]\nentities = [\"availability\", \"specialist\"]\nroutes = [\"specialist-availability\"]\n",
+  "metadata": {
+    "size": 787,
+    "modified": "2025-12-14T15:38:59.961Z"
+  }
+}

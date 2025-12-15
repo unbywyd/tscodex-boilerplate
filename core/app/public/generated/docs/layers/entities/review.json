@@ -1,0 +1,69 @@
+{
+  "path": "layers/entities/review.toml",
+  "name": "review.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "review",
+      "name": "Review",
+      "description": "A client review after service completion",
+      "table": "reviews"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "required": true,
+        "unique": true,
+        "description": "Unique review identifier"
+      },
+      {
+        "name": "orderId",
+        "type": "relation",
+        "relatedEntity": "order",
+        "required": true,
+        "unique": true,
+        "description": "The order being reviewed"
+      },
+      {
+        "name": "rating",
+        "type": "integer",
+        "min": 1,
+        "max": 5,
+        "required": true,
+        "description": "Rating from 1 to 5 stars"
+      },
+      {
+        "name": "comment",
+        "type": "text",
+        "required": false,
+        "description": "Optional review comment"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "required": true,
+        "description": "Review submission timestamp"
+      }
+    ],
+    "relations": {
+      "order": {
+        "entity": "order",
+        "type": "one-to-one",
+        "field": "orderId"
+      }
+    },
+    "implementation": {
+      "interface": "ReviewEntity",
+      "file": "src/prototype/factories/index.ts",
+      "mock": "src/prototype/mocks/reviews.json",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Review Entity\n# Client reviews after service completion\n\n[entity]\nid = \"review\"\nname = \"Review\"\ndescription = \"A client review after service completion\"\ntable = \"reviews\"\n\n[[fields]]\nname = \"id\"\ntype = \"string\"\nformat = \"uuid\"\nrequired = true\nunique = true\ndescription = \"Unique review identifier\"\n\n[[fields]]\nname = \"orderId\"\ntype = \"relation\"\nrelatedEntity = \"order\"\nrequired = true\nunique = true\ndescription = \"The order being reviewed\"\n\n[[fields]]\nname = \"rating\"\ntype = \"integer\"\nmin = 1\nmax = 5\nrequired = true\ndescription = \"Rating from 1 to 5 stars\"\n\n[[fields]]\nname = \"comment\"\ntype = \"text\"\nrequired = false\ndescription = \"Optional review comment\"\n\n[[fields]]\nname = \"createdAt\"\ntype = \"datetime\"\nrequired = true\ndescription = \"Review submission timestamp\"\n\n[relations]\norder = { entity = \"order\", type = \"one-to-one\", field = \"orderId\" }\n\n[implementation]\ninterface = \"ReviewEntity\"\nfile = \"src/prototype/factories/index.ts\"\nmock = \"src/prototype/mocks/reviews.json\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 999,
+    "modified": "2025-12-14T14:12:42.114Z"
+  }
+}

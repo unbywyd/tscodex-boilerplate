@@ -1,0 +1,55 @@
+{
+  "path": "layers/events/order-created.toml",
+  "name": "order-created.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "order.created",
+      "name": "Order Created",
+      "description": "Client submitted a new care order request",
+      "category": "order"
+    },
+    "trigger": {
+      "action": "submit",
+      "element": "Order confirmation button"
+    },
+    "payload": [
+      {
+        "name": "orderId",
+        "type": "string",
+        "description": "Unique order identifier"
+      },
+      {
+        "name": "serviceType",
+        "type": "string",
+        "description": "Type of care service (caregiver, nurse, household, etc)"
+      },
+      {
+        "name": "city",
+        "type": "string",
+        "description": "City where service is needed"
+      },
+      {
+        "name": "date",
+        "type": "string",
+        "description": "Scheduled date for service"
+      }
+    ],
+    "backend": {
+      "description": "Creates order record in database, sends notification to admin dashboard, reserves time slot"
+    },
+    "relations": {
+      "entities": [
+        "care-order"
+      ],
+      "routes": [
+        "client-order-form"
+      ]
+    }
+  },
+  "rawContent": "[event]\nid = \"order.created\"\nname = \"Order Created\"\ndescription = \"Client submitted a new care order request\"\ncategory = \"order\"\n\n[trigger]\naction = \"submit\"\nelement = \"Order confirmation button\"\n\n[[payload]]\nname = \"orderId\"\ntype = \"string\"\ndescription = \"Unique order identifier\"\n\n[[payload]]\nname = \"serviceType\"\ntype = \"string\"\ndescription = \"Type of care service (caregiver, nurse, household, etc)\"\n\n[[payload]]\nname = \"city\"\ntype = \"string\"\ndescription = \"City where service is needed\"\n\n[[payload]]\nname = \"date\"\ntype = \"string\"\ndescription = \"Scheduled date for service\"\n\n[backend]\ndescription = \"Creates order record in database, sends notification to admin dashboard, reserves time slot\"\n\n[relations]\nentities = [\"care-order\"]\nroutes = [\"client-order-form\"]\n",
+  "metadata": {
+    "size": 767,
+    "modified": "2025-12-14T15:38:49.224Z"
+  }
+}

@@ -1,0 +1,151 @@
+{
+  "path": "layers/entities/order.toml",
+  "name": "order.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "order",
+      "name": "Order",
+      "description": "A care service order from a client",
+      "table": "orders"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "required": true,
+        "unique": true,
+        "description": "Unique order identifier"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "format": "phone",
+        "required": true,
+        "description": "Client phone number (primary identifier)"
+      },
+      {
+        "name": "clientName",
+        "type": "string",
+        "required": false,
+        "description": "Client name (optional)"
+      },
+      {
+        "name": "serviceType",
+        "type": "enum",
+        "values": [
+          "caregiver",
+          "nurse",
+          "household",
+          "shopping",
+          "escort",
+          "medical"
+        ],
+        "required": true,
+        "description": "Type of care service needed"
+      },
+      {
+        "name": "address",
+        "type": "string",
+        "required": true,
+        "description": "Service location address"
+      },
+      {
+        "name": "city",
+        "type": "string",
+        "required": true,
+        "description": "City or area in Israel"
+      },
+      {
+        "name": "date",
+        "type": "datetime",
+        "required": true,
+        "description": "Requested service date"
+      },
+      {
+        "name": "startTime",
+        "type": "string",
+        "format": "time",
+        "required": true,
+        "description": "Preferred start time"
+      },
+      {
+        "name": "duration",
+        "type": "integer",
+        "required": false,
+        "description": "Expected duration in hours (optional)"
+      },
+      {
+        "name": "notes",
+        "type": "text",
+        "required": false,
+        "description": "Additional notes or instructions"
+      },
+      {
+        "name": "status",
+        "type": "enum",
+        "values": [
+          "created",
+          "reviewing",
+          "assigned",
+          "on_way",
+          "in_progress",
+          "completed",
+          "cancelled"
+        ],
+        "default": "created",
+        "required": true,
+        "description": "Current order status"
+      },
+      {
+        "name": "specialistId",
+        "type": "relation",
+        "relatedEntity": "specialist",
+        "required": false,
+        "description": "Assigned specialist"
+      },
+      {
+        "name": "actualStart",
+        "type": "datetime",
+        "required": false,
+        "description": "Actual work start time"
+      },
+      {
+        "name": "actualEnd",
+        "type": "datetime",
+        "required": false,
+        "description": "Actual work end time"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "required": true,
+        "description": "Order creation timestamp"
+      }
+    ],
+    "relations": {
+      "specialist": {
+        "entity": "specialist",
+        "type": "many-to-one",
+        "field": "specialistId"
+      },
+      "review": {
+        "entity": "review",
+        "type": "one-to-one",
+        "mappedBy": "orderId"
+      }
+    },
+    "implementation": {
+      "interface": "CareOrderEntity",
+      "file": "src/prototype/factories/index.ts",
+      "mock": "src/prototype/mocks/orders.json",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Order Entity\n# Care service orders from clients\n\n[entity]\nid = \"order\"\nname = \"Order\"\ndescription = \"A care service order from a client\"\ntable = \"orders\"\n\n[[fields]]\nname = \"id\"\ntype = \"string\"\nformat = \"uuid\"\nrequired = true\nunique = true\ndescription = \"Unique order identifier\"\n\n[[fields]]\nname = \"phone\"\ntype = \"string\"\nformat = \"phone\"\nrequired = true\ndescription = \"Client phone number (primary identifier)\"\n\n[[fields]]\nname = \"clientName\"\ntype = \"string\"\nrequired = false\ndescription = \"Client name (optional)\"\n\n[[fields]]\nname = \"serviceType\"\ntype = \"enum\"\nvalues = [\"caregiver\", \"nurse\", \"household\", \"shopping\", \"escort\", \"medical\"]\nrequired = true\ndescription = \"Type of care service needed\"\n\n[[fields]]\nname = \"address\"\ntype = \"string\"\nrequired = true\ndescription = \"Service location address\"\n\n[[fields]]\nname = \"city\"\ntype = \"string\"\nrequired = true\ndescription = \"City or area in Israel\"\n\n[[fields]]\nname = \"date\"\ntype = \"datetime\"\nrequired = true\ndescription = \"Requested service date\"\n\n[[fields]]\nname = \"startTime\"\ntype = \"string\"\nformat = \"time\"\nrequired = true\ndescription = \"Preferred start time\"\n\n[[fields]]\nname = \"duration\"\ntype = \"integer\"\nrequired = false\ndescription = \"Expected duration in hours (optional)\"\n\n[[fields]]\nname = \"notes\"\ntype = \"text\"\nrequired = false\ndescription = \"Additional notes or instructions\"\n\n[[fields]]\nname = \"status\"\ntype = \"enum\"\nvalues = [\"created\", \"reviewing\", \"assigned\", \"on_way\", \"in_progress\", \"completed\", \"cancelled\"]\ndefault = \"created\"\nrequired = true\ndescription = \"Current order status\"\n\n[[fields]]\nname = \"specialistId\"\ntype = \"relation\"\nrelatedEntity = \"specialist\"\nrequired = false\ndescription = \"Assigned specialist\"\n\n[[fields]]\nname = \"actualStart\"\ntype = \"datetime\"\nrequired = false\ndescription = \"Actual work start time\"\n\n[[fields]]\nname = \"actualEnd\"\ntype = \"datetime\"\nrequired = false\ndescription = \"Actual work end time\"\n\n[[fields]]\nname = \"createdAt\"\ntype = \"datetime\"\nrequired = true\ndescription = \"Order creation timestamp\"\n\n[relations]\nspecialist = { entity = \"specialist\", type = \"many-to-one\", field = \"specialistId\" }\nreview = { entity = \"review\", type = \"one-to-one\", mappedBy = \"orderId\" }\n\n[implementation]\ninterface = \"CareOrderEntity\"\nfile = \"src/prototype/factories/index.ts\"\nmock = \"src/prototype/mocks/orders.json\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 2327,
+    "modified": "2025-12-14T14:12:33.729Z"
+  }
+}

@@ -1,0 +1,63 @@
+{
+  "path": "layers/entities/service.toml",
+  "name": "service.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "service",
+      "name": "Service",
+      "description": "A type of care service offered",
+      "table": "services"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "required": true,
+        "unique": true,
+        "description": "Service type identifier"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "description": "Service name"
+      },
+      {
+        "name": "description",
+        "type": "text",
+        "required": true,
+        "description": "Service description"
+      },
+      {
+        "name": "category",
+        "type": "enum",
+        "values": [
+          "care",
+          "medical",
+          "household",
+          "transport"
+        ],
+        "required": true,
+        "description": "Service category"
+      },
+      {
+        "name": "icon",
+        "type": "string",
+        "required": false,
+        "description": "Icon name for UI display"
+      }
+    ],
+    "implementation": {
+      "interface": "ServiceEntity",
+      "file": "src/prototype/factories/index.ts",
+      "mock": "src/prototype/mocks/services.json",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Service Entity\n# Types of care services offered\n\n[entity]\nid = \"service\"\nname = \"Service\"\ndescription = \"A type of care service offered\"\ntable = \"services\"\n\n[[fields]]\nname = \"id\"\ntype = \"string\"\nrequired = true\nunique = true\ndescription = \"Service type identifier\"\n\n[[fields]]\nname = \"name\"\ntype = \"string\"\nrequired = true\ndescription = \"Service name\"\n\n[[fields]]\nname = \"description\"\ntype = \"text\"\nrequired = true\ndescription = \"Service description\"\n\n[[fields]]\nname = \"category\"\ntype = \"enum\"\nvalues = [\"care\", \"medical\", \"household\", \"transport\"]\nrequired = true\ndescription = \"Service category\"\n\n[[fields]]\nname = \"icon\"\ntype = \"string\"\nrequired = false\ndescription = \"Icon name for UI display\"\n\n[implementation]\ninterface = \"ServiceEntity\"\nfile = \"src/prototype/factories/index.ts\"\nmock = \"src/prototype/mocks/services.json\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 852,
+    "modified": "2025-12-14T14:12:37.931Z"
+  }
+}

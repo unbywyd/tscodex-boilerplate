@@ -1,0 +1,60 @@
+{
+  "path": "layers/roles/specialist.toml",
+  "name": "specialist.toml",
+  "type": "toml",
+  "content": {
+    "role": {
+      "id": "specialist",
+      "name": "Specialist",
+      "description": "Care specialists providing elderly care services",
+      "level": 2,
+      "identification": {
+        "method": "phone",
+        "required": true,
+        "verification": "sms-otp"
+      },
+      "actions": {
+        "canDo": [
+          "View assigned orders",
+          "Start and end work shifts",
+          "Set weekly availability",
+          "View own shift history"
+        ],
+        "cannotDo": [
+          "Create orders",
+          "Assign orders to self",
+          "View other specialists",
+          "Access admin features"
+        ]
+      }
+    },
+    "permissions": {
+      "list": [
+        "order:read:assigned",
+        "shift:start",
+        "shift:end",
+        "availability:manage:own"
+      ]
+    },
+    "relations": {
+      "guards": [
+        "authenticated",
+        "specialist-only"
+      ],
+      "routes": [
+        "specialist-home",
+        "specialist-orders",
+        "active-shift",
+        "availability-setup"
+      ],
+      "platforms": [
+        "specialist-app"
+      ]
+    }
+  },
+  "rawContent": "# Specialist Role\n# Care workers providing services\n\n[role]\nid = \"specialist\"\nname = \"Specialist\"\ndescription = \"Care specialists providing elderly care services\"\nlevel = 2\n\n[role.identification]\nmethod = \"phone\"\nrequired = true\nverification = \"sms-otp\"\n\n[permissions]\nlist = [\n  \"order:read:assigned\",\n  \"shift:start\",\n  \"shift:end\",\n  \"availability:manage:own\"\n]\n\n[role.actions]\ncanDo = [\n  \"View assigned orders\",\n  \"Start and end work shifts\",\n  \"Set weekly availability\",\n  \"View own shift history\"\n]\ncannotDo = [\n  \"Create orders\",\n  \"Assign orders to self\",\n  \"View other specialists\",\n  \"Access admin features\"\n]\n\n[relations]\nguards = [\"authenticated\", \"specialist-only\"]\nroutes = [\"specialist-home\", \"specialist-orders\", \"active-shift\", \"availability-setup\"]\nplatforms = [\"specialist-app\"]\n",
+  "metadata": {
+    "size": 799,
+    "modified": "2025-12-14T14:11:44.425Z"
+  }
+}

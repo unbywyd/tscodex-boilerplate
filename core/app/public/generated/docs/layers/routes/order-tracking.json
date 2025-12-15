@@ -1,0 +1,50 @@
+{
+  "path": "layers/routes/order-tracking.toml",
+  "name": "order-tracking.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "order-tracking",
+      "path": "/prototype/client/track",
+      "title": "Track Order"
+    },
+    "page": {
+      "type": "public",
+      "role": "client",
+      "description": {
+        "summary": "Track order status using phone number",
+        "features": [
+          "Phone verification",
+          "Order status display",
+          "Assigned specialist info",
+          "Timeline of status changes"
+        ]
+      }
+    },
+    "relations": {
+      "guards": [
+        "public"
+      ],
+      "roles": [
+        "client"
+      ],
+      "entities": [
+        "order",
+        "specialist"
+      ],
+      "platforms": [
+        "client-app"
+      ]
+    },
+    "implementation": {
+      "component": "OrderTracking",
+      "file": "src/prototype/pages/client/OrderTracking.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Order Tracking Route\n# Track order status by phone\n\n[route]\nid = \"order-tracking\"\npath = \"/prototype/client/track\"\ntitle = \"Track Order\"\n\n[page]\ntype = \"public\"\nrole = \"client\"\n\n[page.description]\nsummary = \"Track order status using phone number\"\nfeatures = [\n  \"Phone verification\",\n  \"Order status display\",\n  \"Assigned specialist info\",\n  \"Timeline of status changes\"\n]\n\n[relations]\nguards = [\"public\"]\nroles = [\"client\"]\nentities = [\"order\", \"specialist\"]\nplatforms = [\"client-app\"]\n\n[implementation]\ncomponent = \"OrderTracking\"\nfile = \"src/prototype/pages/client/OrderTracking.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 608,
+    "modified": "2025-12-14T14:13:25.478Z"
+  }
+}

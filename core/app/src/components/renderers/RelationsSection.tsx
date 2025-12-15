@@ -85,7 +85,7 @@ export default function RelationsSection({ entityId, relations }: RelationsSecti
     if (!entry) {
       return (
         <span key={id} className="inline-block bg-red-100 text-red-800 px-2 py-1 rounded text-sm opacity-50">
-          {id} (not found)
+          {id} (not defined)
         </span>
       )
     }

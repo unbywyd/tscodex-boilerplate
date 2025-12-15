@@ -1,0 +1,101 @@
+{
+  "path": "layers/entities/specialist.toml",
+  "name": "specialist.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "specialist",
+      "name": "Specialist",
+      "description": "A care specialist providing services",
+      "table": "specialists"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "required": true,
+        "unique": true,
+        "description": "Unique specialist identifier"
+      },
+      {
+        "name": "name",
+        "type": "string",
+        "required": true,
+        "description": "Full name"
+      },
+      {
+        "name": "phone",
+        "type": "string",
+        "format": "phone",
+        "required": true,
+        "unique": true,
+        "description": "Phone number"
+      },
+      {
+        "name": "email",
+        "type": "string",
+        "format": "email",
+        "required": false,
+        "description": "Email address (optional)"
+      },
+      {
+        "name": "avatar",
+        "type": "string",
+        "format": "url",
+        "required": false,
+        "description": "Profile photo URL"
+      },
+      {
+        "name": "serviceTypes",
+        "type": "array",
+        "items": "string",
+        "required": true,
+        "description": "Types of services the specialist can provide"
+      },
+      {
+        "name": "cities",
+        "type": "array",
+        "items": "string",
+        "required": true,
+        "description": "Cities/areas where specialist can work"
+      },
+      {
+        "name": "isActive",
+        "type": "boolean",
+        "default": true,
+        "required": true,
+        "description": "Whether specialist is currently active"
+      },
+      {
+        "name": "createdAt",
+        "type": "datetime",
+        "required": true,
+        "description": "Account creation timestamp"
+      }
+    ],
+    "relations": {
+      "orders": {
+        "entity": "order",
+        "type": "one-to-many",
+        "mappedBy": "specialistId"
+      },
+      "availabilities": {
+        "entity": "availability",
+        "type": "one-to-many",
+        "mappedBy": "specialistId"
+      }
+    },
+    "implementation": {
+      "interface": "SpecialistEntity",
+      "file": "src/prototype/factories/index.ts",
+      "mock": "src/prototype/mocks/specialists.json",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Specialist Entity\n# Care workers providing services\n\n[entity]\nid = \"specialist\"\nname = \"Specialist\"\ndescription = \"A care specialist providing services\"\ntable = \"specialists\"\n\n[[fields]]\nname = \"id\"\ntype = \"string\"\nformat = \"uuid\"\nrequired = true\nunique = true\ndescription = \"Unique specialist identifier\"\n\n[[fields]]\nname = \"name\"\ntype = \"string\"\nrequired = true\ndescription = \"Full name\"\n\n[[fields]]\nname = \"phone\"\ntype = \"string\"\nformat = \"phone\"\nrequired = true\nunique = true\ndescription = \"Phone number\"\n\n[[fields]]\nname = \"email\"\ntype = \"string\"\nformat = \"email\"\nrequired = false\ndescription = \"Email address (optional)\"\n\n[[fields]]\nname = \"avatar\"\ntype = \"string\"\nformat = \"url\"\nrequired = false\ndescription = \"Profile photo URL\"\n\n[[fields]]\nname = \"serviceTypes\"\ntype = \"array\"\nitems = \"string\"\nrequired = true\ndescription = \"Types of services the specialist can provide\"\n\n[[fields]]\nname = \"cities\"\ntype = \"array\"\nitems = \"string\"\nrequired = true\ndescription = \"Cities/areas where specialist can work\"\n\n[[fields]]\nname = \"isActive\"\ntype = \"boolean\"\ndefault = true\nrequired = true\ndescription = \"Whether specialist is currently active\"\n\n[[fields]]\nname = \"createdAt\"\ntype = \"datetime\"\nrequired = true\ndescription = \"Account creation timestamp\"\n\n[relations]\norders = { entity = \"order\", type = \"one-to-many\", mappedBy = \"specialistId\" }\navailabilities = { entity = \"availability\", type = \"one-to-many\", mappedBy = \"specialistId\" }\n\n[implementation]\ninterface = \"SpecialistEntity\"\nfile = \"src/prototype/factories/index.ts\"\nmock = \"src/prototype/mocks/specialists.json\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 1596,
+    "modified": "2025-12-14T14:12:35.792Z"
+  }
+}

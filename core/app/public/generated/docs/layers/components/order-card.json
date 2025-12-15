@@ -1,0 +1,57 @@
+{
+  "path": "layers/components/order-card.toml",
+  "name": "order-card.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "order-card",
+      "name": "Order Card",
+      "description": "Displays care order information with status, service type, location, and time details",
+      "props": {
+        "order": "CareOrderEntity",
+        "onSelect": "(order: CareOrderEntity) => void",
+        "onAssign": "(order: CareOrderEntity) => void (optional, admin only)",
+        "showActions": "boolean (default: false)",
+        "variant": "'compact' | 'detailed' (default: 'compact')"
+      },
+      "features": {
+        "list": [
+          "Service type with icon",
+          "Status badge with color coding",
+          "Address and city display",
+          "Date and time information",
+          "Client/specialist name",
+          "Action buttons (assign, view)",
+          "Hover state with border highlight"
+        ]
+      },
+      "styling": {
+        "hover": "border-cyan-300 transition",
+        "responsive": true
+      },
+      "usage": {
+        "code": "import { OrderCard } from '@prototype/components'\n\n<OrderCard\n  order={order}\n  onSelect={(o) => navigate(`/orders/${o.id}`)}\n  showActions={isAdmin}\n/>\n"
+      }
+    },
+    "relations": {
+      "entities": [
+        "care-order"
+      ],
+      "routes": [
+        "client-orders",
+        "admin-orders",
+        "specialist-orders"
+      ]
+    },
+    "implementation": {
+      "component": "OrderCard",
+      "file": "src/prototype/components/OrderCard.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "[component]\nid = \"order-card\"\nname = \"Order Card\"\ndescription = \"Displays care order information with status, service type, location, and time details\"\n\n[component.props]\norder = \"CareOrderEntity\"\nonSelect = \"(order: CareOrderEntity) => void\"\nonAssign = \"(order: CareOrderEntity) => void (optional, admin only)\"\nshowActions = \"boolean (default: false)\"\nvariant = \"'compact' | 'detailed' (default: 'compact')\"\n\n[component.features]\nlist = [\n  \"Service type with icon\",\n  \"Status badge with color coding\",\n  \"Address and city display\",\n  \"Date and time information\",\n  \"Client/specialist name\",\n  \"Action buttons (assign, view)\",\n  \"Hover state with border highlight\"\n]\n\n[component.styling]\nhover = \"border-cyan-300 transition\"\nresponsive = true\n\n[component.usage]\ncode = \"\"\"\nimport { OrderCard } from '@prototype/components'\n\n<OrderCard\n  order={order}\n  onSelect={(o) => navigate(`/orders/${o.id}`)}\n  showActions={isAdmin}\n/>\n\"\"\"\n\n[relations]\nentities = [\"care-order\"]\nroutes = [\"client-orders\", \"admin-orders\", \"specialist-orders\"]\n\n[implementation]\ncomponent = \"OrderCard\"\nfile = \"src/prototype/components/OrderCard.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 1143,
+    "modified": "2025-12-14T15:39:44.404Z"
+  }
+}

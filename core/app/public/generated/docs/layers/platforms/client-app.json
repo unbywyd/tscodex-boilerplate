@@ -1,0 +1,68 @@
+{
+  "path": "layers/platforms/client-app.toml",
+  "name": "client-app.toml",
+  "type": "toml",
+  "content": {
+    "platform": {
+      "id": "client-app",
+      "name": "ElderCare Client",
+      "type": "mobile",
+      "description": "Mobile app for clients to order and track care services",
+      "config": {
+        "baseRoute": "/prototype/client",
+        "theme": "light",
+        "primaryAction": "Order Service"
+      },
+      "features": {
+        "core": [
+          "Order care services",
+          "Track order status",
+          "View order history",
+          "Leave reviews"
+        ],
+        "auth": "phone-optional"
+      },
+      "navigation": {
+        "type": "bottom-nav",
+        "items": [
+          {
+            "id": "home",
+            "icon": "Home",
+            "label": "Home"
+          },
+          {
+            "id": "orders",
+            "icon": "ClipboardList",
+            "label": "My Orders"
+          },
+          {
+            "id": "history",
+            "icon": "Clock",
+            "label": "History"
+          }
+        ]
+      }
+    },
+    "relations": {
+      "routes": [
+        "client-home",
+        "order-form",
+        "order-tracking",
+        "order-history",
+        "review-form"
+      ],
+      "roles": [
+        "client",
+        "guest"
+      ],
+      "guards": [
+        "public"
+      ]
+    }
+  },
+  "rawContent": "# Client Application Platform\n# For clients ordering care services\n\n[platform]\nid = \"client-app\"\nname = \"ElderCare Client\"\ntype = \"mobile\"\ndescription = \"Mobile app for clients to order and track care services\"\n\n[platform.config]\nbaseRoute = \"/prototype/client\"\ntheme = \"light\"\nprimaryAction = \"Order Service\"\n\n[platform.features]\ncore = [\n  \"Order care services\",\n  \"Track order status\",\n  \"View order history\",\n  \"Leave reviews\"\n]\nauth = \"phone-optional\"  # Can order without registration\n\n[platform.navigation]\ntype = \"bottom-nav\"\nitems = [\n  { id = \"home\", icon = \"Home\", label = \"Home\" },\n  { id = \"orders\", icon = \"ClipboardList\", label = \"My Orders\" },\n  { id = \"history\", icon = \"Clock\", label = \"History\" }\n]\n\n[relations]\nroutes = [\"client-home\", \"order-form\", \"order-tracking\", \"order-history\", \"review-form\"]\nroles = [\"client\", \"guest\"]\nguards = [\"public\"]\n",
+  "metadata": {
+    "size": 868,
+    "modified": "2025-12-14T14:10:47.629Z"
+  }
+}

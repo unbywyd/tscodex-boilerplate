@@ -1,0 +1,68 @@
+{
+  "path": "layers/platforms/admin-app.toml",
+  "name": "admin-app.toml",
+  "type": "toml",
+  "content": {
+    "platform": {
+      "id": "admin-app",
+      "name": "ElderCare Admin",
+      "type": "mobile",
+      "description": "Mobile app for administrators to manage orders and specialists",
+      "config": {
+        "baseRoute": "/prototype/admin",
+        "theme": "light",
+        "primaryAction": "Assign Order"
+      },
+      "features": {
+        "core": [
+          "View all orders",
+          "Assign specialists to orders",
+          "Manage specialists",
+          "View dashboard metrics"
+        ],
+        "auth": "required"
+      },
+      "navigation": {
+        "type": "bottom-nav",
+        "items": [
+          {
+            "id": "dashboard",
+            "icon": "LayoutDashboard",
+            "label": "Dashboard"
+          },
+          {
+            "id": "orders",
+            "icon": "ClipboardList",
+            "label": "Orders"
+          },
+          {
+            "id": "specialists",
+            "icon": "Users",
+            "label": "Specialists"
+          }
+        ]
+      }
+    },
+    "relations": {
+      "routes": [
+        "admin-dashboard",
+        "admin-orders",
+        "admin-specialists",
+        "specialist-detail",
+        "order-assignment"
+      ],
+      "roles": [
+        "admin"
+      ],
+      "guards": [
+        "authenticated",
+        "admin-only"
+      ]
+    }
+  },
+  "rawContent": "# Admin Application Platform\n# For company administrators\n\n[platform]\nid = \"admin-app\"\nname = \"ElderCare Admin\"\ntype = \"mobile\"\ndescription = \"Mobile app for administrators to manage orders and specialists\"\n\n[platform.config]\nbaseRoute = \"/prototype/admin\"\ntheme = \"light\"\nprimaryAction = \"Assign Order\"\n\n[platform.features]\ncore = [\n  \"View all orders\",\n  \"Assign specialists to orders\",\n  \"Manage specialists\",\n  \"View dashboard metrics\"\n]\nauth = \"required\"\n\n[platform.navigation]\ntype = \"bottom-nav\"\nitems = [\n  { id = \"dashboard\", icon = \"LayoutDashboard\", label = \"Dashboard\" },\n  { id = \"orders\", icon = \"ClipboardList\", label = \"Orders\" },\n  { id = \"specialists\", icon = \"Users\", label = \"Specialists\" }\n]\n\n[relations]\nroutes = [\"admin-dashboard\", \"admin-orders\", \"admin-specialists\", \"specialist-detail\", \"order-assignment\"]\nroles = [\"admin\"]\nguards = [\"authenticated\", \"admin-only\"]\n",
+  "metadata": {
+    "size": 892,
+    "modified": "2025-12-14T14:10:51.805Z"
+  }
+}

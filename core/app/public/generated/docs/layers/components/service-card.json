@@ -1,0 +1,53 @@
+{
+  "path": "layers/components/service-card.toml",
+  "name": "service-card.toml",
+  "type": "toml",
+  "content": {
+    "component": {
+      "id": "service-card",
+      "name": "Service Card",
+      "description": "Displays a care service option with icon, name and description for selection",
+      "props": {
+        "service": "{ id: string, name: string, description: string, icon: string }",
+        "onSelect": "(service) => void",
+        "selected": "boolean (default: false)"
+      },
+      "features": {
+        "list": [
+          "Service icon (dynamic from lucide-react)",
+          "Service name",
+          "Short description",
+          "Selection state styling",
+          "Click to select"
+        ]
+      },
+      "styling": {
+        "hover": "border-cyan-300 cursor-pointer",
+        "selected": "border-cyan-500 bg-cyan-50",
+        "responsive": true
+      },
+      "usage": {
+        "code": "import { ServiceCard } from '@prototype/components'\n\n<ServiceCard\n  service={{ id: 'caregiver', name: 'Caregiver', description: '...', icon: 'Heart' }}\n  onSelect={(s) => setSelected(s)}\n  selected={selectedId === 'caregiver'}\n/>\n"
+      }
+    },
+    "relations": {
+      "entities": [
+        "service"
+      ],
+      "routes": [
+        "client-home",
+        "client-order-form"
+      ]
+    },
+    "implementation": {
+      "component": "ServiceCard",
+      "file": "src/prototype/components/ServiceCard.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "[component]\nid = \"service-card\"\nname = \"Service Card\"\ndescription = \"Displays a care service option with icon, name and description for selection\"\n\n[component.props]\nservice = \"{ id: string, name: string, description: string, icon: string }\"\nonSelect = \"(service) => void\"\nselected = \"boolean (default: false)\"\n\n[component.features]\nlist = [\n  \"Service icon (dynamic from lucide-react)\",\n  \"Service name\",\n  \"Short description\",\n  \"Selection state styling\",\n  \"Click to select\"\n]\n\n[component.styling]\nhover = \"border-cyan-300 cursor-pointer\"\nselected = \"border-cyan-500 bg-cyan-50\"\nresponsive = true\n\n[component.usage]\ncode = \"\"\"\nimport { ServiceCard } from '@prototype/components'\n\n<ServiceCard\n  service={{ id: 'caregiver', name: 'Caregiver', description: '...', icon: 'Heart' }}\n  onSelect={(s) => setSelected(s)}\n  selected={selectedId === 'caregiver'}\n/>\n\"\"\"\n\n[relations]\nentities = [\"service\"]\nroutes = [\"client-home\", \"client-order-form\"]\n\n[implementation]\ncomponent = \"ServiceCard\"\nfile = \"src/prototype/components/ServiceCard.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 1059,
+    "modified": "2025-12-14T15:39:46.340Z"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "path": "layers/routes/active-shift.toml",
+  "name": "active-shift.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "active-shift",
+      "path": "/prototype/specialist/shift",
+      "title": "Active Shift"
+    },
+    "page": {
+      "type": "authenticated",
+      "role": "specialist",
+      "description": {
+        "summary": "Active shift management screen",
+        "features": [
+          "Current order details",
+          "Start/End shift buttons",
+          "Time tracking display",
+          "Order address and client info"
+        ]
+      }
+    },
+    "relations": {
+      "guards": [
+        "authenticated",
+        "specialist-only"
+      ],
+      "roles": [
+        "specialist"
+      ],
+      "entities": [
+        "order"
+      ],
+      "platforms": [
+        "specialist-app"
+      ]
+    },
+    "implementation": {
+      "component": "ActiveShift",
+      "file": "src/prototype/pages/specialist/ActiveShift.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Active Shift Route\n# Current active work shift\n\n[route]\nid = \"active-shift\"\npath = \"/prototype/specialist/shift\"\ntitle = \"Active Shift\"\n\n[page]\ntype = \"authenticated\"\nrole = \"specialist\"\n\n[page.description]\nsummary = \"Active shift management screen\"\nfeatures = [\n  \"Current order details\",\n  \"Start/End shift buttons\",\n  \"Time tracking display\",\n  \"Order address and client info\"\n]\n\n[relations]\nguards = [\"authenticated\", \"specialist-only\"]\nroles = [\"specialist\"]\nentities = [\"order\"]\nplatforms = [\"specialist-app\"]\n\n[implementation]\ncomponent = \"ActiveShift\"\nfile = \"src/prototype/pages/specialist/ActiveShift.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 637,
+    "modified": "2025-12-14T14:13:33.654Z"
+  }
+}

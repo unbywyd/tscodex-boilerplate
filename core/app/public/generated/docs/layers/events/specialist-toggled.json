@@ -1,0 +1,50 @@
+{
+  "path": "layers/events/specialist-toggled.toml",
+  "name": "specialist-toggled.toml",
+  "type": "toml",
+  "content": {
+    "event": {
+      "id": "specialist.toggled",
+      "name": "Specialist Status Toggled",
+      "description": "Admin activated or deactivated a specialist",
+      "category": "specialist"
+    },
+    "trigger": {
+      "action": "toggle",
+      "element": "Active switch on specialist card"
+    },
+    "payload": [
+      {
+        "name": "specialistId",
+        "type": "string",
+        "description": "Specialist being toggled"
+      },
+      {
+        "name": "isActive",
+        "type": "boolean",
+        "description": "New active status"
+      },
+      {
+        "name": "specialistName",
+        "type": "string",
+        "description": "Specialist name for logging"
+      }
+    ],
+    "backend": {
+      "description": "Updates specialist active status, if deactivated - removes from available pool, cancels pending assignments"
+    },
+    "relations": {
+      "entities": [
+        "specialist"
+      ],
+      "routes": [
+        "admin-specialists"
+      ]
+    }
+  },
+  "rawContent": "[event]\nid = \"specialist.toggled\"\nname = \"Specialist Status Toggled\"\ndescription = \"Admin activated or deactivated a specialist\"\ncategory = \"specialist\"\n\n[trigger]\naction = \"toggle\"\nelement = \"Active switch on specialist card\"\n\n[[payload]]\nname = \"specialistId\"\ntype = \"string\"\ndescription = \"Specialist being toggled\"\n\n[[payload]]\nname = \"isActive\"\ntype = \"boolean\"\ndescription = \"New active status\"\n\n[[payload]]\nname = \"specialistName\"\ntype = \"string\"\ndescription = \"Specialist name for logging\"\n\n[backend]\ndescription = \"Updates specialist active status, if deactivated - removes from available pool, cancels pending assignments\"\n\n[relations]\nentities = [\"specialist\"]\nroutes = [\"admin-specialists\"]\n",
+  "metadata": {
+    "size": 703,
+    "modified": "2025-12-14T15:39:04.738Z"
+  }
+}

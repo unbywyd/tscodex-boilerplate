@@ -1,0 +1,75 @@
+{
+  "path": "layers/entities/availability.toml",
+  "name": "availability.toml",
+  "type": "toml",
+  "content": {
+    "entity": {
+      "id": "availability",
+      "name": "Availability",
+      "description": "A specialist's availability time slot",
+      "table": "availabilities"
+    },
+    "fields": [
+      {
+        "name": "id",
+        "type": "string",
+        "format": "uuid",
+        "required": true,
+        "unique": true,
+        "description": "Unique availability slot identifier"
+      },
+      {
+        "name": "specialistId",
+        "type": "relation",
+        "relatedEntity": "specialist",
+        "required": true,
+        "description": "Specialist this availability belongs to"
+      },
+      {
+        "name": "date",
+        "type": "datetime",
+        "required": true,
+        "description": "Date of availability"
+      },
+      {
+        "name": "startTime",
+        "type": "string",
+        "format": "time",
+        "required": true,
+        "description": "Start time"
+      },
+      {
+        "name": "endTime",
+        "type": "string",
+        "format": "time",
+        "required": true,
+        "description": "End time"
+      },
+      {
+        "name": "isBooked",
+        "type": "boolean",
+        "default": false,
+        "required": true,
+        "description": "Whether this slot is booked"
+      }
+    ],
+    "relations": {
+      "specialist": {
+        "entity": "specialist",
+        "type": "many-to-one",
+        "field": "specialistId"
+      }
+    },
+    "implementation": {
+      "interface": "AvailabilityEntity",
+      "file": "src/prototype/factories/index.ts",
+      "mock": "src/prototype/mocks/availabilities.json",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Availability Entity\n# Specialist availability slots\n\n[entity]\nid = \"availability\"\nname = \"Availability\"\ndescription = \"A specialist's availability time slot\"\ntable = \"availabilities\"\n\n[[fields]]\nname = \"id\"\ntype = \"string\"\nformat = \"uuid\"\nrequired = true\nunique = true\ndescription = \"Unique availability slot identifier\"\n\n[[fields]]\nname = \"specialistId\"\ntype = \"relation\"\nrelatedEntity = \"specialist\"\nrequired = true\ndescription = \"Specialist this availability belongs to\"\n\n[[fields]]\nname = \"date\"\ntype = \"datetime\"\nrequired = true\ndescription = \"Date of availability\"\n\n[[fields]]\nname = \"startTime\"\ntype = \"string\"\nformat = \"time\"\nrequired = true\ndescription = \"Start time\"\n\n[[fields]]\nname = \"endTime\"\ntype = \"string\"\nformat = \"time\"\nrequired = true\ndescription = \"End time\"\n\n[[fields]]\nname = \"isBooked\"\ntype = \"boolean\"\ndefault = false\nrequired = true\ndescription = \"Whether this slot is booked\"\n\n[relations]\nspecialist = { entity = \"specialist\", type = \"many-to-one\", field = \"specialistId\" }\n\n[implementation]\ninterface = \"AvailabilityEntity\"\nfile = \"src/prototype/factories/index.ts\"\nmock = \"src/prototype/mocks/availabilities.json\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 1163,
+    "modified": "2025-12-14T14:12:40.030Z"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "path": "layers/routes/admin-dashboard.toml",
+  "name": "admin-dashboard.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "admin-dashboard",
+      "path": "/prototype/admin",
+      "title": "Dashboard"
+    },
+    "page": {
+      "type": "authenticated",
+      "role": "eldercare-admin",
+      "description": {
+        "summary": "Admin dashboard with key metrics and quick actions",
+        "features": [
+          "Order statistics",
+          "Active specialists count",
+          "Pending assignments",
+          "Quick links to orders/specialists"
+        ]
+      }
+    },
+    "relations": {
+      "guards": [
+        "authenticated",
+        "admin-only"
+      ],
+      "roles": [
+        "eldercare-admin"
+      ],
+      "entities": [
+        "order",
+        "specialist"
+      ],
+      "platforms": [
+        "admin-app"
+      ]
+    },
+    "implementation": {
+      "component": "AdminDashboard",
+      "file": "src/prototype/pages/admin/AdminDashboard.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Admin Dashboard Route\n# Main admin overview screen\n\n[route]\nid = \"admin-dashboard\"\npath = \"/prototype/admin\"\ntitle = \"Dashboard\"\n\n[page]\ntype = \"authenticated\"\nrole = \"eldercare-admin\"\n\n[page.description]\nsummary = \"Admin dashboard with key metrics and quick actions\"\nfeatures = [\n  \"Order statistics\",\n  \"Active specialists count\",\n  \"Pending assignments\",\n  \"Quick links to orders/specialists\"\n]\n\n[relations]\nguards = [\"authenticated\", \"admin-only\"]\nroles = [\"eldercare-admin\"]\nentities = [\"order\", \"specialist\"]\nplatforms = [\"admin-app\"]\n\n[implementation]\ncomponent = \"AdminDashboard\"\nfile = \"src/prototype/pages/admin/AdminDashboard.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 663,
+    "modified": "2025-12-14T14:13:37.889Z"
+  }
+}

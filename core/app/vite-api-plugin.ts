@@ -99,7 +99,7 @@ async function readFileContent(filePath: string): Promise<any> {
 // Helper: extract ID from TOML content
 function extractId(content: any, fileName: string): string | null {
   if (content.id) return content.id
-  for (const key of ['useCase', 'guard', 'role', 'route', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
+  for (const key of ['useCase', 'guard', 'role', 'route', 'event', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
     if (content[key]?.id) return content[key].id
   }
   return fileName.replace(/\.toml$/, '')
@@ -108,7 +108,7 @@ function extractId(content: any, fileName: string): string | null {
 // Helper: extract title from TOML content
 function extractTitle(content: any): string | undefined {
   if (content.name) return content.name
-  for (const key of ['useCase', 'guard', 'role', 'route', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
+  for (const key of ['useCase', 'guard', 'role', 'route', 'event', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
     if (content[key]?.name) return content[key].name
     if (content[key]?.title) return content[key].title
   }
@@ -124,7 +124,7 @@ function extractRelations(content: any): Record<string, string[]> | null {
     }
     return Object.keys(relations).length > 0 ? relations : null
   }
-  for (const key of ['useCase', 'guard', 'role', 'route', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
+  for (const key of ['useCase', 'guard', 'role', 'route', 'event', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
     if (content[key]?.relations) {
       const relations: Record<string, string[]> = {}
       for (const [k, v] of Object.entries(content[key].relations)) {

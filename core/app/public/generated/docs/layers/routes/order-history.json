@@ -1,0 +1,49 @@
+{
+  "path": "layers/routes/order-history.toml",
+  "name": "order-history.toml",
+  "type": "toml",
+  "content": {
+    "route": {
+      "id": "order-history",
+      "path": "/prototype/client/history",
+      "title": "Order History"
+    },
+    "page": {
+      "type": "public",
+      "role": "client",
+      "description": {
+        "summary": "View order history by phone number",
+        "features": [
+          "List of past orders",
+          "Order details",
+          "Review option for completed orders"
+        ]
+      }
+    },
+    "relations": {
+      "guards": [
+        "public"
+      ],
+      "roles": [
+        "client"
+      ],
+      "entities": [
+        "order",
+        "review"
+      ],
+      "platforms": [
+        "client-app"
+      ]
+    },
+    "implementation": {
+      "component": "OrderHistory",
+      "file": "src/prototype/pages/client/OrderHistory.tsx",
+      "status": "planned"
+    }
+  },
+  "rawContent": "# Order History Route\n# View past orders\n\n[route]\nid = \"order-history\"\npath = \"/prototype/client/history\"\ntitle = \"Order History\"\n\n[page]\ntype = \"public\"\nrole = \"client\"\n\n[page.description]\nsummary = \"View order history by phone number\"\nfeatures = [\n  \"List of past orders\",\n  \"Order details\",\n  \"Review option for completed orders\"\n]\n\n[relations]\nguards = [\"public\"]\nroles = [\"client\"]\nentities = [\"order\", \"review\"]\nplatforms = [\"client-app\"]\n\n[implementation]\ncomponent = \"OrderHistory\"\nfile = \"src/prototype/pages/client/OrderHistory.tsx\"\nstatus = \"planned\"\n",
+  "metadata": {
+    "size": 562,
+    "modified": "2025-12-14T14:13:27.461Z"
+  }
+}
