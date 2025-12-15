@@ -185,7 +185,7 @@ const BottomSheet = React.forwardRef<HTMLDivElement, BottomSheetProps>(
           )}
 
           {/* Content */}
-          <div className="flex-1 overflow-auto px-4 pb-safe">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden px-4 pb-safe">
             {children}
           </div>
         </div>
@@ -253,7 +253,7 @@ const SimpleBottomSheet = React.forwardRef<HTMLDivElement, SimpleBottomSheetProp
           )}
 
           {/* Content */}
-          <div className={cn('flex-1 overflow-auto', !noPadding && 'p-4')}>
+          <div className={cn('flex-1 overflow-y-auto overflow-x-hidden', !noPadding && 'p-4')}>
             {children}
           </div>
         </div>
