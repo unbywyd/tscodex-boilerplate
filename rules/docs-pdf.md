@@ -98,7 +98,7 @@ list = [
 MCP: screenshot(
   url: "http://localhost:5173/prototype/products",
   selector: "[data-component='product-card']",
-  output: "uploads/docs/images/component-product-card.png"
+  output: "public/uploads/docs/images/component-product-card.png"
 )
 ```
 
@@ -132,7 +132,7 @@ Displays product/pricing plan with features list and selection button.
 
 #### Step 7: Save to documentation folder
 ```
-Write: uploads/docs/6.Components.md
+Write: public/uploads/docs/6.Components.md
 ```
 
 ### Finding All Documentable Elements
@@ -184,10 +184,10 @@ User: Document the users page at http://localhost:5173/prototype/users
 LLM:
 1. MCP fetch_html → find data-doc-url="/docs/layers/pages/users"
 2. Read src/spec/layers/pages/users.toml
-3. MCP screenshot [data-screen="users"] → uploads/docs/images/screen-users.png
+3. MCP screenshot [data-screen="users"] → public/uploads/docs/images/screen-users.png
 4. Find nested components: data-component="user-card"
 5. Read src/spec/layers/components/user-card.toml
-6. MCP screenshot [data-component="user-card"] → uploads/docs/images/component-user-card.png
+6. MCP screenshot [data-component="user-card"] → public/uploads/docs/images/component-user-card.png
 7. Generate 5.Screens.md with page overview
 8. Generate 6.Components.md with component details
 9. Insert image references with {{BASE_URL}}
@@ -208,7 +208,7 @@ PDF documentation is needed for:
 ## Directory Structure
 
 ```
-uploads/
+public/uploads/
 └── docs/
     ├── 1.Intro.md
     ├── 2.Architecture.md
@@ -274,7 +274,7 @@ Request MCP server to capture screen:
 
 ```
 Take screenshot of [data-screen="users-page"]
-Save to uploads/docs/images/screen-users.png
+Save to public/uploads/docs/images/screen-users.png
 ```
 
 MCP will:
@@ -289,7 +289,7 @@ For individual components use `data-component`:
 
 ```
 Take screenshot of [data-component="user-card"]
-Save to uploads/docs/images/component-user-card.png
+Save to public/uploads/docs/images/component-user-card.png
 ```
 
 ## Content Sources
@@ -343,7 +343,7 @@ The User entity represents registered users in the system.
 ### Step 1: Create markdown files
 
 ```
-uploads/docs/
+public/uploads/docs/
 ├── 1.Intro.md
 ├── 2.Architecture.md
 ├── 3.Entities.md
@@ -352,14 +352,14 @@ uploads/docs/
 
 ### Step 2: Add screenshots
 
-Request MCP to capture screens and save to `uploads/docs/images/`.
+Request MCP to capture screens and save to `public/uploads/docs/images/`.
 
 ### Step 3: Generate PDF via MCP
 
 ```
-Generate PDF from uploads/docs/
+Generate PDF from public/uploads/docs/
 Base URL: <user provides URL>
-Output: uploads/docs/Project-Documentation.pdf
+Output: public/uploads/docs/Project-Documentation.pdf
 ```
 
 MCP tool will:
@@ -375,7 +375,7 @@ MCP tool will:
 User: Generate PDF documentation for this project
 
 Claude:
-1. Create uploads/docs/ directory structure
+1. Create public/uploads/docs/ directory structure
 2. Read TOML specs and generate markdown sections:
    - 1.Intro.md from project/about.toml
    - 2.Architecture.md from project/tech.toml
@@ -386,7 +386,7 @@ Claude:
    - Screenshot [data-screen="users-page"] → images/screen-users.png
    - Screenshot [data-screen="products-page"] → images/screen-products.png
 4. Generate PDF via MCP tool:
-   - Input: uploads/docs/*.md
+   - Input: public/uploads/docs/*.md
    - Base URL: <provided by user>
    - Output: Project-Documentation.pdf
 ```

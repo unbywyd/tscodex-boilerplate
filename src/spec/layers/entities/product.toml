@@ -94,6 +94,6 @@ components = ["product-card"]
 [implementation]
 interface = "Product"
 file = "core/app/src/pages/prototype/ProductsPage.tsx"
-mock = "core/app/public/generated/mocks/products.json"
+mock = "public/generated/mocks/products.json"
 preview = "/prototype/products"
 status = "implemented"

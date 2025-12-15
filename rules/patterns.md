@@ -430,7 +430,7 @@ src/prototype/
 | Method | Location | URL | When to use |
 |--------|----------|-----|-------------|
 | **Import** | `src/prototype/assets/` | bundled | Small files, component-specific (logos, icons) |
-| **Uploads** | `uploads/` | `/uploads/*` | Large files, external access (uploads, MCP screenshots) |
+| **Uploads** | `public/uploads/` | `/uploads/*` | Large files, external access (uploads, MCP screenshots) |
 
 ### 1. Import (bundled)
 
@@ -449,11 +449,11 @@ function Header() {
 
 ### 2. Uploads folder (URL access)
 
-Files in `uploads/` are served at `/uploads/*` URL. Not bundled, accessible externally.
+Files in `public/uploads/` are served at `/uploads/*` URL. Not bundled, accessible externally.
 
 ```
-uploads/docs/images/screen.png  →  /uploads/docs/images/screen.png
-uploads/media/video.mp4         →  /uploads/media/video.mp4
+public/uploads/docs/images/screen.png  →  /uploads/docs/images/screen.png
+public/uploads/media/video.mp4         →  /uploads/media/video.mp4
 ```
 
 ```tsx
@@ -473,7 +473,7 @@ uploads/media/video.mp4         →  /uploads/media/video.mp4
 ### Uploads folder structure
 
 ```
-uploads/
+public/uploads/
 ├── docs/
 │   └── images/       # MCP screenshot captures
 └── media/            # Large media files
@@ -485,7 +485,7 @@ uploads/
 |----------|-----|
 | Component logo/icon | Import from `@prototype/assets/` |
 | User avatar placeholder | Import |
-| MCP screenshot upload | `uploads/docs/images/` |
-| curl file upload | `uploads/` |
-| Video/large image | `uploads/media/` |
-| Need URL for external API | `uploads/` |
+| MCP screenshot upload | `public/uploads/docs/images/` |
+| curl file upload | `public/uploads/` |
+| Video/large image | `public/uploads/media/` |
+| Need URL for external API | `public/uploads/` |

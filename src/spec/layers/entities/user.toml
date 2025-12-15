@@ -79,6 +79,6 @@ components = ["user-card"]
 [implementation]
 interface = "UserEntity"
 file = "core/app/src/pages/prototype/UsersPage.tsx"
-mock = "core/app/public/generated/mocks/users.json"
+mock = "public/generated/mocks/users.json"
 preview = "/prototype/users"
 status = "implemented"

@@ -9,8 +9,7 @@ import { viteApiPlugin } from './vite-api-plugin'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
-const uploadsDir = path.resolve(rootDir, 'uploads')
-const publicGeneratedDir = path.resolve(rootDir, 'public/generated')
+const rootPublicDir = path.resolve(rootDir, 'public')
 
 export default defineConfig({
   root: __dirname,
@@ -20,38 +19,37 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: '../../uploads/*',
-          dest: 'uploads',
-        },
-        {
-          src: '../../public/generated/**/*',
-          dest: 'generated',
+          src: '../../public/**/*',
+          dest: '.',
         },
       ],
     }),
-    // Serve /uploads/ in dev mode
+    // Serve root public/ folder in dev mode (uploads, generated, etc.)
     {
-      name: 'serve-uploads',
+      name: 'serve-root-public',
       configureServer(server) {
-        server.middlewares.use('/uploads', (req, res, next) => {
-          const filePath = path.join(uploadsDir, req.url || '')
-          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            res.setHeader('Access-Control-Allow-Origin', '*')
-            fs.createReadStream(filePath).pipe(res)
-          } else {
-            next()
+        server.middlewares.use((req, res, next) => {
+          const url = req.url || ''
+          // Only handle /uploads/ and /generated/ paths
+          if (!url.startsWith('/uploads/') && !url.startsWith('/generated/')) {
+            return next()
           }
-        })
-      },
-    },
-    // Serve /generated/ from root public/generated/ in dev mode
-    {
-      name: 'serve-generated',
-      configureServer(server) {
-        server.middlewares.use('/generated', (req, res, next) => {
-          const filePath = path.join(publicGeneratedDir, req.url || '')
+          const filePath = path.join(rootPublicDir, url)
           if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
-            res.setHeader('Content-Type', 'application/json')
+            // Set content type based on extension
+            const ext = path.extname(filePath).toLowerCase()
+            const mimeTypes: Record<string, string> = {
+              '.json': 'application/json',
+              '.png': 'image/png',
+              '.jpg': 'image/jpeg',
+              '.jpeg': 'image/jpeg',
+              '.gif': 'image/gif',
+              '.svg': 'image/svg+xml',
+              '.webp': 'image/webp',
+            }
+            if (mimeTypes[ext]) {
+              res.setHeader('Content-Type', mimeTypes[ext])
+            }
             res.setHeader('Access-Control-Allow-Origin', '*')
             fs.createReadStream(filePath).pipe(res)
           } else {

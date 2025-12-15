@@ -835,7 +835,7 @@ Every prototype element should be linked to its TOML specification using the `Do
 
 ```
 1. Define spec     →  src/spec/layers/pages/users.toml
-2. Build generates →  core/app/public/generated/docs/layers/pages/users.json
+2. Build generates →  public/generated/docs/layers/pages/users.json
 3. Link in code    →  <Doc of="pages.users" floating />
 4. User sees       →  "?" button linking to /docs/layers/pages/users
 ```

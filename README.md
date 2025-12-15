@@ -137,7 +137,9 @@ llm-boilerplate/
 │   ├── prototype.md          # Prototype development guide
 │   └── docs-pdf.md           # PDF generation, MCP, manifest
 │
-├── uploads/                  # Static files (images, PDFs)
+├── public/                   # Public static files (not in core)
+│   ├── generated/            # Build output (gitignore)
+│   └── uploads/              # Uploads (images, PDFs)
 │
 └── core/                     # ENGINE (don't modify)
     ├── app/                  # React SPA
