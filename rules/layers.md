@@ -175,6 +175,290 @@ import { Button } from '@prototype/components/ui/Button'
 """
 ```
 
+### Extended Structure
+
+For complex components, use these optional sections:
+
+```toml
+[component]
+id = "order-card"                      # Required: unique identifier (kebab-case)
+name = "Order Card"                    # Required: display name
+description = "Displays order info"    # Required: what it does
+category = "ui"                        # Optional: "ui" | "forms" | "pages"
+
+# ─────────────────────────────────────────────────
+# Props - Two formats available
+# ─────────────────────────────────────────────────
+
+# Format 1: Flat structure (simple components)
+[component.props]
+order = "OrderEntity (required) - Order data"
+variant = "'compact' | 'detailed' (default: 'compact') - Display mode"
+onSelect = "(order: OrderEntity) => void (optional) - Click handler"
+
+# Format 2: Array structure (complex props with metadata)
+[[props]]
+name = "variant"
+type = "enum"
+values = ["compact", "detailed"]
+default = "compact"
+required = false
+description = "Display density variant"
+
+# ─────────────────────────────────────────────────
+# Features - What component does
+# ─────────────────────────────────────────────────
+
+[component.features]
+list = [
+  "Status badge with color coding",
+  "Date and time display",
+  "Responsive layout",
+]
+
+# Role-specific features (optional)
+[component.features.admin]
+list = ["Edit button", "Delete action"]
+
+[component.features.client]
+list = ["View only mode"]
+
+# ─────────────────────────────────────────────────
+# Styling - Visual details
+# ─────────────────────────────────────────────────
+
+[component.styling]
+hover = "hover:border-primary transition-colors"
+selected = "border-primary bg-primary/10"
+responsive = true
+layout = "flex items-start gap-3"
+
+# ─────────────────────────────────────────────────
+# Sections - For composite components
+# ─────────────────────────────────────────────────
+
+[component.sections.header]
+name = "Header"
+description = "Order title and status"
+layout = "flex justify-between"
+
+[component.sections.details]
+name = "Details"
+description = "Order items and pricing"
+
+# ─────────────────────────────────────────────────
+# Flow - For multi-step components (forms, wizards)
+# ─────────────────────────────────────────────────
+
+[component.flow]
+description = "Two-step authentication"
+
+[[component.flow.steps]]
+step = 1
+name = "Phone Input"
+description = "User enters phone number"
+validation = "10 digits required"
+event = "auth.otp_sent"
+
+[[component.flow.steps]]
+step = 2
+name = "OTP Verification"
+description = "User enters received code"
+validation = "6 digits"
+event = "auth.verified"
+error = "Invalid code"
+
+# ─────────────────────────────────────────────────
+# Config - Backend/API configuration
+# ─────────────────────────────────────────────────
+
+[component.config]
+sms_provider = "Twilio"
+otp_length = 6
+otp_ttl = "5 minutes"
+rate_limit = "3 attempts per 15 minutes"
+
+# ─────────────────────────────────────────────────
+# Variants - For live preview in docs
+# ─────────────────────────────────────────────────
+
+[[variants]]
+name = "Compact"
+props = { variant = "compact", children = "Order #123" }
+
+[[variants]]
+name = "Detailed"
+props = { variant = "detailed", showActions = true }
+
+# ─────────────────────────────────────────────────
+# Usage - Code example
+# ─────────────────────────────────────────────────
+
+[component.usage]
+code = """
+import { OrderCard } from '@prototype/components'
+
+<OrderCard
+  order={order}
+  variant="detailed"
+  onSelect={(o) => navigate(`/orders/${o.id}`)}
+/>
+"""
+
+# ─────────────────────────────────────────────────
+# Relations - Links to other layers
+# ─────────────────────────────────────────────────
+
+[relations]
+entities = ["order", "user"]
+routes = ["orders-list", "order-details"]
+components = ["status-badge", "price-display"]
+events = ["order.selected", "order.updated"]
+roles = ["admin", "client"]
+guards = ["authenticated"]
+
+# ─────────────────────────────────────────────────
+# Implementation - Code mapping
+# ─────────────────────────────────────────────────
+
+[implementation]
+status = "implemented"                              # Required: planned | in-progress | implemented
+component = "OrderCard"                             # Component name
+file = "src/prototype/components/OrderCard.tsx"    # Single file
+# files = ["file1.tsx", "file2.tsx"]               # Or multiple files
+exports = "OrderCard, OrderCardProps"               # Exported names
+note = "Uses shadcn Card as base"                   # Implementation notes
+
+[implementation.variants]
+compact = "Minimal info, for lists"
+detailed = "Full info, for detail views"
+```
+
+### Examples by Component Type
+
+**Simple UI Component:**
+```toml
+[component]
+id = "button"
+name = "Button"
+description = "Primary action button"
+category = "ui"
+
+[[props]]
+name = "variant"
+type = "enum"
+values = ["default", "primary", "destructive"]
+default = "default"
+
+[implementation]
+status = "implemented"
+file = "src/prototype/components/ui/Button.tsx"
+```
+
+**Business Component:**
+```toml
+[component]
+id = "product-card"
+name = "Product Card"
+description = "Displays product with price and actions"
+
+[component.props]
+product = "ProductEntity (required)"
+onAddToCart = "(product) => void (optional)"
+
+[component.features]
+list = ["Image with fallback", "Price with discount", "Add to cart button"]
+
+[component.styling]
+hover = "shadow-lg transition-shadow"
+
+[relations]
+entities = ["product"]
+events = ["cart.add"]
+
+[implementation]
+status = "implemented"
+file = "src/prototype/components/ProductCard.tsx"
+```
+
+**Multi-step Form:**
+```toml
+[component]
+id = "checkout-form"
+name = "Checkout Form"
+description = "Multi-step checkout process"
+category = "forms"
+
+[component.flow]
+description = "Three-step checkout"
+
+[[component.flow.steps]]
+step = 1
+name = "Shipping"
+validation = "Address required"
+
+[[component.flow.steps]]
+step = 2
+name = "Payment"
+validation = "Card details"
+
+[[component.flow.steps]]
+step = 3
+name = "Confirmation"
+event = "order.created"
+
+[implementation]
+status = "planned"
+files = ["src/prototype/pages/checkout/CheckoutPage.tsx"]
+```
+
+**Page Component:**
+```toml
+[component]
+id = "dashboard-page"
+name = "Dashboard"
+description = "Main dashboard with stats and activity"
+category = "pages"
+
+[component.composition]
+layout = "main-layout"
+uses = ["stats-card", "activity-list", "quick-actions"]
+
+[component.sections.stats]
+name = "Statistics"
+layout = "grid-cols-4"
+
+[component.sections.activity]
+name = "Recent Activity"
+
+[relations]
+routes = ["dashboard"]
+guards = ["authenticated"]
+
+[implementation]
+status = "implemented"
+file = "src/prototype/pages/DashboardPage.tsx"
+```
+
+### Field Reference
+
+| Section | Key Fields | Description |
+|---------|------------|-------------|
+| `[component]` | `id`, `name`, `description`, `category` | Basic info (id, name required) |
+| `[component.props]` | `propName = "Type (required/optional) - Desc"` | Flat props format |
+| `[[props]]` | `name`, `type`, `values`, `default`, `required` | Array props format |
+| `[component.features]` | `list = [...]` | Feature descriptions |
+| `[component.features.*]` | `list = [...]` | Role-specific features |
+| `[component.styling]` | any keys | Styling details |
+| `[component.sections.*]` | `name`, `description`, `layout` | Composite sections |
+| `[component.flow]` | `description` | Flow intro |
+| `[[component.flow.steps]]` | `step`, `name`, `validation`, `event`, `error` | Flow steps |
+| `[component.config]` | any keys | Backend/API config |
+| `[[variants]]` | `name`, `props` | Live preview variants |
+| `[component.usage]` | `code` | Usage example |
+| `[relations]` | `entities`, `routes`, `components`, `events`, `roles`, `guards` | Links |
+| `[implementation]` | `status`, `component`, `file`/`files`, `exports`, `note` | Code mapping |
+
 Categories:
 - `ui` - base elements (Button, Input, Card, Badge, Modal, Table, Menu...)
 - `forms` - forms (LoginForm, RegisterForm, SearchForm, ProductForm...)
