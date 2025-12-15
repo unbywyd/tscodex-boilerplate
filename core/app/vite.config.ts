@@ -10,6 +10,7 @@ import { viteApiPlugin } from './vite-api-plugin'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
 const uploadsDir = path.resolve(rootDir, 'uploads')
+const publicGeneratedDir = path.resolve(rootDir, 'public/generated')
 
 export default defineConfig({
   root: __dirname,
@@ -22,6 +23,10 @@ export default defineConfig({
           src: '../../uploads/*',
           dest: 'uploads',
         },
+        {
+          src: '../../public/generated/**/*',
+          dest: 'generated',
+        },
       ],
     }),
     // Serve /uploads/ in dev mode
@@ -31,6 +36,22 @@ export default defineConfig({
         server.middlewares.use('/uploads', (req, res, next) => {
           const filePath = path.join(uploadsDir, req.url || '')
           if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            res.setHeader('Access-Control-Allow-Origin', '*')
+            fs.createReadStream(filePath).pipe(res)
+          } else {
+            next()
+          }
+        })
+      },
+    },
+    // Serve /generated/ from root public/generated/ in dev mode
+    {
+      name: 'serve-generated',
+      configureServer(server) {
+        server.middlewares.use('/generated', (req, res, next) => {
+          const filePath = path.join(publicGeneratedDir, req.url || '')
+          if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+            res.setHeader('Content-Type', 'application/json')
             res.setHeader('Access-Control-Allow-Origin', '*')
             fs.createReadStream(filePath).pipe(res)
           } else {

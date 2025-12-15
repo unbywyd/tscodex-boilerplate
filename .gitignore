@@ -10,6 +10,9 @@ build/
 app/dist/
 app/src/data/
 
+# Generated files (rebuilt on each dev/build)
+public/generated/
+
 # Environment variables
 .env
 .env.local

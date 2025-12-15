@@ -9,7 +9,7 @@ const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
 const mocksDir = path.join(rootDir, 'src/prototype/mocks')
 const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
-const outputDir = path.join(rootDir, 'core/app/public/generated')
+const outputDir = path.join(rootDir, 'public/generated')
 
 async function readTomlFile(filePath: string): Promise<any> {
   try {
