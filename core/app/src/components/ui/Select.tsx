@@ -148,6 +148,139 @@ const SelectContent = React.forwardRef<
 ))
 SelectContent.displayName = SelectPrimitive.Content.displayName
 
+// ─────────────────────────────────────────────────
+// SimpleSelect - No portal, works in inline dialogs/MobileFrame
+// ─────────────────────────────────────────────────
+interface SimpleSelectProps {
+  value?: string
+  onChange?: (value: string) => void
+  options: Array<{ value: string; label: string }> | string[]
+  placeholder?: string
+  label?: string
+  error?: string
+  required?: boolean
+  disabled?: boolean
+  className?: string
+}
+
+function SimpleSelect({
+  value,
+  onChange,
+  options,
+  placeholder = 'Select...',
+  label,
+  error,
+  required,
+  disabled,
+  className,
+}: SimpleSelectProps) {
+  const [open, setOpen] = React.useState(false)
+  const containerRef = React.useRef<HTMLDivElement>(null)
+
+  // Normalize options
+  const normalizedOptions = options.map((opt) =>
+    typeof opt === 'string' ? { value: opt, label: opt } : opt
+  )
+
+  const selectedOption = normalizedOptions.find((opt) => opt.value === value)
+
+  // Close on click outside
+  React.useEffect(() => {
+    if (!open) return
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [open])
+
+  // Close on escape
+  React.useEffect(() => {
+    if (!open) return
+
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [open])
+
+  return (
+    <div className="space-y-1.5">
+      {label && (
+        <label className="text-sm font-medium">
+          {label}
+          {required && <span className="text-destructive ml-1">*</span>}
+        </label>
+      )}
+
+      <div ref={containerRef} className="relative">
+        {/* Trigger */}
+        <button
+          type="button"
+          onClick={() => !disabled && setOpen(!open)}
+          disabled={disabled}
+          className={cn(
+            'flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm',
+            'ring-offset-background',
+            'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+            'disabled:cursor-not-allowed disabled:opacity-50',
+            error && 'border-destructive',
+            className
+          )}
+        >
+          <span className={cn('truncate', !selectedOption && 'text-muted-foreground')}>
+            {selectedOption?.label || placeholder}
+          </span>
+          <ChevronDown className={cn('h-4 w-4 opacity-50 transition-transform', open && 'rotate-180')} />
+        </button>
+
+        {/* Dropdown - no portal */}
+        {open && (
+          <div
+            className={cn(
+              'absolute z-50 top-full left-0 right-0 mt-1',
+              'max-h-60 overflow-auto rounded-md border bg-popover text-popover-foreground shadow-md',
+              'animate-in fade-in-0 zoom-in-95'
+            )}
+          >
+            <div className="p-1">
+              {normalizedOptions.map((option) => (
+                <button
+                  key={option.value}
+                  type="button"
+                  onClick={() => {
+                    onChange?.(option.value)
+                    setOpen(false)
+                  }}
+                  className={cn(
+                    'relative flex w-full cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none',
+                    'hover:bg-accent hover:text-accent-foreground',
+                    'focus:bg-accent focus:text-accent-foreground',
+                    option.value === value && 'bg-accent/50'
+                  )}
+                >
+                  <span className="absolute left-2 flex h-3.5 w-3.5 items-center justify-center">
+                    {option.value === value && <Check className="h-4 w-4" />}
+                  </span>
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {error && <p className="text-xs text-destructive">{error}</p>}
+    </div>
+  )
+}
+
 // Label (group label)
 const SelectLabel = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Label>,
@@ -216,4 +349,6 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  // Simple dropdown without portal - use in inline dialogs/MobileFrame
+  SimpleSelect,
 }

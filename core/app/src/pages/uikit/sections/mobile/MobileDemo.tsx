@@ -26,6 +26,7 @@ import { FloatingButton } from '@/components/ui/FloatingButton'
 import { HorizontalScroll, ScrollTabs } from '@/components/ui/HorizontalScroll'
 import { MobileCard, ProductCard, HorizontalCard, StoryCard } from '@/components/ui/MobileCard'
 import { MobileFrame } from '@/components/ui/MobileFrame'
+import { MobilePicker } from '@/components/ui/MobilePicker'
 import { Screen, ScreenHeader, ScreenBody, ScreenFooter } from '@/components/ui/MobileLayout'
 import { MobileList, MobileListItem } from '@/components/ui/MobileList'
 import { MobileToastProvider, useToast, Snackbar, InlineToast } from '@/components/ui/MobileToast'
@@ -59,6 +60,8 @@ function MobileDemoContent() {
   const [snackbarOpen, setSnackbarOpen] = useState(false)
   const [successShow, setSuccessShow] = useState(false)
   const [confettiShow, setConfettiShow] = useState(false)
+  const [pickerValue, setPickerValue] = useState('')
+  const [multiPickerValue, setMultiPickerValue] = useState<string[]>([])
 
   const toast = useToast()
 
@@ -721,6 +724,93 @@ function MobileDemoContent() {
             ]}
             onSelect={(id) => console.log('Selected:', id)}
           />
+        </div>
+      </DemoCard>
+
+      {/* MobilePicker */}
+      <DemoCard id="mobile-picker" title="MobilePicker - BottomSheet Select">
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Mobile-friendly select that opens a BottomSheet with searchable options. Works inside MobileFrame.
+          </p>
+          <CodeBlock
+            code={`// Single selection
+<MobilePicker
+  label="Country"
+  value={value}
+  onChange={setValue}
+  options={[
+    { value: 'us', label: 'USA', description: 'United States' },
+    { value: 'uk', label: 'UK', description: 'United Kingdom' },
+  ]}
+  searchable
+  title="Select Country"
+/>
+
+// Multi-selection
+<MobilePicker
+  label="Tags"
+  multiple
+  value={values}
+  onChange={setValues}
+  options={['React', 'Vue', 'Angular']}
+/>`}
+            id="mobilepicker-code"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <div className="border rounded-lg overflow-hidden">
+              <MobileFrame device="iphone" size="sm">
+                <Screen>
+                  <ScreenHeader>
+                    <TopBar title="Demo" />
+                  </ScreenHeader>
+                  <ScreenBody className="p-4 space-y-4">
+                    <MobilePicker
+                      label="Single Selection"
+                      value={pickerValue}
+                      onChange={setPickerValue}
+                      options={[
+                        { value: 'apple', label: 'Apple', description: 'Fresh red apples' },
+                        { value: 'banana', label: 'Banana', description: 'Yellow bananas' },
+                        { value: 'orange', label: 'Orange', description: 'Juicy oranges' },
+                        { value: 'grape', label: 'Grape', description: 'Sweet grapes' },
+                      ]}
+                      placeholder="Select fruit..."
+                      title="Choose a Fruit"
+                      searchable
+                    />
+                    <MobilePicker
+                      label="Multi Selection"
+                      multiple
+                      value={multiPickerValue}
+                      onChange={setMultiPickerValue}
+                      options={['React', 'Vue', 'Angular', 'Svelte', 'Solid']}
+                      placeholder="Select frameworks..."
+                      title="Choose Frameworks"
+                      searchable
+                    />
+                  </ScreenBody>
+                </Screen>
+              </MobileFrame>
+            </div>
+            <div className="space-y-2 text-sm">
+              <div>
+                <span className="text-muted-foreground">Single:</span>{' '}
+                <code className="bg-muted px-1 rounded">{pickerValue || '(empty)'}</code>
+              </div>
+              <div>
+                <span className="text-muted-foreground">Multi:</span>{' '}
+                <code className="bg-muted px-1 rounded">[{multiPickerValue.join(', ')}]</code>
+              </div>
+              <ul className="mt-4 space-y-1 text-muted-foreground">
+                <li>• Looks like Select, opens BottomSheet</li>
+                <li>• Works inside MobileFrame (absolute positioning)</li>
+                <li>• Searchable with filter input</li>
+                <li>• Multi-select with OK confirmation</li>
+                <li>• Supports descriptions and icons</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </DemoCard>
 

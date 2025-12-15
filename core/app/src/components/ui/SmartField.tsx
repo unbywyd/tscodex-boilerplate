@@ -8,10 +8,11 @@ import { OTPInput } from './OTPInput'
 import { Checkbox } from './Checkbox'
 import { Switch } from './Switch'
 import { RadioGroup } from './RadioGroup'
-import { Select } from './Select'
+import { Select, SimpleSelect } from './Select'
 import { ChipSelect } from './ChipSelect'
 import { Combobox } from './Combobox'
 import { TagInput } from './TagInput'
+import { MobilePicker } from './MobilePicker'
 
 export type FieldType =
   | 'string'
@@ -36,6 +37,9 @@ export type FieldType =
   | 'chips'  // Multi select chips (checkbox-like)
   | 'autocomplete' // Searchable dropdown
   | 'tags'  // Free-form tag input (array of strings)
+  | 'picker' // Mobile picker - single select with BottomSheet
+  | 'multi-picker' // Mobile picker - multi select with BottomSheet
+  | 'simple-select' // Simple dropdown without portal (for inline dialogs)
 
 export interface FieldConfig {
   name: string
@@ -63,6 +67,9 @@ export interface FieldConfig {
   maxTags?: number
   allowDuplicates?: boolean
   tagVariant?: 'default' | 'outline' | 'soft'
+  // Mobile picker options
+  searchable?: boolean
+  pickerTitle?: string
 }
 
 interface SmartFieldProps extends FieldConfig {
@@ -106,6 +113,8 @@ export function SmartField({
   maxTags,
   allowDuplicates = false,
   tagVariant = 'default',
+  searchable = true,
+  pickerTitle,
 }: SmartFieldProps) {
   const errorClass = error ? 'border-destructive focus-visible:ring-destructive' : ''
 
@@ -462,6 +471,57 @@ export function SmartField({
           maxTags={maxTags}
           allowDuplicates={allowDuplicates}
           variant={tagVariant}
+          className={className}
+        />
+      )
+
+    case 'picker':
+      return (
+        <MobilePicker
+          options={options || []}
+          value={value}
+          onChange={onChange}
+          multiple={false}
+          label={label}
+          placeholder={placeholder}
+          error={error}
+          required={required}
+          disabled={disabled}
+          searchable={searchable}
+          title={pickerTitle}
+          className={className}
+        />
+      )
+
+    case 'multi-picker':
+      return (
+        <MobilePicker
+          options={options || []}
+          value={value}
+          onChange={onChange}
+          multiple={true}
+          label={label}
+          placeholder={placeholder}
+          error={error}
+          required={required}
+          disabled={disabled}
+          searchable={searchable}
+          title={pickerTitle}
+          className={className}
+        />
+      )
+
+    case 'simple-select':
+      return (
+        <SimpleSelect
+          options={options || []}
+          value={value}
+          onChange={onChange}
+          label={label}
+          placeholder={placeholder}
+          error={error}
+          required={required}
+          disabled={disabled}
           className={className}
         />
       )

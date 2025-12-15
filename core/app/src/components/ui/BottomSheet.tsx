@@ -204,10 +204,12 @@ interface SimpleBottomSheetProps extends React.HTMLAttributes<HTMLDivElement> {
   onClose: () => void
   title?: string
   showClose?: boolean
+  /** Disable default padding on content wrapper */
+  noPadding?: boolean
 }
 
 const SimpleBottomSheet = React.forwardRef<HTMLDivElement, SimpleBottomSheetProps>(
-  ({ open, onClose, title, showClose = true, children, className, ...props }, ref) => {
+  ({ open, onClose, title, showClose = true, noPadding = false, children, className, ...props }, ref) => {
     if (!open) return null
 
     return (
@@ -251,7 +253,7 @@ const SimpleBottomSheet = React.forwardRef<HTMLDivElement, SimpleBottomSheetProp
           )}
 
           {/* Content */}
-          <div className="flex-1 overflow-auto p-4">
+          <div className={cn('flex-1 overflow-auto', !noPadding && 'p-4')}>
             {children}
           </div>
         </div>

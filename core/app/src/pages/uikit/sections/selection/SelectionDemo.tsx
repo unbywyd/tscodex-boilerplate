@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Bold, Italic, Underline, AlignLeft, AlignCenter, AlignRight } from 'lucide-react'
-import { Select } from '@/components/ui/Select'
+import { Select, SimpleSelect } from '@/components/ui/Select'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { RadioGroup } from '@/components/ui/RadioGroup'
 import { Switch } from '@/components/ui/Switch'
@@ -8,6 +8,7 @@ import { Toggle } from '@/components/ui/Toggle'
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/ToggleGroup'
 import { ChipSelect } from '@/components/ui/ChipSelect'
 import { Combobox } from '@/components/ui/Combobox'
+import { MobilePicker } from '@/components/ui/MobilePicker'
 import { CodeBlock } from '../../components/CodeBlock'
 import { SectionHeader } from '../../components/SectionHeader'
 import { DemoCard } from '../../components/DemoCard'
@@ -24,10 +25,19 @@ const countries = [
 
 const frameworks = ['React', 'Vue', 'Angular', 'Svelte', 'Solid']
 
+const pickerOptions = [
+  { value: 'apple', label: 'Apple', description: 'Fresh red apples' },
+  { value: 'banana', label: 'Banana', description: 'Yellow bananas' },
+  { value: 'orange', label: 'Orange', description: 'Juicy oranges' },
+  { value: 'grape', label: 'Grape', description: 'Sweet grapes' },
+  { value: 'mango', label: 'Mango', description: 'Tropical mangoes' },
+]
+
 export function SelectionDemo() {
   useScrollToSection()
 
   const [selectValue, setSelectValue] = useState('')
+  const [simpleSelectValue, setSimpleSelectValue] = useState('')
   const [checkboxValue, setCheckboxValue] = useState(false)
   const [radioValue, setRadioValue] = useState('')
   const [switchValue, setSwitchValue] = useState(false)
@@ -36,6 +46,8 @@ export function SelectionDemo() {
   const [chipSingle, setChipSingle] = useState('')
   const [chipMultiple, setChipMultiple] = useState<string[]>([])
   const [comboValue, setComboValue] = useState('')
+  const [pickerValue, setPickerValue] = useState('')
+  const [multiPickerValue, setMultiPickerValue] = useState<string[]>([])
 
   return (
     <div className="space-y-8">
@@ -110,6 +122,103 @@ export function SelectionDemo() {
           </div>
           <div className="text-xs text-muted-foreground">
             Value: <code className="bg-muted px-1 rounded">{comboValue || '(empty)'}</code>
+          </div>
+        </div>
+      </DemoCard>
+
+      {/* SimpleSelect */}
+      <DemoCard id="simple-select" title="SimpleSelect - No Portal Dropdown">
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Simple dropdown without Portal. Use in inline dialogs, MobileFrame, or modals where Portal positioning breaks.
+          </p>
+          <CodeBlock
+            code={`<SimpleSelect
+  label="Country"
+  value={value}
+  onChange={setValue}
+  options={[
+    { value: 'us', label: 'United States' },
+    { value: 'uk', label: 'United Kingdom' },
+  ]}
+  placeholder="Select country..."
+/>`}
+            id="simpleselect"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <SimpleSelect
+              label="With Objects"
+              value={simpleSelectValue}
+              onChange={setSimpleSelectValue}
+              options={countries}
+              placeholder="Select country..."
+            />
+            <SimpleSelect
+              label="With Strings"
+              options={frameworks}
+              placeholder="Select framework..."
+            />
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Value: <code className="bg-muted px-1 rounded">{simpleSelectValue || '(empty)'}</code>
+          </div>
+        </div>
+      </DemoCard>
+
+      {/* MobilePicker */}
+      <DemoCard id="mobile-picker" title="MobilePicker - BottomSheet Selection">
+        <div className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Mobile-friendly picker that opens a BottomSheet. Supports search, single/multi-select modes.
+          </p>
+          <CodeBlock
+            code={`// Single selection
+<MobilePicker
+  label="Fruit"
+  value={value}
+  onChange={setValue}
+  options={[
+    { value: 'apple', label: 'Apple', description: 'Fresh apples' },
+    { value: 'banana', label: 'Banana' },
+  ]}
+  searchable
+  title="Select Fruit"
+/>
+
+// Multi-selection
+<MobilePicker
+  label="Fruits"
+  multiple
+  value={values}
+  onChange={setValues}
+  options={['Apple', 'Banana', 'Orange']}
+/>`}
+            id="mobilepicker"
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
+            <MobilePicker
+              label="Single Selection"
+              value={pickerValue}
+              onChange={setPickerValue}
+              options={pickerOptions}
+              placeholder="Select fruit..."
+              title="Choose a Fruit"
+              searchable
+            />
+            <MobilePicker
+              label="Multi Selection"
+              multiple
+              value={multiPickerValue}
+              onChange={setMultiPickerValue}
+              options={frameworks}
+              placeholder="Select frameworks..."
+              title="Choose Frameworks"
+              searchable
+            />
+          </div>
+          <div className="text-xs text-muted-foreground">
+            Single: <code className="bg-muted px-1 rounded">{pickerValue || '(empty)'}</code> |
+            Multi: <code className="bg-muted px-1 rounded">[{multiPickerValue.join(', ')}]</code>
           </div>
         </div>
       </DemoCard>
@@ -366,9 +475,19 @@ export function SelectionDemo() {
                 <td className="py-2">string</td>
               </tr>
               <tr className="border-b">
+                <td className="py-2 pr-4">SimpleSelect</td>
+                <td className="py-2 pr-4">options, placeholder, label, error (no Portal)</td>
+                <td className="py-2">string</td>
+              </tr>
+              <tr className="border-b">
                 <td className="py-2 pr-4">Combobox</td>
                 <td className="py-2 pr-4">options, searchPlaceholder, emptyText</td>
                 <td className="py-2">string</td>
+              </tr>
+              <tr className="border-b">
+                <td className="py-2 pr-4">MobilePicker</td>
+                <td className="py-2 pr-4">options, multiple, searchable, title</td>
+                <td className="py-2">string | string[]</td>
               </tr>
               <tr className="border-b">
                 <td className="py-2 pr-4">Checkbox</td>

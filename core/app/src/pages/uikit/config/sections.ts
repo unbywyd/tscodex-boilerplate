@@ -60,6 +60,7 @@ export const sections: Section[] = [
     icon: ListChecks,
     subsections: [
       { id: 'select', title: 'Select / Dropdown', path: '/ui-kit/selection/select' },
+      { id: 'simple-select', title: 'SimpleSelect (No Portal)', path: '/ui-kit/selection/simple-select' },
       { id: 'autocomplete', title: 'Autocomplete', path: '/ui-kit/selection/autocomplete' },
       { id: 'checkbox', title: 'Checkbox', path: '/ui-kit/selection/checkbox' },
       { id: 'radio', title: 'Radio Group', path: '/ui-kit/selection/radio' },
@@ -214,6 +215,7 @@ export const sections: Section[] = [
       { id: 'search-bar', title: 'Search Bar', path: '/ui-kit/mobile/search-bar' },
       { id: 'filter-chips', title: 'Filter Chips', path: '/ui-kit/mobile/filter-chips' },
       { id: 'bottom-sheet', title: 'Bottom Sheet', path: '/ui-kit/mobile/bottom-sheet' },
+      { id: 'mobile-picker', title: 'MobilePicker', path: '/ui-kit/mobile/mobile-picker' },
       // Feedback
       { id: 'success-animation', title: 'Success Animation', path: '/ui-kit/mobile/success-animation' },
       { id: 'product-gallery', title: 'Product Gallery', path: '/ui-kit/mobile/product-gallery' },
