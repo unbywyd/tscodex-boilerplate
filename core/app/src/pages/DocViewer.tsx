@@ -70,7 +70,10 @@ export default function DocViewer() {
         // If path doesn't start with known folders, it's likely from /docs/ route
         // and refers to files in src/spec/docs/ folder
         // But don't add prefix if it already starts with docs/ or layers/
-        if (!filePath.startsWith('layers/') && !filePath.startsWith('docs/') && filePath !== 'status' && !filePath.startsWith('status/')) {
+        // Also exclude root-level files like status.toml, interview.toml
+        const rootFiles = ['status', 'interview'];
+        const isRootFile = rootFiles.includes(filePath) || rootFiles.some(f => filePath.startsWith(f + '/'));
+        if (!filePath.startsWith('layers/') && !filePath.startsWith('docs/') && !isRootFile) {
           filePath = `docs/${filePath}`;
         }
 
