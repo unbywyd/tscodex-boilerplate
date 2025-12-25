@@ -1,8 +1,7 @@
 import { useEffect, lazy, Suspense } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Link } from 'react-router-dom';
 import Layout from './components/Layout';
-import EventToast from './components/EventToast';
-import { DocProvider } from './components/documented';
+import { AppProvider } from './components/AppProvider';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { loadEvents } from './lib/docs-loader';
 import { registerEvents } from './lib/events';
@@ -72,22 +71,20 @@ function AppContent() {
   // Prototype routes - no Layout, just minimal back button
   if (isPrototype) {
     return (
-      <DocProvider>
-        <EventToast />
+      <AppProvider>
         <PrototypeBackButton />
         <Suspense fallback={<PageLoader />}>
           <Routes>
             <Route path="/prototype/*" element={<PrototypePage />} />
           </Routes>
         </Suspense>
-      </DocProvider>
+      </AppProvider>
     );
   }
 
   // Regular routes with full Layout
   return (
-    <DocProvider>
-      <EventToast />
+    <AppProvider>
       <Layout>
         <Suspense fallback={<PageLoader />}>
           <Routes>
@@ -104,7 +101,7 @@ function AppContent() {
           </Routes>
         </Suspense>
       </Layout>
-    </DocProvider>
+    </AppProvider>
   );
 }
 

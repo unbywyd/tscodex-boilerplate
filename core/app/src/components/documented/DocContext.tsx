@@ -114,9 +114,11 @@ function extractMeta(content: any, type: 'toml' | 'markdown'): { title?: string;
 
 interface DocProviderProps {
   children: ReactNode
+  /** Globally enable/disable doc link buttons (?) on components */
+  showDocLinks?: boolean
 }
 
-export function DocProvider({ children }: DocProviderProps) {
+export function DocProvider({ children, showDocLinks = true }: DocProviderProps) {
   const [docs, setDocs] = useState<Map<string, DocMeta>>(new Map())
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<Error | null>(null)
@@ -226,6 +228,8 @@ export function DocProvider({ children }: DocProviderProps) {
   }
 
   const hasDoc = (layer: string, id: string): boolean => {
+    // Globally disable doc links if showDocLinks is false
+    if (!showDocLinks) return false
     // During loading or on error, show "?" as fallback
     if (loading || error) return true
     return docs.has(`layers/${layer}/${id}`)
