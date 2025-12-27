@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import { HelpCircle, ExternalLink, Copy, Check } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { useDocRegistry } from './DocContext'
@@ -30,19 +31,77 @@ function getDataAttribute(layer: string): 'data-screen' | 'data-component' {
 }
 
 // ============================================
-// DocLinkPopover (for components - relative position)
+// DocLinkPopover (fixed position with JS coordinates)
 // ============================================
 
 interface DocLinkPopoverProps {
   docPath: string
   title?: string
   description?: string
+  /** Reference to the parent element for positioning */
+  parentRef: React.RefObject<HTMLElement | null>
 }
 
-function DocLinkPopover({ docPath, title, description }: DocLinkPopoverProps) {
+function DocLinkPopover({ docPath, title, description, parentRef }: DocLinkPopoverProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isVisible, setIsVisible] = useState(false)
+  const [position, setPosition] = useState({ top: 0, right: 0 })
   const [copied, setCopied] = useState(false)
   const popoverRef = useRef<HTMLDivElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  // Update position based on parent element
+  const updatePosition = useCallback(() => {
+    if (!parentRef.current) return
+    const rect = parentRef.current.getBoundingClientRect()
+    setPosition({
+      top: rect.top + 4, // 4px from top
+      right: window.innerWidth - rect.right + 4, // 4px from right
+    })
+  }, [parentRef])
+
+  // Handle hover state from parent
+  useEffect(() => {
+    const parent = parentRef.current
+    if (!parent) return
+
+    const handleMouseEnter = () => {
+      updatePosition()
+      setIsVisible(true)
+    }
+    const handleMouseLeave = (e: MouseEvent) => {
+      // Don't hide if mouse is over the popover
+      const relatedTarget = e.relatedTarget as Node | null
+      if (popoverRef.current?.contains(relatedTarget) || buttonRef.current?.contains(relatedTarget)) {
+        return
+      }
+      if (!isOpen) {
+        setIsVisible(false)
+      }
+    }
+
+    parent.addEventListener('mouseenter', handleMouseEnter)
+    parent.addEventListener('mouseleave', handleMouseLeave)
+
+    return () => {
+      parent.removeEventListener('mouseenter', handleMouseEnter)
+      parent.removeEventListener('mouseleave', handleMouseLeave)
+    }
+  }, [parentRef, updatePosition, isOpen])
+
+  // Update position on scroll/resize
+  useEffect(() => {
+    if (!isVisible && !isOpen) return
+
+    const handleUpdate = () => updatePosition()
+    window.addEventListener('scroll', handleUpdate, true)
+    window.addEventListener('resize', handleUpdate)
+
+    return () => {
+      window.removeEventListener('scroll', handleUpdate, true)
+      window.removeEventListener('resize', handleUpdate)
+    }
+  }, [isVisible, isOpen, updatePosition])
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.stopPropagation()
@@ -51,26 +110,43 @@ function DocLinkPopover({ docPath, title, description }: DocLinkPopoverProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  // Close popover on outside click
   useEffect(() => {
     if (!isOpen) return
     const handleClickOutside = (e: MouseEvent) => {
       if (popoverRef.current && !popoverRef.current.contains(e.target as Node)) {
         setIsOpen(false)
+        setIsVisible(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [isOpen])
 
-  return (
-    <div ref={popoverRef} className="absolute top-1 right-1 z-50">
+  // Handle mouse leave from popover
+  const handlePopoverMouseLeave = () => {
+    if (!isOpen) {
+      setIsVisible(false)
+    }
+  }
+
+  if (!isVisible && !isOpen) return null
+
+  return createPortal(
+    <div
+      ref={popoverRef}
+      className="fixed z-[9999]"
+      style={{ top: position.top, right: position.right }}
+      onMouseLeave={handlePopoverMouseLeave}
+    >
       <button
+        ref={buttonRef}
         onClick={(e) => {
           e.stopPropagation()
           setIsOpen(!isOpen)
         }}
         className="p-1 rounded-full bg-black text-white border-2 border-white shadow-md
-          hover:bg-black/80 transition-all opacity-0 group-hover:opacity-100 focus:opacity-100"
+          hover:bg-black/80 transition-all"
         title={title || 'View documentation'}
       >
         <HelpCircle className="h-4 w-4" />
@@ -114,7 +190,10 @@ function DocLinkPopover({ docPath, title, description }: DocLinkPopoverProps) {
               to={docPath}
               className="flex-1 flex items-center justify-center gap-1.5 text-xs px-3 py-1.5
                 rounded bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false)
+                setIsVisible(false)
+              }}
             >
               <ExternalLink className="h-3 w-3" />
               Open documentation
@@ -122,7 +201,8 @@ function DocLinkPopover({ docPath, title, description }: DocLinkPopoverProps) {
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   )
 }
 
@@ -259,10 +339,8 @@ interface DocPropsBase {
 interface DocPropsWrapper extends DocPropsBase {
   /** When false or undefined, Doc wraps children */
   floating?: false
-  /** Content to wrap */
-  children: React.ReactNode
-  /** Additional className for wrapper */
-  className?: string
+  /** Content to wrap - must be a single React element */
+  children: React.ReactElement
   position?: never
 }
 
@@ -272,7 +350,6 @@ interface DocPropsFloating extends DocPropsBase {
   /** Position of the button within parent */
   position?: Position
   children?: never
-  className?: never
 }
 
 type DocProps = DocPropsWrapper | DocPropsFloating
@@ -280,7 +357,10 @@ type DocProps = DocPropsWrapper | DocPropsFloating
 /**
  * Universal documentation link component.
  *
- * **Wrapper mode** (default): wraps children with doc link on hover
+ * Renders as Fragment - no wrapper div! Adds data-attributes to child element
+ * and shows doc button on hover via portal.
+ *
+ * **Wrapper mode** (default): clones child with data-attributes, shows doc button on hover
  * @example
  * <Doc of="components.user-card" entityId={user.id}>
  *   <Card>...</Card>
@@ -293,6 +373,7 @@ type DocProps = DocPropsWrapper | DocPropsFloating
 export function Doc(props: DocProps) {
   const { hasDoc, getDoc } = useDocRegistry()
   const parsed = parseDocString(props.of)
+  const elementRef = useRef<HTMLElement>(null)
 
   if (!parsed) {
     return props.floating ? null : <>{props.children}</>
@@ -315,7 +396,7 @@ export function Doc(props: DocProps) {
     )
   }
 
-  // Wrapper mode - wrap children
+  // Wrapper mode - clone child with data-attributes, no wrapper div
   const dataAttr = getDataAttribute(parsed.layer)
 
   const dataProps: Record<string, string | number | undefined> = {
@@ -326,16 +407,24 @@ export function Doc(props: DocProps) {
     dataProps['data-entity-id'] = props.entityId
   }
 
+  // Clone the child element with ref and data attributes
+  const child = props.children
+  const clonedChild = React.cloneElement(child as React.ReactElement<{ ref?: React.Ref<HTMLElement> }>, {
+    ...dataProps,
+    ref: elementRef,
+  })
+
   return (
-    <div {...dataProps} className={`group relative ${props.className || ''}`}>
+    <>
+      {clonedChild}
       {showDocLink && (
         <DocLinkPopover
           docPath={docPath}
           title={docMeta?.title}
           description={docMeta?.description}
+          parentRef={elementRef}
         />
       )}
-      {props.children}
-    </div>
+    </>
   )
 }

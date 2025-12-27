@@ -2,12 +2,31 @@
 // This is the main page for /prototype/* routes
 // Build your prototype here - the entire routing is yours to control
 
-import { Link } from 'react-router-dom'
-import { ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette } from 'lucide-react'
+import { Routes, Route, Link } from 'react-router-dom'
+import { ArrowRight, Code, Zap, Database, FileCode, Layers, Sparkles, BookOpen, Palette, Smartphone } from 'lucide-react'
 import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Button } from '@/components/ui'
+import MobileTestPage from './MobileTest'
 
-export default function PrototypePage() {
+// Main prototype router
+export default function PrototypeRouter() {
+  return (
+    <Routes>
+      <Route path="/" element={<PrototypeHome />} />
+      <Route path="/mobile-test" element={<MobileTestPage />} />
+    </Routes>
+  )
+}
+
+// Home page
+function PrototypeHome() {
   const pages = [
+    {
+      path: '/prototype/mobile-test',
+      icon: Smartphone,
+      title: 'Mobile Test',
+      description: 'Test overlays inside MobileFrame',
+      badge: 'Dev',
+    },
     {
       path: '/ui-kit',
       icon: Palette,

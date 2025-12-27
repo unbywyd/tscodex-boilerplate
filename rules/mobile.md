@@ -1215,3 +1215,54 @@ Instead of success toasts, use:
 - **Inline message** — "Changes saved" text near the action
 - **Animation** — brief success animation (SuccessAnimation component)
 - **Badge update** — cart count increases, notification dot appears
+
+---
+
+## Reference: Mobile Test Page
+
+For a working example of mobile components inside `MobileFrame`, see:
+
+**`src/prototype/pages/MobileTest.tsx`**
+
+This file demonstrates:
+- `MobileFrame` with iPhone device frame
+- `TopBar` with `DropdownMenu` in rightAction
+- `Dialog` with `inline` prop for proper containment
+- `Sheet` with `inline` prop and `side="bottom"`
+- `Drawer` with `inline` prop (Vaul library)
+- `SimpleBottomSheet` and `BottomSheet` (custom components)
+- `AppProvider` usage for disabling doc links and event toasts
+
+**Key pattern for overlays inside MobileFrame:**
+
+```tsx
+// Always use inline prop for Radix-based components inside MobileFrame
+<Dialog>
+  <DialogTrigger asChild>
+    <Button>Open</Button>
+  </DialogTrigger>
+  <DialogContent inline>  {/* ← inline prevents portal to body */}
+    ...
+  </DialogContent>
+</Dialog>
+
+<Sheet>
+  <SheetTrigger asChild>
+    <Button>Open</Button>
+  </SheetTrigger>
+  <SheetContent side="bottom" inline>  {/* ← inline for MobileFrame */}
+    ...
+  </SheetContent>
+</Sheet>
+
+<Drawer>
+  <DrawerTrigger asChild>
+    <Button>Open</Button>
+  </DrawerTrigger>
+  <DrawerContent inline>  {/* ← inline for MobileFrame */}
+    ...
+  </DrawerContent>
+</Drawer>
+```
+
+Run `/prototype/mobile-test` to see these components in action.
