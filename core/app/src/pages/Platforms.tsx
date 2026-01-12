@@ -5,6 +5,12 @@ import { cn } from '@/lib/utils'
 import { Container, Card, CardContent, CardHeader, CardTitle, Skeleton, Badge } from '@/components/ui'
 import MarkdownRenderer from '@/components/renderers/MarkdownRenderer'
 
+// Use API in dev, static files in prod
+const isDev = import.meta.env.DEV
+const getPlatformsUrl = () => isDev ? '/api/platforms' : '/generated/platforms/index.json'
+const getPlatformUrl = (id: string) => isDev ? `/api/platforms/${id}` : `/generated/platforms/${id}/index.json`
+const getPlatformDocUrl = (platformId: string, docId: string) => isDev ? `/api/platforms/${platformId}/${docId}` : `/generated/platforms/${platformId}/${docId}.json`
+
 interface PlatformDoc {
   id: string
   title: string
@@ -139,7 +145,7 @@ function DocContent({
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/api/platforms/${platform.id}/${docId}`)
+    fetch(getPlatformDocUrl(platform.id, docId))
       .then(res => res.json())
       .then(data => {
         setDoc(data)
@@ -188,7 +194,7 @@ function PlatformViewer({ platformId }: { platformId: string }) {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/api/platforms/${platformId}`)
+    fetch(getPlatformUrl(platformId))
       .then(res => res.json())
       .then(data => {
         setPlatform(data)
@@ -272,7 +278,7 @@ export default function PlatformsPage() {
 
   useEffect(() => {
     if (!platformId) {
-      fetch('/api/platforms')
+      fetch(getPlatformsUrl())
         .then(res => res.json())
         .then(data => {
           setPlatforms(data.platforms || [])
