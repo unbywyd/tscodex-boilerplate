@@ -148,7 +148,7 @@ export default function ChallengePage() {
   }, [])
 
   // Get project info from manifest or use defaults
-  const projectName = manifest?.project?.name || 'LLM Boilerplate'
+  const projectName = manifest?.project?.name || 'tscodex-boilerplate-simple'
   const projectDescription = manifest?.project?.description || 'File-driven specification system for LLM-assisted development'
 
   return (
@@ -179,7 +179,7 @@ export default function ChallengePage() {
             </div>
 
             <div className="relative px-4 overflow-visible">
-              {/* Timeline line - градиентная */}
+              {/* Timeline line - gradient */}
               <div className="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-primary/30 to-transparent md:-translate-x-1/2" />
 
               <div className="space-y-6 sm:space-y-8">
@@ -191,8 +191,8 @@ export default function ChallengePage() {
                     gradient: 'from-purple-400 to-purple-600'
                   },
                   {
-                    name: 'LLM reads src/spec/status.toml',
-                    description: 'LLM checks the current project state. If currentPhase = "assessment" and all phases are pending — this is a new project.',
+                    name: 'LLM reads platform status.toml',
+                    description: 'For each platform, LLM reads src/spec/platforms/{id}/status.toml to check current phase, checklist items, and required artifacts to create.',
                     icon: Settings,
                     gradient: 'from-blue-400 to-blue-600'
                   },
@@ -203,14 +203,14 @@ export default function ChallengePage() {
                     gradient: 'from-pink-400 to-pink-600'
                   },
                   {
-                    name: 'LLM selects profile and updates status.toml',
-                    description: 'Based on answers, LLM selects profile and updates status.toml, setting currentPhase = "discovery".',
+                    name: 'LLM selects profile and updates status',
+                    description: 'Based on answers, LLM selects profile and updates platform status.toml. Then CREATES required artifacts and marks them as done.',
                     icon: PlayCircle,
                     gradient: 'from-green-400 to-green-600'
                   },
                   {
                     name: 'LLM goes through phases',
-                    description: 'For each phase, LLM reads phase description, asks questions at appropriate depth, creates TOML files in src/spec/layers/, and updates status.toml after completion.',
+                    description: 'For each phase: 1) Ask questions, 2) CREATE artifact files listed in status.toml, 3) Mark artifacts as done, 4) Update checklist and move to next phase.',
                     icon: Layers,
                     gradient: 'from-orange-400 to-orange-600'
                   },
@@ -230,7 +230,7 @@ export default function ChallengePage() {
                         index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                       }`}
                     >
-                      {/* Timeline dot - градиентный */}
+                      {/* Timeline dot - gradient */}
                       <div className={`absolute left-4 md:left-1/2 w-4 h-4 rounded-full bg-gradient-to-br ${step.gradient} border-2 border-white dark:border-slate-900 md:-translate-x-1/2 z-10 shrink-0 mt-1 md:mt-0`} style={{ boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }} />
 
                       {/* Content */}
@@ -308,25 +308,26 @@ export default function ChallengePage() {
                   <div className="rounded-lg bg-gradient-to-br from-green-400 to-green-600 p-2.5">
                     <Settings className="h-5 w-5 text-white" />
                   </div>
-                  <CardTitle>src/spec/status.toml</CardTitle>
+                  <CardTitle>platforms/{'{id}'}/status.toml</CardTitle>
                 </div>
               </CardHeader>
               <CardContent className="space-y-3">
                 <p className="text-sm text-muted-foreground">
-                  <strong>Purpose:</strong> Current project state
+                  <strong>Purpose:</strong> Per-platform interview progress
                 </p>
                 <div className="space-y-2">
                   <p className="text-xs font-medium text-muted-foreground">Contains:</p>
                   <ul className="space-y-1 text-xs text-muted-foreground ml-4">
                     <li>• Selected profile (simple/medium/complex)</li>
                     <li>• Current phase (currentPhase)</li>
-                    <li>• Status of each phase (pending/completed)</li>
+                    <li>• Status of each phase (pending/in_progress/completed)</li>
                     <li>• Checklists for each phase</li>
+                    <li>• <strong>Artifacts to create</strong> (files LLM must generate)</li>
                   </ul>
                 </div>
                 <div className="pt-2 border-t border-white/20">
                   <p className="text-xs text-muted-foreground">
-                    <strong>When read:</strong> LLM reads it first to understand where the project is
+                    <strong>Path:</strong> src/spec/platforms/{'{platform-id}'}/status.toml
                   </p>
                 </div>
               </CardContent>

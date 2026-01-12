@@ -1,0 +1,16 @@
+# Web Application Platform
+# Default platform template - customize for your project
+
+[platform]
+id = "web-app"
+name = "Web Application"
+type = "web"  # web | mobile | api | desktop
+description = ""
+
+[platform.config]
+baseRoute = "/"
+theme = "default"
+
+[relations]
+roles = []
+guards = []

@@ -1,0 +1,190 @@
+# Platform Status: Web Application
+# ================================================
+# LLM: READ THIS FILE FIRST for this platform!
+#
+# This file tracks:
+# 1. Interview progress (phases, checklist)
+# 2. Required artifacts (files to create)
+# 3. Completion status
+#
+# WORKFLOW: For each phase:
+# 1. Ask questions from interview.toml
+# 2. CREATE the required artifacts (TOML/MD files)
+# 3. Update checklist items to true
+# 4. Move to next phase
+#
+# See: rules/challenge.md for full workflow
+# ================================================
+
+[status]
+id = "web-app-status"
+name = "Web Application Status"
+profile = "medium"  # simple | medium | complex
+currentPhase = "assessment"
+lastUpdated = ""
+
+# ================================================
+# Phase 0: Assessment
+# ================================================
+[phases.assessment]
+status = "pending"  # pending | in_progress | completed
+description = "Determine project scope and profile"
+
+[phases.assessment.checklist]
+projectNameDefined = false
+typeIdentified = false
+rolesCount = false
+dataComplexity = false
+profileSelected = false
+
+# No artifacts needed for assessment - just questions
+
+# ================================================
+# Phase 1: Discovery
+# ================================================
+[phases.discovery]
+status = "pending"
+description = "Understanding the project"
+
+[phases.discovery.checklist]
+projectDefined = false
+targetAudience = false
+coreValue = false
+keyFeatures = false
+competitorsReviewed = false
+scopeDefined = false
+
+# Artifacts to create in this phase:
+[phases.discovery.artifacts]
+"layers/project/about.toml" = false  # Project definition
+
+# ================================================
+# Phase 2: Design (optional for simple)
+# ================================================
+[phases.design]
+status = "pending"
+skip = false
+description = "Visual and UX requirements"
+
+[phases.design.checklist]
+designApproach = false
+colorScheme = false
+responsiveStrategy = false
+localization = false
+
+[phases.design.artifacts]
+"layers/project/design.toml" = false
+
+# ================================================
+# Phase 3: Access Control (skip if single role)
+# ================================================
+[phases.access]
+status = "pending"
+skip = false
+description = "User roles and permissions"
+
+[phases.access.checklist]
+authModelDefined = false
+rolesIdentified = false
+permissionsDefined = false
+guardsCreated = false
+
+# LLM: Create one file per role/guard identified!
+[phases.access.artifacts]
+# Example - update based on interview answers:
+# "layers/roles/admin.toml" = false
+# "layers/roles/user.toml" = false
+# "layers/guards/authenticated.toml" = false
+# "layers/guards/admin-only.toml" = false
+
+# ================================================
+# Phase 4: Data Model
+# ================================================
+[phases.data]
+status = "pending"
+description = "Entities and relationships"
+
+[phases.data.checklist]
+entitiesListed = false
+fieldsDefined = false
+relationsMapped = false
+
+# LLM: Create one file per entity identified!
+[phases.data.artifacts]
+# Example - update based on interview answers:
+# "layers/entities/user.toml" = false
+# "layers/entities/product.toml" = false
+# "layers/entities/order.toml" = false
+
+# ================================================
+# Phase 5: Features & Use Cases
+# ================================================
+[phases.features]
+status = "pending"
+description = "Use cases and user flows"
+
+[phases.features.checklist]
+useCasesDefined = false
+flowsDiagrammed = false
+
+# LLM: Create one file per use case!
+[phases.features.artifacts]
+# Example:
+# "layers/use-cases/login.toml" = false
+# "layers/use-cases/register.toml" = false
+# "layers/use-cases/checkout.toml" = false
+
+# ================================================
+# Phase 6: Modules (complex only)
+# ================================================
+[phases.modules]
+status = "pending"
+skip = true  # Set to false for complex profile
+description = "Domain decomposition"
+
+[phases.modules.checklist]
+domainsIdentified = false
+modulesDefined = false
+interfacesSet = false
+
+[phases.modules.artifacts]
+# Example for complex projects:
+# "layers/modules/auth.toml" = false
+# "layers/modules/catalog.toml" = false
+# "layers/modules/orders.toml" = false
+
+# ================================================
+# Phase 7: Schema
+# ================================================
+[phases.schema]
+status = "pending"
+skip = false  # Only skip for simple profile
+description = "Database schema generation"
+
+[phases.schema.checklist]
+prismaGenerated = false
+relationsValid = false
+indexesAdded = false
+
+[phases.schema.artifacts]
+"prisma/schema.prisma" = false  # Main Prisma schema
+
+# ================================================
+# Phase 8: Documentation
+# ================================================
+[phases.documentation]
+status = "pending"
+description = "Platform documentation in markdown"
+
+[phases.documentation.checklist]
+overviewWritten = false
+featuresDocumented = false
+userFlowsDocumented = false
+apiDocumented = false
+
+# LLM: Create docs in platform's docs/ folder
+[phases.documentation.artifacts]
+"platforms/web-app/docs/01-overview.md" = false
+"platforms/web-app/docs/02-features.md" = false
+"platforms/web-app/docs/03-user-flows.md" = false
+# Add more based on project needs

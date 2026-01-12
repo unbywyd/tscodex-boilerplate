@@ -1,9 +1,8 @@
 import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Box, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Palette } from 'lucide-react'
+import { FileText, Sparkles, Database, Menu, X, Info, GitBranch, Rocket, ClipboardList, Monitor, Smartphone } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Container } from './ui'
-import { customNavLinks } from '@prototype/config/nav'
 
 interface LayoutProps {
   children: React.ReactNode
@@ -19,11 +18,10 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   // Project links (PRIMARY - left side, prominent)
-  // Custom links from prototype config come first
   const mainNavLinks = [
-    ...customNavLinks,
-    { path: '/prototype', label: 'Prototype', icon: Box },
     { path: '/interview', label: 'Interview', icon: ClipboardList },
+    { path: '/platforms', label: 'Platforms', icon: Monitor },
+    { path: '/prototype', label: 'Prototype', icon: Smartphone },
     { path: '/docs', label: 'Docs', icon: FileText },
     { path: '/schema', label: 'Schema', icon: Database },
   ]
@@ -34,7 +32,6 @@ export default function Layout({ children }: LayoutProps) {
     { path: '/about', label: 'About', icon: Info },
     { path: '/challenge', label: 'Challenge', icon: GitBranch },
     { path: '/get-started', label: 'Get Started', icon: Rocket },
-    { path: '/ui-kit', label: 'UIKit', icon: Palette },
   ]
 
   return (
@@ -47,7 +44,7 @@ export default function Layout({ children }: LayoutProps) {
               <Link to="/" className="flex items-center space-x-2 group py-2">
                 <Sparkles className="h-5 w-5 text-primary transition-transform group-hover:scale-110" />
                 <span className="font-bold text-xl bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                  LLM Boilerplate
+                  tscodex-boilerplate
                 </span>
               </Link>
 
@@ -211,16 +208,16 @@ export default function Layout({ children }: LayoutProps) {
       </header>
 
       {/* Main content */}
-      <main className="flex-1">
+      <main className="flex-1 pb-12">
         {children}
       </main>
 
       {/* Footer */}
-      <footer className="border-t mt-auto">
+      <footer className="border-t">
         <Container>
           <div className="flex flex-col items-center justify-between gap-4 py-6 md:h-16 md:flex-row">
             <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
-              LLM Boilerplate - File-driven specification for LLM-assisted development
+              tscodex-boilerplate - File-driven specification for LLM-assisted development
             </p>
             <div className="flex flex-col items-center gap-2 md:flex-row md:items-center md:gap-4">
               <p className="text-center text-xs text-muted-foreground md:text-right">

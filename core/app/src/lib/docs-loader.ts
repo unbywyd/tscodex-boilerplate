@@ -287,11 +287,11 @@ export interface InterviewPhase {
 
 export interface InterviewStatus {
   status: {
-    id: string
-    name: string
+    id?: string
+    name?: string
     profile: 'simple' | 'medium' | 'complex'
     currentPhase: string
-    multiPlatform: boolean
+    multiPlatform?: boolean
     lastUpdated: string
   }
   phases: Record<string, InterviewPhase>
@@ -299,9 +299,10 @@ export interface InterviewStatus {
 
 export interface InterviewAnswers {
   meta: {
-    projectName: string
+    platformId?: string
+    projectName?: string
     startedAt: string
-    completedAt: string
+    completedAt?: string
   }
   assessment: Record<string, any>
   discovery: Record<string, any>
@@ -313,6 +314,7 @@ export interface InterviewAnswers {
 }
 
 export interface InterviewData {
+  platformId: string
   status: InterviewStatus | null
   interview: InterviewAnswers | null
   metadata: {
@@ -322,18 +324,46 @@ export interface InterviewData {
   }
 }
 
-// Load interview data (status + answers)
-export async function loadInterview(): Promise<InterviewData> {
+// Interview index (list of all platforms)
+export interface InterviewIndex {
+  platforms: Array<{
+    platformId: string
+    currentPhase: string
+    profile: string
+    lastUpdated: string | null
+  }>
+  generated: string
+}
+
+// Load interviews index (list of all platforms with interview status)
+export async function loadInterviewsIndex(): Promise<InterviewIndex> {
   if (isDev) {
-    const response = await fetch('/api/interview')
+    const response = await fetch('/api/interviews')
     if (!response.ok) {
-      throw new Error('Failed to load interview data')
+      throw new Error('Failed to load interviews index')
     }
     return response.json()
   } else {
-    const response = await fetch('/generated/interview.json')
+    const response = await fetch('/generated/interviews/index.json')
     if (!response.ok) {
-      throw new Error('Failed to load interview data')
+      throw new Error('Failed to load interviews index')
+    }
+    return response.json()
+  }
+}
+
+// Load interview data for a specific platform
+export async function loadInterview(platformId: string): Promise<InterviewData> {
+  if (isDev) {
+    const response = await fetch(`/api/interviews/${platformId}`)
+    if (!response.ok) {
+      throw new Error(`Failed to load interview data for platform: ${platformId}`)
+    }
+    return response.json()
+  } else {
+    const response = await fetch(`/generated/interviews/${platformId}.json`)
+    if (!response.ok) {
+      throw new Error(`Failed to load interview data for platform: ${platformId}`)
     }
     return response.json()
   }

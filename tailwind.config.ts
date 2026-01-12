@@ -6,6 +6,7 @@ const config: Config = {
     './core/app/index.html',
     './core/app/src/**/*.{js,ts,jsx,tsx}',
     './src/prototype/**/*.{js,ts,jsx,tsx}',
+    './node_modules/protomobilekit/dist/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
     extend: {

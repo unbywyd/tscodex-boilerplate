@@ -13,8 +13,8 @@ import { useState } from 'react'
 
 export default function GetStartedPage() {
   const [copied, setCopied] = useState(false)
-  const repoUrl = 'https://github.com/unbywyd/tscodex-boilerplate'
-  const cloneCommand = 'git clone https://github.com/unbywyd/tscodex-boilerplate.git'
+  const repoUrl = 'https://github.com/AiRchitects/tscodex-boilerplate-simple'
+  const cloneCommand = 'git clone https://github.com/AiRchitects/tscodex-boilerplate-simple.git'
 
   const handleCopy = () => {
     navigator.clipboard.writeText(cloneCommand)
@@ -35,7 +35,7 @@ export default function GetStartedPage() {
             </h1>
           </div>
           <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Start building your project with LLM Boilerplate in minutes
+            Start building your project with tscodex-boilerplate in minutes
           </p>
         </section>
 

@@ -1,0 +1,131 @@
+# Interview Answers: Web Application
+# ================================================
+# LLM Instructions:
+# 1. Read status.toml → get currentPhase
+# 2. Find that phase section here
+# 3. Ask questions where value = "" or [] (empty)
+# 4. Write user's answers immediately
+# 5. When phase complete → update status.toml
+#
+# Format: use arrays [] for lists, "" for text/enum
+# See: rules/challenge.md for conditional questions
+# ================================================
+
+[meta]
+platformId = "web-app"
+platformName = "Web Application"
+startedAt = ""
+completedAt = ""
+
+# Language Settings (ask FIRST before any other questions)
+chatLanguage = ""         # en | ru | es | de | fr | ... - language for LLM communication
+docsLanguage = ""         # en | ru | es | de | fr | ... - language for generated documentation
+
+# ─────────────────────────────────────────────────
+# Phase 0: Assessment
+# ─────────────────────────────────────────────────
+[assessment]
+projectName = ""          # Name of the project
+projectType = ""          # web-app | mobile | api | landing
+projectStage = ""         # idea | redesign | existing-mvp
+dataComplexity = ""       # simple-crud | relational | complex
+rolesCount = ""           # single | 2-3 | many
+integrationsLevel = ""    # none | few-apis | many-services
+existingCodebase = false
+techConstraints = []
+
+# ─────────────────────────────────────────────────
+# Phase 1: Discovery
+# ─────────────────────────────────────────────────
+[discovery]
+problem = ""
+audience = ""
+coreValue = ""
+keyFeatures = []
+competitors = []          # Similar products/services for reference
+inScope = []
+outOfScope = []
+successMetrics = []
+constraints = ""
+existingSystems = []
+compliance = []
+scale = ""
+stakeholders = ""
+aiIntegration = false
+aiProvider = ""
+aiFeatures = []
+
+# ─────────────────────────────────────────────────
+# Phase 2: Design
+# ─────────────────────────────────────────────────
+[design]
+approach = ""             # custom | ui-kit | hybrid
+colorScheme = ""
+darkMode = false
+brandGuidelines = false
+uiReferences = []
+responsive = ""           # mobile-first | desktop-first
+accessibilityTarget = ""
+primaryLanguage = ""
+additionalLanguages = []
+rtlSupport = false
+
+# ─────────────────────────────────────────────────
+# Phase 3: Access
+# ─────────────────────────────────────────────────
+[access]
+authModel = ""            # public | authenticated | mixed
+publicParts = []
+authMethods = []
+phoneFormat = ""
+socialAuth = []
+userTypes = []
+rolePermissions = ""
+protectedPages = []
+roleHierarchy = ""
+permissionGranularity = ""
+multiTenant = ""
+guestFlows = ""
+
+# ─────────────────────────────────────────────────
+# Phase 4: Data Model
+# ─────────────────────────────────────────────────
+[data]
+mainEntities = []
+entityFields = ""
+relationships = ""
+requiredFields = ""
+validationRules = ""
+filesAndMedia = ""
+search = ""
+softDelete = false
+importExport = ""
+fieldPermissions = ""
+auditTrails = ""
+dataLifecycle = ""
+retentionPolicy = ""
+
+# ─────────────────────────────────────────────────
+# Phase 5: Features & Screens
+# ─────────────────────────────────────────────────
+[features]
+screens = []
+navigationMap = ""
+primaryUserJourney = ""
+userStories = ""
+errorHandling = ""
+emptyStates = ""
+loadingStates = ""
+offlineBehavior = ""
+notifications = ""
+settingsPage = false
+analyticsEvents = []
+
+# ─────────────────────────────────────────────────
+# Phase 6: Modules (complex only)
+# ─────────────────────────────────────────────────
+[modules]
+domains = []
+moduleBoundaries = ""
+interfaces = ""
+sharedComponents = []

@@ -45,7 +45,7 @@ export function DateTimeDemo() {
             <DatePicker
               label="Date (RU locale)"
               locale="ru"
-              placeholder="Выберите дату"
+              placeholder="Select date"
             />
           </div>
           <div className="grid grid-cols-2 gap-4">

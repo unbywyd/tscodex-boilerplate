@@ -305,9 +305,9 @@ export function LayoutDemo() {
               </p>
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>What is LLM Boilerplate?</AccordionTrigger>
+                  <AccordionTrigger>What is tscodex-boilerplate?</AccordionTrigger>
                   <AccordionContent>
-                    LLM Boilerplate is a file-driven specification system for LLM-assisted
+                    tscodex-boilerplate is a file-driven specification system for LLM-assisted
                     development. It helps you build prototypes quickly through structured
                     dialogue with AI.
                   </AccordionContent>

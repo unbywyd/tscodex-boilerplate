@@ -1,4 +1,4 @@
-# LLM Boilerplate
+# tscodex-boilerplate-simple
 
 File-driven specification system for LLM-assisted development. Define your project in TOML/Markdown, get documentation portal + working React prototype.
 
@@ -108,7 +108,7 @@ Complex:  Assessment → Discovery → Design → Access → Data → Modules �
 ## Project Structure
 
 ```
-llm-boilerplate/
+tscodex-boilerplate-simple/
 ├── src/spec/                 # YOUR PROJECT SPECIFICATION
 │   ├── layers/               # Structured TOML files
 │   │   ├── project/          # about.toml, tech.toml, business.toml, design.toml
@@ -250,8 +250,8 @@ All specifications compile into a unified `manifest.json` for LLM agents and RAG
   "version": "1.0.0",
   "generated": "2025-12-11T...",
   "project": {
-    "id": "llm-boilerplate",
-    "name": "LLM Boilerplate",
+    "id": "tscodex-boilerplate-simple",
+    "name": "tscodex-boilerplate-simple",
     "description": "...",
     "_meta": { "path": "layers/project/about.toml" }
   },

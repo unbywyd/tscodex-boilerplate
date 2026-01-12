@@ -19,7 +19,7 @@ export const workflowPhases = [
   { id: 'schema', label: 'Schema', type: 'subprocess' as const, description: 'Prisma generation' },
   { id: 'modules', label: 'Modules', type: 'action' as const, description: 'Domain decomposition' },
   { id: 'features', label: 'Features', type: 'action' as const, description: 'Use cases & routes' },
-  { id: 'prototype', label: 'Prototype', type: 'end' as const, description: 'Working React app' },
+  { id: 'documentation', label: 'Docs', type: 'end' as const, description: 'Platform documentation' },
 ] as const
 
 const phaseColors: Record<string, { bg: string; border: string }> = {

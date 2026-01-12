@@ -511,8 +511,8 @@ For LLM agents and RAG systems, the project provides a unified manifest containi
   "version": "1.0.0",
   "generated": "2025-12-11T...",
   "project": {
-    "id": "llm-boilerplate",
-    "name": "LLM Boilerplate",
+    "id": "tscodex-boilerplate-simple",
+    "name": "tscodex-boilerplate-simple",
     "description": "...",
     "_meta": { "path": "layers/project/about.toml" }
   },

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 import {
   CheckCircle2,
   Circle,
@@ -10,14 +11,17 @@ import {
   Database,
   Code2,
   GitBranch,
-  Box,
+  FileText,
   AlertCircle,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Monitor,
+  ArrowLeft
 } from 'lucide-react'
-import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Skeleton } from '@/components/ui'
-import { loadInterview, type InterviewData } from '@/lib/docs-loader'
+import { Container, Card, CardContent, CardDescription, CardHeader, CardTitle, Badge, Skeleton, Button } from '@/components/ui'
+import { loadInterview, loadInterviewsIndex, type InterviewData, type InterviewIndex } from '@/lib/docs-loader'
 import { AnimatedBackground } from '@/components/AnimatedBackground'
+import { StatusProgressBlock, type StatusProgressData } from '@/components/StatusProgressBlock'
 import { cn } from '@/lib/utils'
 import interviewLabels from '@/lib/interview-labels.json'
 
@@ -30,7 +34,7 @@ const phaseIcons: Record<string, typeof Target> = {
   data: Database,
   features: Code2,
   modules: GitBranch,
-  prototype: Box,
+  documentation: FileText,
   schema: Database,
 }
 
@@ -43,7 +47,7 @@ const phaseColors: Record<string, string> = {
   data: 'from-green-400 to-green-600',
   features: 'from-cyan-400 to-cyan-600',
   modules: 'from-indigo-400 to-indigo-600',
-  prototype: 'from-emerald-400 to-emerald-600',
+  documentation: 'from-violet-400 to-violet-600',
   schema: 'from-teal-400 to-teal-600',
 }
 
@@ -108,13 +112,13 @@ function getQuestionLabel(phaseName: string, key: string): string {
   if (checklistLabels && checklistLabels[key]) {
     return checklistLabels[key]
   }
-  
+
   // Then check phase labels
   const phaseLabels = (interviewLabels as any)[phaseName]
   if (phaseLabels && phaseLabels[key]) {
     return phaseLabels[key]
   }
-  
+
   // Fallback: format key as title case
   return key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim()
 }
@@ -153,9 +157,9 @@ function PhaseSection({
           ? "!bg-gradient-to-br from-blue-500/20 via-blue-400/15 to-blue-500/10 !border-blue-500/50 ring-2 ring-blue-500/30 shadow-lg shadow-blue-500/10 hover:!bg-gradient-to-br hover:from-blue-500/25 hover:via-blue-400/20 hover:to-blue-500/15"
           : "!bg-white/50 dark:!bg-slate-900/50 !border-white/40 hover:!bg-white/60 dark:hover:!bg-slate-900/60"
       )}
-      style={{ 
-        backdropFilter: 'blur(24px)', 
-        WebkitBackdropFilter: 'blur(24px)', 
+      style={{
+        backdropFilter: 'blur(24px)',
+        WebkitBackdropFilter: 'blur(24px)',
         boxShadow: isCurrentPhase ? '0 8px 24px 0 rgba(59, 130, 246, 0.15)' : '0 1px 3px 0 rgba(0, 0, 0, 0.05)'
       }}
     >
@@ -290,55 +294,86 @@ function PhaseSection({
   )
 }
 
-export default function InterviewPage() {
-  const [data, setData] = useState<InterviewData | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+// Platform selection view
+function PlatformSelector({ platforms, onSelect }: { platforms: InterviewIndex['platforms'], onSelect: (id: string) => void }) {
+  return (
+    <>
+      <AnimatedBackground />
+      <Container size="lg" className="py-8 sm:py-12 md:py-16 space-y-8 relative">
+        <section className="text-center space-y-4">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Interview Progress
+          </h1>
+          <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+            Select a platform to view its interview progress and answers
+          </p>
+        </section>
 
-  useEffect(() => {
-    loadInterview()
-      .then(setData)
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false))
-  }, [])
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {platforms.map(platform => (
+            <Card
+              key={platform.platformId}
+              className="!backdrop-blur-xl !bg-white/50 dark:!bg-slate-900/50 !border-white/40 hover:!bg-white/60 dark:hover:!bg-slate-900/60 transition-all cursor-pointer group"
+              style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}
+              onClick={() => onSelect(platform.platformId)}
+            >
+              <CardHeader>
+                <div className="flex items-center gap-3">
+                  <div className="rounded-lg bg-gradient-to-br from-primary to-primary/70 p-2.5">
+                    <Monitor className="h-5 w-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <CardTitle className="capitalize group-hover:text-primary transition-colors">
+                      {platform.platformId.replace(/-/g, ' ')}
+                    </CardTitle>
+                    <CardDescription className="mt-1 capitalize">
+                      Phase: {platform.currentPhase}
+                    </CardDescription>
+                  </div>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center gap-2">
+                  <Badge {...(profileBadges[platform.profile] || { variant: 'secondary' })}>
+                    {profileBadges[platform.profile]?.label || platform.profile}
+                  </Badge>
+                  {platform.lastUpdated && (
+                    <span className="text-xs text-muted-foreground">
+                      Updated: {platform.lastUpdated}
+                    </span>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
 
-  if (loading) {
-    return (
-      <Container size="lg" className="py-8 space-y-6">
-        <Skeleton className="h-10 w-64" />
-        <Skeleton className="h-6 w-96" />
-        <div className="grid gap-4">
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-48 w-full" />
-          <Skeleton className="h-48 w-full" />
-        </div>
+        {platforms.length === 0 && (
+          <Card className="!backdrop-blur-xl !bg-white/50 dark:!bg-slate-900/50 !border-white/40" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)' }}>
+            <CardContent className="py-12 text-center">
+              <Monitor className="h-12 w-12 mx-auto text-muted-foreground/50 mb-4" />
+              <h3 className="text-lg font-medium mb-2">No Platforms Found</h3>
+              <p className="text-muted-foreground mb-4">
+                Create a platform in <code className="bg-muted px-2 py-1 rounded">src/spec/platforms/</code> to get started.
+              </p>
+              <Button asChild variant="outline">
+                <Link to="/platforms">View Platforms</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
       </Container>
-    )
-  }
+    </>
+  )
+}
 
-  if (error) {
-    return (
-      <Container size="lg" className="py-8">
-        <Card className="border-destructive">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-destructive">
-              <AlertCircle className="h-5 w-5" />
-              Error Loading Interview Data
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-muted-foreground">{error}</p>
-          </CardContent>
-        </Card>
-      </Container>
-    )
-  }
-
+// Platform interview detail view
+function PlatformInterviewView({ data, onBack }: { data: InterviewData, onBack: () => void }) {
   const status = data?.status
   const interview = data?.interview
   const currentPhase = status?.status?.currentPhase || 'assessment'
   const profile = status?.status?.profile || 'medium'
-  const projectName = interview?.meta?.projectName || 'Untitled Project'
+  const platformName = data.platformId.replace(/-/g, ' ')
 
   // Calculate overall progress
   const phases = status?.phases || {}
@@ -347,21 +382,46 @@ export default function InterviewPage() {
   const overallProgress = totalPhases > 0 ? Math.round((completedPhases / totalPhases) * 100) : 0
 
   // Phase order
-  const phaseOrder = ['assessment', 'discovery', 'design', 'access', 'data', 'modules', 'features', 'prototype', 'schema']
+  const phaseOrder = ['assessment', 'discovery', 'design', 'access', 'data', 'modules', 'features', 'schema', 'documentation']
 
   return (
     <>
       <AnimatedBackground />
       <Container size="lg" className="py-8 sm:py-12 md:py-16 space-y-8 relative">
+        {/* Back button */}
+        <Button variant="ghost" onClick={onBack} className="gap-2">
+          <ArrowLeft className="h-4 w-4" />
+          All Platforms
+        </Button>
+
         {/* Header */}
         <section className="text-center space-y-4">
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-            {projectName || 'Interview Progress'}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent capitalize">
+            {platformName}
           </h1>
           <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-            Track your project specification progress and interview answers
+            Track interview progress and answers for this platform
           </p>
         </section>
+
+        {/* Visual Progress Block */}
+        {status && (
+          <section>
+            <StatusProgressBlock
+              statusData={{
+                status: {
+                  id: status.status?.id,
+                  name: platformName,
+                  profile: profile,
+                  currentPhase: currentPhase,
+                  lastUpdated: status.status?.lastUpdated
+                },
+                phases: phases
+              } as StatusProgressData}
+              title={platformName}
+            />
+          </section>
+        )}
 
         {/* Stats */}
         <section className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -387,7 +447,7 @@ export default function InterviewPage() {
 
           <Card className="!backdrop-blur-xl !bg-white/50 dark:!bg-slate-900/50 !border-white/40 hover:!bg-white/60 dark:hover:!bg-slate-900/60 transition-all" style={{ backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)', boxShadow: '0 1px 3px 0 rgba(0, 0, 0, 0.05)' }}>
             <CardContent className="pt-6">
-              <Badge {...profileBadges[profile]} className="text-sm">
+              <Badge {...(profileBadges[profile] || { variant: 'secondary' })} className="text-sm">
                 {profileBadges[profile]?.label || profile}
               </Badge>
               <p className="text-xs text-muted-foreground mt-2">Profile</p>
@@ -445,4 +505,97 @@ export default function InterviewPage() {
       </Container>
     </>
   )
+}
+
+export default function InterviewPage() {
+  const { platformId } = useParams<{ platformId?: string }>()
+  const navigate = useNavigate()
+
+  const [index, setIndex] = useState<InterviewIndex | null>(null)
+  const [data, setData] = useState<InterviewData | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [selectedPlatform, setSelectedPlatform] = useState<string | null>(platformId || null)
+
+  // Load index on mount
+  useEffect(() => {
+    loadInterviewsIndex()
+      .then(idx => {
+        setIndex(idx)
+        // Auto-select first platform if only one exists
+        if (!platformId && idx.platforms.length === 1) {
+          setSelectedPlatform(idx.platforms[0].platformId)
+        }
+      })
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false))
+  }, [platformId])
+
+  // Load platform data when selected
+  useEffect(() => {
+    if (selectedPlatform) {
+      setLoading(true)
+      loadInterview(selectedPlatform)
+        .then(setData)
+        .catch(err => setError(err.message))
+        .finally(() => setLoading(false))
+    }
+  }, [selectedPlatform])
+
+  const handleSelectPlatform = (id: string) => {
+    setSelectedPlatform(id)
+    navigate(`/interview/${id}`, { replace: true })
+  }
+
+  const handleBack = () => {
+    setSelectedPlatform(null)
+    setData(null)
+    navigate('/interview', { replace: true })
+  }
+
+  if (loading) {
+    return (
+      <Container size="lg" className="py-8 space-y-6">
+        <Skeleton className="h-10 w-64" />
+        <Skeleton className="h-6 w-96" />
+        <div className="grid gap-4">
+          <Skeleton className="h-48 w-full" />
+          <Skeleton className="h-48 w-full" />
+          <Skeleton className="h-48 w-full" />
+        </div>
+      </Container>
+    )
+  }
+
+  if (error) {
+    return (
+      <>
+        <AnimatedBackground />
+        <Container size="lg" className="py-8 relative">
+          <Card className="border-destructive">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2 text-destructive">
+                <AlertCircle className="h-5 w-5" />
+                Error Loading Interview Data
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground mb-4">{error}</p>
+              <Button variant="outline" onClick={() => window.location.reload()}>
+                Retry
+              </Button>
+            </CardContent>
+          </Card>
+        </Container>
+      </>
+    )
+  }
+
+  // Show platform detail view
+  if (selectedPlatform && data) {
+    return <PlatformInterviewView data={data} onBack={handleBack} />
+  }
+
+  // Show platform selector
+  return <PlatformSelector platforms={index?.platforms || []} onSelect={handleSelectPlatform} />
 }

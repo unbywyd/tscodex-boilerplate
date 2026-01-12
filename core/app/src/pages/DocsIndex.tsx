@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { loadDocsStructure, getRouteFromPath } from '@/lib/docs-loader'
-import type { DocFolder } from '@/lib/docs-loader'
-import { ChevronRight, ChevronDown, FileText, Settings, Folder, FolderOpen } from 'lucide-react'
+import { loadDocsStructure, getRouteFromPath, loadInterviewsIndex } from '@/lib/docs-loader'
+import type { DocFolder, InterviewIndex } from '@/lib/docs-loader'
+import { ChevronRight, ChevronDown, FileText, Settings, Folder, FolderOpen, Monitor, ArrowRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { Container, Card, CardContent, Skeleton } from '@/components/ui'
+import { Container, Card, CardContent, CardHeader, CardTitle, CardDescription, Skeleton, Badge } from '@/components/ui'
 
 interface FolderTreeProps {
   folder: DocFolder
@@ -84,13 +84,18 @@ function FolderTree({ folder, level = 0 }: FolderTreeProps) {
 
 export default function DocsIndex() {
   const [structure, setStructure] = useState<DocFolder | null>(null)
+  const [platforms, setPlatforms] = useState<InterviewIndex | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    loadDocsStructure()
-      .then((data) => {
-        setStructure(data)
+    Promise.all([
+      loadDocsStructure(),
+      loadInterviewsIndex().catch(() => null) // Don't fail if no platforms
+    ])
+      .then(([docsData, platformsData]) => {
+        setStructure(docsData)
+        setPlatforms(platformsData)
         setLoading(false)
       })
       .catch((err) => {
@@ -154,6 +159,66 @@ export default function DocsIndex() {
           <FolderTree folder={structure} />
         </CardContent>
       </Card>
+
+      {/* Platforms Section */}
+      {platforms && platforms.platforms.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Platforms</h2>
+              <p className="text-sm text-muted-foreground">
+                Platform-specific documentation and interview progress
+              </p>
+            </div>
+            <Link
+              to="/platforms"
+              className="text-sm text-primary hover:underline flex items-center gap-1"
+            >
+              View all
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {platforms.platforms.map((platform) => (
+              <Link key={platform.platformId} to={`/platforms/${platform.platformId}`}>
+                <Card className="h-full hover:bg-accent/50 transition-colors cursor-pointer">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="rounded-lg bg-primary/10 p-2">
+                        <Monitor className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <CardTitle className="text-base capitalize truncate">
+                          {platform.platformId.replace(/-/g, ' ')}
+                        </CardTitle>
+                        <CardDescription className="text-xs capitalize">
+                          Phase: {platform.currentPhase}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="flex items-center gap-2">
+                      <Badge variant={
+                        platform.profile === 'simple' ? 'secondary' :
+                        platform.profile === 'complex' ? 'outline' : 'default'
+                      }>
+                        {platform.profile}
+                      </Badge>
+                      {platform.lastUpdated && (
+                        <span className="text-xs text-muted-foreground">
+                          {platform.lastUpdated}
+                        </span>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              </Link>
+            ))}
+          </div>
+        </div>
+      )}
     </Container>
   )
 }

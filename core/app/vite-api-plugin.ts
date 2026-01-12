@@ -12,8 +12,7 @@ const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
 const mocksDir = path.join(rootDir, 'src/prototype/mocks')
 const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
-const statusPath = path.join(specDir, 'status.toml')
-const interviewPath = path.join(specDir, 'interview.toml')
+const platformsDir = path.join(specDir, 'platforms')
 
 // Helper: read and parse TOML file
 async function readTomlFile(filePath: string): Promise<any> {
@@ -46,6 +45,10 @@ async function findTomlFilesRecursive(dir: string, basePath: string = ''): Promi
 }
 
 // Helper: scan directory recursively
+// Files and folders to exclude from documentation tree
+const excludedFiles = ['status.toml', 'interview.toml']
+const excludedFolders = ['platforms'] // Platforms have their own page at /platforms
+
 async function scanDirectory(dirPath: string, basePath: string = ''): Promise<any> {
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true })
@@ -61,10 +64,14 @@ async function scanDirectory(dirPath: string, basePath: string = ''): Promise<an
       const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name
 
       if (entry.isDirectory()) {
+        // Skip excluded folders (platforms has its own page)
+        if (excludedFolders.includes(entry.name)) continue
         const subFolder = await scanDirectory(fullPath, relativePath)
         result.folders.push(subFolder)
       } else if (entry.isFile()) {
         const ext = path.extname(entry.name).toLowerCase()
+        // Skip excluded files (status.toml, interview.toml)
+        if (excludedFiles.includes(entry.name)) continue
         if (ext === '.md' || ext === '.toml') {
           const stats = await fs.stat(fullPath)
           result.files.push({
@@ -517,39 +524,99 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
-      // API: Get interview data (status + interview combined)
-      server.middlewares.use('/api/interview', async (_req, res) => {
+      // API: Get interviews - index or specific platform
+      server.middlewares.use('/api/interviews', async (req, res) => {
         try {
+          // req.url is relative to the middleware path, e.g. "/" or "/web-app"
+          const urlPath = req.url || '/'
+          const cleanPath = urlPath.split('?')[0]
+
+          // If exact match (/ or empty), return index
+          if (cleanPath === '/' || cleanPath === '') {
+            const platformInterviews: any[] = []
+            const platformDirs = await fs.readdir(platformsDir, { withFileTypes: true })
+
+            for (const dir of platformDirs) {
+              if (!dir.isDirectory()) continue
+
+              const platformId = dir.name
+              const platformPath = path.join(platformsDir, platformId)
+              const statusPath = path.join(platformPath, 'status.toml')
+
+              try {
+                const status = await readTomlFile(statusPath)
+                if (status) {
+                  platformInterviews.push({
+                    platformId,
+                    currentPhase: status?.status?.currentPhase || 'unknown',
+                    profile: status?.status?.profile || 'unknown',
+                    lastUpdated: status?.status?.lastUpdated || null
+                  })
+                }
+              } catch {
+                // Skip platforms without status files
+              }
+            }
+
+            return sendJson(res, {
+              platforms: platformInterviews,
+              generated: new Date().toISOString()
+            })
+          }
+
+          // Otherwise, get specific platform (e.g. /web-app)
+          const platformId = cleanPath.replace(/^\//, '') // Remove leading slash
+          if (!platformId) {
+            return sendJson(res, { error: 'Platform ID required' }, 400)
+          }
+
+          const platformPath = path.join(platformsDir, platformId)
+          if (!platformPath.startsWith(platformsDir)) {
+            return sendJson(res, { error: 'Access denied' }, 403)
+          }
+
+          const statusPath = path.join(platformPath, 'status.toml')
+          const interviewPath = path.join(platformPath, 'interview.toml')
+
           const [status, interview] = await Promise.all([
-            readTomlFile(statusPath),
-            readTomlFile(interviewPath)
+            readTomlFile(statusPath).catch(() => null),
+            readTomlFile(interviewPath).catch(() => null)
           ])
 
+          if (!status && !interview) {
+            return sendJson(res, { error: 'Platform interview not found' }, 404)
+          }
+
           sendJson(res, {
+            platformId,
             status: status || null,
             interview: interview || null,
             metadata: {
-              statusPath: 'src/spec/status.toml',
-              interviewPath: 'src/spec/interview.toml',
+              statusPath: `platforms/${platformId}/status.toml`,
+              interviewPath: `platforms/${platformId}/interview.toml`,
               generated: new Date().toISOString()
             }
           })
-        } catch (error) {
+        } catch (error: any) {
+          if (error.code === 'ENOENT') {
+            return sendJson(res, { platforms: [], generated: new Date().toISOString() })
+          }
           console.error('Error loading interview data:', error)
           sendJson(res, { error: 'Internal server error' }, 500)
         }
       })
 
       console.log('\n📚 API endpoints available:')
-      console.log('  GET /api/docs/tree       - Documentation structure')
-      console.log('  GET /api/docs/file?path= - Specific doc file')
-      console.log('  GET /api/docs/route-map  - Route to docs mapping')
-      console.log('  GET /api/relations-map   - Relations graph')
-      console.log('  GET /api/manifest        - Unified manifest for LLM/RAG')
-      console.log('  GET /api/prisma/schema   - Prisma schema file')
-      console.log('  GET /api/mocks           - List all mocks')
-      console.log('  GET /api/mocks/:name     - Specific mock data')
-      console.log('  GET /api/interview       - Interview status and answers\n')
+      console.log('  GET /api/docs/tree           - Documentation structure')
+      console.log('  GET /api/docs/file?path=     - Specific doc file')
+      console.log('  GET /api/docs/route-map      - Route to docs mapping')
+      console.log('  GET /api/relations-map       - Relations graph')
+      console.log('  GET /api/manifest            - Unified manifest for LLM/RAG')
+      console.log('  GET /api/prisma/schema       - Prisma schema file')
+      console.log('  GET /api/mocks               - List all mocks')
+      console.log('  GET /api/mocks/:name         - Specific mock data')
+      console.log('  GET /api/interviews          - List all platform interviews')
+      console.log('  GET /api/interviews/:id      - Specific platform interview\n')
     },
   }
 }

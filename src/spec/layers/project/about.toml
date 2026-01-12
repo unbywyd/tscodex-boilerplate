@@ -1,26 +1,15 @@
 # Project Overview
+# LLM: Update this file during Discovery phase
 
 [project]
-id = "llm-boilerplate"
-name = "LLM Boilerplate"
-type = "application"
-description = """
-File-driven specification system for LLM-assisted development.
-All project knowledge lives in Markdown and TOML files.
-"""
+id = ""
+name = ""
+type = ""  # web-app | mobile | api | landing
+description = ""
 
 [features]
-list = [
-  "Adaptive workflow (Simple/Medium/Complex profiles)",
-  "Structured layers: entities, roles, guards, routes, use-cases, components",
-  "Multi-platform support (web-app, admin-panel, mobile, API)",
-  "Event system with visual feedback and toast notifications",
-  "Auto-generated documentation from TOML specs",
-  "Working React prototype with mock data and localStorage persistence",
-  "Prisma schema generation from entity definitions",
-  "LLM/RAG integration via manifest.json",
-]
+list = []
 
 [owner]
-name = "LLM Boilerplate Team"
-email = "team@llm-boilerplate.dev"
+name = ""
+email = ""

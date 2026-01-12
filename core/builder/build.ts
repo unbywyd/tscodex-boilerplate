@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url'
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const rootDir = path.resolve(__dirname, '../..')
 const specDir = path.join(rootDir, 'src/spec')
-const mocksDir = path.join(rootDir, 'src/prototype/mocks')
 const prismaSchemaPath = path.join(rootDir, 'src/prisma/schema.prisma')
 const outputDir = path.join(rootDir, 'public/generated')
 
@@ -36,6 +35,10 @@ async function readTomlFiles(dirPath: string): Promise<any[]> {
 }
 
 // Scan directory structure recursively
+// Files and folders to exclude from documentation tree
+const excludedFiles = ['status.toml', 'interview.toml']
+const excludedFolders = ['platforms'] // Platforms have their own page at /platforms
+
 async function scanDirectory(dirPath: string, basePath: string = ''): Promise<any> {
   try {
     const entries = await fs.readdir(dirPath, { withFileTypes: true })
@@ -51,10 +54,14 @@ async function scanDirectory(dirPath: string, basePath: string = ''): Promise<an
       const relativePath = basePath ? `${basePath}/${entry.name}` : entry.name
 
       if (entry.isDirectory()) {
+        // Skip excluded folders (platforms has its own page)
+        if (excludedFolders.includes(entry.name)) continue
         const subFolder = await scanDirectory(fullPath, relativePath)
         result.folders.push(subFolder)
       } else if (entry.isFile()) {
         const ext = path.extname(entry.name).toLowerCase()
+        // Skip excluded files (status.toml, interview.toml)
+        if (excludedFiles.includes(entry.name)) continue
         if (ext === '.md' || ext === '.toml') {
           const stats = await fs.stat(fullPath)
           result.files.push({
@@ -216,38 +223,6 @@ async function generatePrismaSchema() {
   }
 }
 
-// Generate mocks
-async function generateMocks() {
-  console.log('🎭 Generating mocks...')
-
-  const mocksOutputDir = path.join(outputDir, 'mocks')
-  await fs.mkdir(mocksOutputDir, { recursive: true })
-
-  try {
-    const files = await fs.readdir(mocksDir)
-    const jsonFiles = files.filter(f => f.endsWith('.json'))
-
-    for (const file of jsonFiles) {
-      const content = await fs.readFile(path.join(mocksDir, file), 'utf-8')
-      await fs.writeFile(
-        path.join(mocksOutputDir, file),
-        content
-      )
-      console.log(`  ✓ ${file}`)
-    }
-
-    // Generate mocks index
-    const mockNames = jsonFiles.map(f => f.replace('.json', ''))
-    await fs.writeFile(
-      path.join(outputDir, 'mocks-index.json'),
-      JSON.stringify(mockNames, null, 2)
-    )
-    console.log('  ✓ mocks-index.json')
-  } catch (error) {
-    console.error('Error generating mocks:', error)
-  }
-}
-
 // Types for relations system
 interface IdEntry {
   id: string
@@ -274,13 +249,12 @@ function extractId(content: any, fileName: string): string | null {
   if (content.useCase?.id) return content.useCase.id
   if (content.guard?.id) return content.guard.id
   if (content.role?.id) return content.role.id
-  if (content.route?.id) return content.route.id
   if (content.topic?.id) return content.topic.id
   if (content.project?.id) return content.project.id
   if (content.entity?.id) return content.entity.id
   if (content.status?.id) return content.status.id
-  if (content.component?.id) return content.component.id
   if (content.module?.id) return content.module.id
+  if (content.platform?.id) return content.platform.id
 
   // Fallback to filename without extension
   return fileName.replace(/\.toml$/, '')
@@ -292,13 +266,12 @@ function extractTitle(content: any): string | undefined {
   if (content.useCase?.name) return content.useCase.name
   if (content.guard?.name) return content.guard.name
   if (content.role?.name) return content.role.name
-  if (content.route?.title) return content.route.title
   if (content.topic?.name) return content.topic.name
   if (content.project?.name) return content.project.name
   if (content.entity?.name) return content.entity.name
   if (content.status?.name) return content.status.name
-  if (content.component?.name) return content.component.name
   if (content.module?.name) return content.module.name
+  if (content.platform?.name) return content.platform.name
   return undefined
 }
 
@@ -316,7 +289,7 @@ function extractRelations(content: any): Record<string, string[]> | null {
   }
 
   // Also check nested relations (e.g., useCase.relations)
-  for (const key of ['useCase', 'guard', 'role', 'route', 'topic', 'project', 'entity', 'status', 'component', 'module']) {
+  for (const key of ['useCase', 'guard', 'role', 'topic', 'project', 'entity', 'status', 'module', 'platform']) {
     if (content[key]?.relations) {
       const relations: Record<string, string[]> = {}
       for (const [k, v] of Object.entries(content[key].relations)) {
@@ -442,17 +415,13 @@ async function generateManifest(relationsMap: RelationsMap) {
     project: null,
     layers: {
       entities: [],
-      components: [],
-      routes: [],
-      pages: [],
       useCases: [],
       roles: [],
       guards: [],
-      events: [],
-      platforms: [],
       knowledge: [],
       modules: [],
     },
+    platforms: [],  // Loaded separately from src/spec/platforms/
     docs: [],
     relations: {
       byId: relationsMap.byId,
@@ -510,9 +479,9 @@ async function generateManifest(relationsMap: RelationsMap) {
         const content = await readTomlFile(filePath)
         if (!content) continue
 
-        // Flatten the content - extract from wrapper (entity., component., etc.)
+        // Flatten the content - extract from wrapper (entity., useCase., etc.)
         const wrapperKey = Object.keys(content).find(k =>
-          ['entity', 'component', 'route', 'page', 'useCase', 'role', 'guard', 'event', 'platform', 'topic', 'module', 'project'].includes(k)
+          ['entity', 'useCase', 'role', 'guard', 'platform', 'topic', 'module', 'project'].includes(k)
         )
 
         let item: any
@@ -594,6 +563,30 @@ async function generateManifest(relationsMap: RelationsMap) {
 
   await processDocsFolder(docsDir)
 
+  // Load platforms from src/spec/platforms/
+  const platformsDir = path.join(specDir, 'platforms')
+  try {
+    const platformDirs = await fs.readdir(platformsDir, { withFileTypes: true })
+    for (const dir of platformDirs) {
+      if (!dir.isDirectory()) continue
+      const platformTomlPath = path.join(platformsDir, dir.name, 'platform.toml')
+      try {
+        const content = await readTomlFile(platformTomlPath)
+        if (content?.platform) {
+          manifest.platforms.push({
+            ...content.platform,
+            relations: content.relations || {},
+            _meta: { path: `platforms/${dir.name}/platform.toml` }
+          })
+        }
+      } catch {
+        // Skip platforms without platform.toml
+      }
+    }
+  } catch {
+    // No platforms directory
+  }
+
   // Write manifest
   await fs.writeFile(
     path.join(outputDir, 'manifest.json'),
@@ -606,59 +599,245 @@ async function generateManifest(relationsMap: RelationsMap) {
     .map(([name, arr]) => `${name}: ${(arr as any[]).length}`)
     .join(', ')
 
-  console.log(`  ✓ manifest.json (${layerCounts}, docs: ${manifest.docs.length})`)
+  console.log(`  ✓ manifest.json (${layerCounts}, platforms: ${manifest.platforms.length}, docs: ${manifest.docs.length})`)
 }
 
-// Generate interview data (status + interview)
+// Generate interview data per platform
 async function generateInterview() {
   console.log('📋 Generating interview data...')
 
-  const statusPath = path.join(specDir, 'status.toml')
-  const interviewPath = path.join(specDir, 'interview.toml')
+  const platformsDir = path.join(specDir, 'platforms')
+  const interviewsOutputDir = path.join(outputDir, 'interviews')
+  await fs.mkdir(interviewsOutputDir, { recursive: true })
+
+  const platformInterviews: any[] = []
 
   try {
-    const [status, interview] = await Promise.all([
-      readTomlFile(statusPath),
-      readTomlFile(interviewPath)
-    ])
+    const platformDirs = await fs.readdir(platformsDir, { withFileTypes: true })
 
-    await fs.writeFile(
-      path.join(outputDir, 'interview.json'),
-      JSON.stringify({
-        status: status || null,
-        interview: interview || null,
-        metadata: {
-          statusPath: 'src/spec/status.toml',
-          interviewPath: 'src/spec/interview.toml',
-          generated: new Date().toISOString()
+    for (const dir of platformDirs) {
+      if (!dir.isDirectory()) continue
+
+      const platformId = dir.name
+      const platformPath = path.join(platformsDir, platformId)
+      const statusPath = path.join(platformPath, 'status.toml')
+      const interviewPath = path.join(platformPath, 'interview.toml')
+
+      try {
+        const [status, interview] = await Promise.all([
+          readTomlFile(statusPath).catch(() => null),
+          readTomlFile(interviewPath).catch(() => null)
+        ])
+
+        if (status || interview) {
+          const platformInterview = {
+            platformId,
+            status: status || null,
+            interview: interview || null,
+            metadata: {
+              statusPath: `platforms/${platformId}/status.toml`,
+              interviewPath: `platforms/${platformId}/interview.toml`,
+              generated: new Date().toISOString()
+            }
+          }
+
+          // Write individual platform interview file
+          await fs.writeFile(
+            path.join(interviewsOutputDir, `${platformId}.json`),
+            JSON.stringify(platformInterview, null, 2)
+          )
+
+          platformInterviews.push({
+            platformId,
+            currentPhase: status?.status?.currentPhase || 'unknown',
+            profile: status?.status?.profile || 'unknown',
+            lastUpdated: status?.status?.lastUpdated || null
+          })
         }
+      } catch (error) {
+        // Skip platforms without interview files
+      }
+    }
+
+    // Write interviews index
+    await fs.writeFile(
+      path.join(interviewsOutputDir, 'index.json'),
+      JSON.stringify({
+        platforms: platformInterviews,
+        generated: new Date().toISOString()
       }, null, 2)
     )
-    console.log('  ✓ interview.json')
-  } catch (error) {
-    console.error('Error generating interview data:', error)
+
+    console.log(`  ✓ interviews/index.json (${platformInterviews.length} platforms)`)
+    for (const pi of platformInterviews) {
+      console.log(`    - ${pi.platformId}: ${pi.currentPhase} (${pi.profile})`)
+    }
+
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      console.log('  ⚠ No platforms directory found')
+    } else {
+      console.error('Error generating interview data:', error)
+    }
     // Write empty placeholder
     await fs.writeFile(
-      path.join(outputDir, 'interview.json'),
+      path.join(interviewsOutputDir, 'index.json'),
       JSON.stringify({
-        status: null,
-        interview: null,
-        metadata: {
-          statusPath: 'src/spec/status.toml',
-          interviewPath: 'src/spec/interview.toml',
-          generated: new Date().toISOString()
-        }
+        platforms: [],
+        generated: new Date().toISOString()
       }, null, 2)
     )
   }
 }
 
+// Generate platform documentation with index
+async function generatePlatforms() {
+  console.log('📱 Generating platform documentation...')
+
+  const platformsDir = path.join(specDir, 'platforms')
+  const platformsOutputDir = path.join(outputDir, 'platforms')
+  await fs.mkdir(platformsOutputDir, { recursive: true })
+
+  try {
+    const platformDirs = await fs.readdir(platformsDir, { withFileTypes: true })
+    const platforms: any[] = []
+
+    for (const dir of platformDirs) {
+      if (!dir.isDirectory()) continue
+
+      const platformId = dir.name
+      const platformPath = path.join(platformsDir, platformId)
+      const platformOutputPath = path.join(platformsOutputDir, platformId)
+      await fs.mkdir(platformOutputPath, { recursive: true })
+
+      // Read platform.toml
+      const platformTomlPath = path.join(platformPath, 'platform.toml')
+      let platformConfig: any = null
+      try {
+        platformConfig = await readTomlFile(platformTomlPath)
+      } catch {
+        console.warn(`  ⚠ No platform.toml for ${platformId}`)
+      }
+
+      // Read docs folder
+      const docsPath = path.join(platformPath, 'docs')
+      const docs: any[] = []
+
+      try {
+        const docFiles = await fs.readdir(docsPath)
+        const mdFiles = docFiles.filter(f => f.endsWith('.md')).sort()
+
+        for (const fileName of mdFiles) {
+          const filePath = path.join(docsPath, fileName)
+          const content = await fs.readFile(filePath, 'utf-8')
+          const stats = await fs.stat(filePath)
+
+          // Extract title from first heading
+          const titleMatch = content.match(/^#\s+(.+)$/m)
+          const title = titleMatch ? titleMatch[1] : fileName.replace('.md', '')
+
+          // Extract order from filename (01-overview.md -> 1)
+          const orderMatch = fileName.match(/^(\d+)-/)
+          const order = orderMatch ? parseInt(orderMatch[1]) : 999
+
+          docs.push({
+            id: fileName.replace('.md', ''),
+            fileName,
+            title,
+            order,
+            content,
+            metadata: {
+              path: `platforms/${platformId}/docs/${fileName}`,
+              size: stats.size,
+              modified: stats.mtime.toISOString(),
+            }
+          })
+
+          // Write individual doc file
+          await fs.writeFile(
+            path.join(platformOutputPath, `${fileName.replace('.md', '')}.json`),
+            JSON.stringify({
+              id: fileName.replace('.md', ''),
+              title,
+              content,
+              metadata: {
+                path: `platforms/${platformId}/docs/${fileName}`,
+                size: stats.size,
+                modified: stats.mtime.toISOString(),
+              }
+            }, null, 2)
+          )
+        }
+      } catch (error: any) {
+        if (error.code !== 'ENOENT') {
+          console.error(`  Error reading docs for ${platformId}:`, error)
+        }
+      }
+
+      // Sort docs by order
+      docs.sort((a, b) => a.order - b.order)
+
+      // Create platform index (table of contents)
+      const platformIndex = {
+        id: platformId,
+        name: platformConfig?.platform?.name || platformId,
+        description: platformConfig?.platform?.description || '',
+        type: platformConfig?.platform?.type || 'web',
+        config: platformConfig?.platform?.config || {},
+        relations: platformConfig?.relations || {},
+        docs: docs.map(d => ({
+          id: d.id,
+          title: d.title,
+          order: d.order,
+          path: d.metadata.path,
+        })),
+        metadata: {
+          path: `platforms/${platformId}/platform.toml`,
+          docsCount: docs.length,
+          generated: new Date().toISOString(),
+        }
+      }
+
+      // Write platform index
+      await fs.writeFile(
+        path.join(platformOutputPath, 'index.json'),
+        JSON.stringify(platformIndex, null, 2)
+      )
+
+      platforms.push(platformIndex)
+      console.log(`  ✓ ${platformId} (${docs.length} docs)`)
+    }
+
+    // Write global platforms index
+    await fs.writeFile(
+      path.join(platformsOutputDir, 'index.json'),
+      JSON.stringify({
+        platforms: platforms.map(p => ({
+          id: p.id,
+          name: p.name,
+          description: p.description,
+          type: p.type,
+          docsCount: p.docs.length,
+        })),
+        generated: new Date().toISOString(),
+      }, null, 2)
+    )
+    console.log(`  ✓ platforms/index.json (${platforms.length} platforms)`)
+
+  } catch (error: any) {
+    if (error.code === 'ENOENT') {
+      console.log('  ⚠ No platforms directory found')
+    } else {
+      console.error('Error generating platforms:', error)
+    }
+  }
+}
+
 // Main build function
 async function build() {
-  console.log('\n🚀 LLM Boilerplate Build\n')
+  console.log('\n🚀 tscodex-boilerplate Build\n')
   console.log(`Root: ${rootDir}`)
   console.log(`Spec: ${specDir}`)
-  console.log(`Mocks: ${mocksDir}`)
   console.log(`Output: ${outputDir}\n`)
 
   // Clean output directory
@@ -671,8 +850,8 @@ async function build() {
 
   // Generate all data
   await generateDocs()
+  await generatePlatforms()
   await generatePrismaSchema()
-  await generateMocks()
   await generateInterview()
 
   // Generate relations map

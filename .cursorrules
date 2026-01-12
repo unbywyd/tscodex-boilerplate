@@ -1,166 +1,60 @@
-# LLM Boilerplate - Cursor Instructions
+# tscodex-boilerplate-simple - Cursor Instructions
 
 ## What Is This?
 
-LLM Boilerplate is a file-driven specification system for LLM-assisted development. You guide users from idea to working prototype through structured dialogue.
+File-driven specification system for LLM-assisted development. Interview users about their project, create TOML specs, generate documentation.
 
-**Your Role:** Interview the user about their project, create TOML specifications in `src/spec/layers/`, and generate a React prototype.
+## Quick Start
 
-## Quick Start (Do This First!)
-
-1. **Read `src/spec/status.toml`** — check `currentPhase` and `profile`
-2. **Read `src/spec/interview.toml`** — check answers for current phase
-3. **Determine state:**
-   - If `currentPhase = "assessment"` and all phases `pending` → **Fresh project, start from scratch**
-   - If some phases `completed` → **Continue from `currentPhase`**
-   - If interview has empty fields for current phase → **Ask those questions**
-4. **Read `rules/challenge.md`** — full workflow details
-
-## Fresh Project Flow
-
-When user describes a new project idea:
-
-```
-User: "I want to build a task manager app"
-
-You: "Great! Let me ask a few questions to understand the scope:
-1. What type of project? (web-app, mobile, api, landing)
-2. How many user roles? (single user, 2-3 roles, many roles)
-3. Data complexity? (simple CRUD, relational, complex)
-4. External integrations needed?
-5. Single app or multiple platforms (web + mobile + admin)?"
-
-[Based on answers → select profile: simple/medium/complex]
-[Update status.toml → profile, currentPhase = "discovery"]
-[Update interview.toml → write answers]
-[Continue to Discovery phase questions...]
-```
+1. **Read** `src/spec/platforms/web-app/interview.toml` → check [meta] for language settings
+2. **If no language set** → Ask: `chatLanguage` + `docsLanguage` FIRST
+3. **Switch to chatLanguage** for all communication
+4. **Read** `status.toml` → check `currentPhase`
+5. **Ask** questions for current phase → write answers
+6. **Create** TOML files, write docs in `docsLanguage`
 
 ## Phase-by-Phase Actions
 
-| Phase | Your Action | Output |
-|-------|-------------|--------|
-| Assessment | Ask scope questions, select profile | Update `status.toml`, `interview.toml` |
-| Discovery | Ask "what/who/why" questions | Update `interview.toml`, create `layers/project/about.toml` |
-| Design | Ask visual/UX preferences | Update `interview.toml`, create `layers/project/design.toml` |
-| Access | Ask about roles and permissions | Update `interview.toml`, create `layers/roles/*.toml`, `layers/guards/*.toml` |
-| Data | Ask about entities and fields | Update `interview.toml`, create `layers/entities/*.toml` |
-| Features | Ask about screens and actions | Update `interview.toml`, create `layers/routes/*.toml`, `layers/use-cases/*.toml`, `layers/components/*.toml` |
-| Prototype | Generate React code | Create `src/prototype/pages/*.tsx` |
-| Schema | Generate Prisma schema | Create `prisma/schema.prisma` |
+| Phase | Your Action | Artifacts to Create |
+|-------|-------------|---------------------|
+| Assessment | Ask scope questions, select profile | Update status.toml |
+| Discovery | Ask "what/who/why" questions | `layers/project/about.toml` |
+| Design | Ask visual/UX preferences | `layers/project/design.toml` |
+| Access | Ask about roles and permissions | `layers/roles/*.toml`, `layers/guards/*.toml` |
+| Data | Ask about entities and fields | `layers/entities/*.toml` |
+| Features | Ask about screens and actions | `layers/use-cases/*.toml` |
+| Schema | Generate database schema | `src/prisma/schema.prisma` |
+| Documentation | Write platform docs | `platforms/{id}/docs/*.md` |
 
-## Critical Rules
+## Action-Oriented Workflow
 
-1. **Always update interview.toml** — write answers immediately after user responds
-2. **Always update status.toml** after completing each phase
-3. **Ask before generating** — don't assume, clarify requirements
-4. **Create TOML files** in correct folders under `src/spec/layers/`
-5. **Use knowledge layer** — capture every decision as a fact in `layers/knowledge/*.toml`
-6. **Follow profile depth:**
-   - Simple → shallow questions, minimal files
-   - Medium → detailed questions, full specs
-   - Complex → deep questions, edge cases, modules
-7. **Data format in interview.toml:**
-   - Arrays `[]` for lists: `["item1", "item2"]`
-   - Boolean `true/false` for yes/no fields
-   - Empty string `""` for text/enum fields
+For each phase:
+1. Ask questions (from rules/challenge.md)
+2. Write answers to interview.toml
+3. **CREATE** artifact files listed in status.toml
+4. Mark artifacts as `true` in status.toml
+5. Update phase status to `completed`
+6. Move to next phase
 
 ## Workflow Profiles
 
 ```
-Simple:   Assessment → Discovery → Data → Features → Prototype
-Medium:   Assessment → Discovery → Design → Access → Data → Features → Prototype → Schema
-Complex:  Assessment → Discovery → Design → Access → Data → Modules → Features → Prototype → Schema
+Simple:   Assessment → Discovery → Data → Features → Documentation
+Medium:   Assessment → Discovery → Design → Access → Data → Features → Schema → Documentation
+Complex:  + Modules phase before Features
 ```
 
-**Always start with Assessment** to determine profile and depth.
+## Key Files
 
-## Key Paths
-- `src/spec/status.toml` - current phase, progress tracking
-- `src/spec/interview.toml` - questions and answers for each phase
-- `src/spec/layers/` - TOML specs (project, entities, roles, guards, routes, use-cases, knowledge, components, modules)
-- `src/prototype/` - React prototype code
-- `rules/challenge.md` - full workflow instructions
-
-## Rules
-- `rules/challenge.md` - adaptive workflow (READ THIS)
-- `rules/layers.md` - layer structure reference
-- `rules/patterns.md` - code patterns (Doc component, events, page building)
-- `rules/prototype.md` - prototype development (useRepo, factories, linking to docs)
-- `rules/docs-pdf.md` - PDF documentation, MCP integration, manifest
-- `rules/web.md` - web-specific
-- `rules/mobile.md` - mobile-specific
-
-## LLM/RAG Integration
-
-All project specifications are available as unified manifest:
-
-- **URL:** `/generated/manifest.json`
-- **Dev:** `http://localhost:5173/generated/manifest.json`
-
-Contains all layers (entities, components, routes, etc.) with `_meta.path` for source tracing.
-
-See `rules/docs-pdf.md` for manifest structure and LangChain integration.
-
-## Prototype Tools (USE THESE!)
-
-When generating prototype code, use the built-in infrastructure:
-
-### useRepo - CRUD with persistence
-
-```tsx
-import { useRepo } from '@/hooks/useRepo'
-
-const users = useRepo<User>('users')
-
-// State
-users.data          // T[]
-users.loading       // boolean
-users.count         // number
-
-// CRUD (types exclude id/timestamps automatically)
-users.create({ name: 'John', email: '...' })
-users.update(id, { name: 'Jane' })
-users.delete(id)
-
-// Query
-users.getById(id)
-users.getWhere(u => u.role === 'admin')
-
-// Fake data (uses registerFactory)
-users.populate(20)
-```
-
-### registerFactory - fake data
-
-```tsx
-import { registerFactory, faker } from '@/hooks/useRepo'
-
-registerFactory<User>('users', () => ({
-  name: faker.person.fullName(),
-  email: faker.internet.email(),
-  role: faker.helpers.arrayElement(['admin', 'user']),
-}))
-```
-
-**Full docs:** `rules/prototype.md`
-
-## Demo Content (Delete When Starting Real Project)
-
-The `src/prototype/` folder contains **example/demo code** that demonstrates the prototype structure:
-- `mocks/` - example data (users.json, products.json)
-- `stores/` - example stores (users.store.ts, auth.store.ts)
-- `schemas/` - example validation (user.schema.ts)
-- `components/forms/` - example forms (UserForm.tsx)
-- `pages/` - example pages
-
-**When starting a new project:**
-1. Delete all demo content from `src/prototype/` (keep folder structure)
-2. Keep only reusable infrastructure: `guards/`, `hooks/`, `config/`, `components/ui/`
-3. Generate new prototype based on actual specs from `src/spec/layers/`
-
-**Do NOT use demo content as reference** for the real project - generate fresh code based on TOML specifications.
+| File | Purpose |
+|------|---------|
+| `rules/challenge.md` | Full interview workflow |
+| `rules/layers.md` | TOML structure reference |
+| `src/spec/platforms/{id}/status.toml` | Current phase, artifacts |
+| `src/spec/platforms/{id}/interview.toml` | User answers |
 
 ## Don't Modify
-- `core/` - engine code
-- `dist/` - build output
+
+- `core/` — engine code
+- `dist/` — build output
+- `public/generated/` — auto-generated
