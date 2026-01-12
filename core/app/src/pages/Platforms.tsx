@@ -88,7 +88,7 @@ function DocsSidebar({
   const Icon = platformIcons[platform.type] || Monitor
 
   return (
-    <div className="w-64 shrink-0 border-r bg-muted/30 overflow-y-auto">
+    <div className="w-64 shrink-0 border-r bg-muted/30 overflow-y-auto flex flex-col min-h-[calc(100vh-8rem)]">
       <div className="p-4 border-b">
         <Link to="/platforms" className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-3">
           <ArrowLeft className="h-4 w-4" />
@@ -171,7 +171,7 @@ function DocContent({
   }
 
   return (
-    <div className="p-6 overflow-y-auto">
+    <div className="p-6">
       <article className="prose prose-sm dark:prose-invert max-w-none">
         <MarkdownRenderer content={doc.content} />
       </article>
@@ -206,7 +206,7 @@ function PlatformViewer({ platformId }: { platformId: string }) {
 
   if (loading) {
     return (
-      <div className="flex h-[calc(100vh-4rem)]">
+      <div className="flex max-h-[calc(100vh-8rem)]">
         <div className="w-64 border-r p-4 space-y-4">
           <Skeleton className="h-6 w-32" />
           <Skeleton className="h-4 w-full" />
@@ -239,13 +239,13 @@ function PlatformViewer({ platformId }: { platformId: string }) {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)]">
+    <div className="flex max-h-[calc(100vh-8rem)]">
       <DocsSidebar
         platform={platform}
         activeDocId={activeDocId || undefined}
         onDocSelect={setActiveDocId}
       />
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-y-auto">
         {activeDocId ? (
           <DocContent platform={platform} docId={activeDocId} />
         ) : (

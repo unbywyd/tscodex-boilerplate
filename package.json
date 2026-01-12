@@ -5,7 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite --config core/app/vite.config.ts",
+    "clean:orphans": "tsx core/builder/clean-orphans.ts",
+    "dev": "tsx core/builder/clean-orphans.ts && vite --config core/app/vite.config.ts",
     "build": "tsx core/builder/build.ts && vite build --config core/app/vite.config.ts",
     "preview": "vite preview --config core/app/vite.config.ts",
     "lint": "eslint core/app/src --ext .ts,.tsx",
