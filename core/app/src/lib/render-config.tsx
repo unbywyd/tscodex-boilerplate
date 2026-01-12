@@ -40,16 +40,123 @@ const defaultMarkdownRenderer: RenderFunction = (content: string) => {
   )
 }
 
-// Default TOML renderer (JSON display)
+// Universal TOML renderer - auto-renders any structure
 const defaultTomlRenderer: RenderFunction = (content: any) => {
+  // Extract title from common patterns
+  const getTitle = () => {
+    for (const key of Object.keys(content)) {
+      const section = content[key]
+      if (section?.name) return section.name
+      if (section?.title) return section.title
+    }
+    return null
+  }
+
+  // Render a value based on its type
+  const renderValue = (value: any, depth: number = 0): React.ReactNode => {
+    if (value === null || value === undefined) return <span className="text-muted-foreground">-</span>
+    if (typeof value === 'boolean') {
+      return (
+        <span className={`px-2 py-0.5 rounded text-xs font-medium ${value ? 'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400' : 'bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400'}`}>
+          {value ? 'Yes' : 'No'}
+        </span>
+      )
+    }
+    if (typeof value === 'number') return <span className="font-mono text-primary">{value}</span>
+    if (typeof value === 'string') {
+      // Check if it's a color hex
+      if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+        return (
+          <span className="inline-flex items-center gap-2">
+            <span className="w-4 h-4 rounded border border-border" style={{ backgroundColor: value }} />
+            <span className="font-mono text-xs">{value}</span>
+          </span>
+        )
+      }
+      return <span className="text-muted-foreground">{value}</span>
+    }
+    if (Array.isArray(value)) {
+      if (value.length === 0) return <span className="text-muted-foreground">[]</span>
+      // Simple array of primitives
+      if (value.every(v => typeof v !== 'object')) {
+        return (
+          <div className="flex flex-wrap gap-1.5">
+            {value.map((item, i) => (
+              <span key={i} className="bg-primary/10 text-primary px-2 py-0.5 rounded text-xs font-medium">{String(item)}</span>
+            ))}
+          </div>
+        )
+      }
+      // Array of objects
+      return (
+        <div className="space-y-2 mt-2">
+          {value.map((item, i) => (
+            <div key={i} className="pl-4 border-l-2 border-muted">
+              {renderValue(item, depth + 1)}
+            </div>
+          ))}
+        </div>
+      )
+    }
+    if (typeof value === 'object') {
+      const entries = Object.entries(value)
+      if (entries.length === 0) return <span className="text-muted-foreground">{'{}'}</span>
+      return (
+        <div className={`space-y-2 ${depth > 0 ? 'mt-2' : ''}`}>
+          {entries.map(([k, v]) => (
+            <div key={k} className="flex items-start gap-2">
+              <span className="font-medium capitalize shrink-0 min-w-[100px]">{k}:</span>
+              <div className="flex-1">{renderValue(v, depth + 1)}</div>
+            </div>
+          ))}
+        </div>
+      )
+    }
+    return <span>{String(value)}</span>
+  }
+
+  // Render a section (top-level key)
+  const renderSection = (key: string, data: any) => {
+    if (typeof data !== 'object' || data === null) {
+      return (
+        <div key={key} className="flex items-start gap-2 py-2">
+          <span className="font-medium capitalize">{key}:</span>
+          {renderValue(data)}
+        </div>
+      )
+    }
+
+    return (
+      <Card key={key}>
+        <CardHeader className="pb-3">
+          <CardTitle className="text-lg capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-3 text-sm">
+            {Object.entries(data).map(([k, v]) => (
+              <div key={k} className="flex items-start gap-2">
+                <span className="font-medium capitalize shrink-0 min-w-[120px]">{k.replace(/([A-Z])/g, ' $1').trim()}:</span>
+                <div className="flex-1">{renderValue(v)}</div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    )
+  }
+
+  const title = getTitle()
+  const sections = Object.entries(content)
+
   return (
-    <Card>
-      <CardContent className="p-6">
-        <pre className="bg-muted p-3 sm:p-4 rounded-lg overflow-x-auto text-xs sm:text-sm">
-          <code className="font-mono break-words whitespace-pre-wrap">{JSON.stringify(content, null, 2)}</code>
-        </pre>
-      </CardContent>
-    </Card>
+    <div className="universal-toml-renderer space-y-6">
+      {title && (
+        <div className="space-y-2">
+          <h2 className="text-3xl font-bold tracking-tight">{title}</h2>
+        </div>
+      )}
+      {sections.map(([key, value]) => renderSection(key, value))}
+    </div>
   )
 }
 
@@ -900,7 +1007,7 @@ export const renderConfig: RenderConfig = {
     toml: roleRenderer,
   },
   'layers/project': {
-    toml: projectRenderer,
+    toml: defaultTomlRenderer,
   },
   'layers/knowledge': {
     toml: knowledgeRenderer,
