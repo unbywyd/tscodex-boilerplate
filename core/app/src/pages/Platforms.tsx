@@ -139,7 +139,7 @@ function DocContent({
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/generated/platforms/${platform.id}/${docId}.json`)
+    fetch(`/api/platforms/${platform.id}/${docId}`)
       .then(res => res.json())
       .then(data => {
         setDoc(data)
@@ -188,7 +188,7 @@ function PlatformViewer({ platformId }: { platformId: string }) {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`/generated/platforms/${platformId}/index.json`)
+    fetch(`/api/platforms/${platformId}`)
       .then(res => res.json())
       .then(data => {
         setPlatform(data)
@@ -272,7 +272,7 @@ export default function PlatformsPage() {
 
   useEffect(() => {
     if (!platformId) {
-      fetch('/generated/platforms/index.json')
+      fetch('/api/platforms')
         .then(res => res.json())
         .then(data => {
           setPlatforms(data.platforms || [])

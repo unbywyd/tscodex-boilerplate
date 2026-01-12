@@ -524,6 +524,180 @@ export function viteApiPlugin(): Plugin {
         }
       })
 
+      // API: Get platforms - index, specific platform, or specific doc
+      server.middlewares.use('/api/platforms', async (req, res) => {
+        try {
+          const urlPath = req.url || '/'
+          const cleanPath = urlPath.split('?')[0]
+          const pathParts = cleanPath.split('/').filter(Boolean)
+
+          // GET /api/platforms - list all platforms
+          if (pathParts.length === 0) {
+            const platformDirs = await fs.readdir(platformsDir, { withFileTypes: true })
+            const platforms: any[] = []
+
+            for (const dir of platformDirs) {
+              if (!dir.isDirectory()) continue
+
+              const platformId = dir.name
+              const platformPath = path.join(platformsDir, platformId)
+              const platformTomlPath = path.join(platformPath, 'platform.toml')
+              const docsPath = path.join(platformPath, 'docs')
+
+              let platformConfig: any = null
+              try {
+                platformConfig = await readTomlFile(platformTomlPath)
+              } catch {
+                // No platform.toml
+              }
+
+              let docsCount = 0
+              try {
+                const docFiles = await fs.readdir(docsPath)
+                docsCount = docFiles.filter(f => f.endsWith('.md')).length
+              } catch {
+                // No docs folder
+              }
+
+              platforms.push({
+                id: platformId,
+                name: platformConfig?.platform?.name || platformId,
+                description: platformConfig?.platform?.description || '',
+                type: platformConfig?.platform?.type || 'web',
+                docsCount,
+              })
+            }
+
+            return sendJson(res, {
+              platforms,
+              generated: new Date().toISOString(),
+            })
+          }
+
+          const platformId = pathParts[0]
+          const platformPath = path.join(platformsDir, platformId)
+
+          // Security check
+          if (!platformPath.startsWith(platformsDir)) {
+            return sendJson(res, { error: 'Access denied' }, 403)
+          }
+
+          // Check if platform exists
+          try {
+            await fs.access(platformPath)
+          } catch {
+            return sendJson(res, { error: 'Platform not found' }, 404)
+          }
+
+          // GET /api/platforms/:id - platform index with docs list
+          if (pathParts.length === 1) {
+            const platformTomlPath = path.join(platformPath, 'platform.toml')
+            const docsPath = path.join(platformPath, 'docs')
+
+            let platformConfig: any = null
+            try {
+              platformConfig = await readTomlFile(platformTomlPath)
+            } catch {
+              // No platform.toml
+            }
+
+            const docs: any[] = []
+            try {
+              const docFiles = await fs.readdir(docsPath)
+              const mdFiles = docFiles.filter(f => f.endsWith('.md')).sort()
+
+              for (const fileName of mdFiles) {
+                const filePath = path.join(docsPath, fileName)
+                const content = await fs.readFile(filePath, 'utf-8')
+
+                // Extract title from first heading
+                const titleMatch = content.match(/^#\s+(.+)$/m)
+                const title = titleMatch ? titleMatch[1] : fileName.replace('.md', '')
+
+                // Extract order from filename (01-overview.md -> 1)
+                const orderMatch = fileName.match(/^(\d+)-/)
+                const order = orderMatch ? parseInt(orderMatch[1]) : 999
+
+                docs.push({
+                  id: fileName.replace('.md', ''),
+                  title,
+                  order,
+                  path: `platforms/${platformId}/docs/${fileName}`,
+                })
+              }
+            } catch {
+              // No docs folder
+            }
+
+            // Sort docs by order
+            docs.sort((a, b) => a.order - b.order)
+
+            return sendJson(res, {
+              id: platformId,
+              name: platformConfig?.platform?.name || platformId,
+              description: platformConfig?.platform?.description || '',
+              type: platformConfig?.platform?.type || 'web',
+              config: platformConfig?.platform?.config || {},
+              relations: platformConfig?.relations || {},
+              docs,
+              metadata: {
+                path: `platforms/${platformId}/platform.toml`,
+                docsCount: docs.length,
+                generated: new Date().toISOString(),
+              }
+            })
+          }
+
+          // GET /api/platforms/:id/:docId - specific doc content
+          if (pathParts.length === 2) {
+            const docId = pathParts[1]
+            const docsPath = path.join(platformPath, 'docs')
+
+            // Find the md file (could be docId.md or ##-docId.md)
+            let docFileName: string | null = null
+            try {
+              const docFiles = await fs.readdir(docsPath)
+              docFileName = docFiles.find(f =>
+                f === `${docId}.md` || f.match(new RegExp(`^\\d+-${docId}\\.md$`))
+              ) || null
+            } catch {
+              return sendJson(res, { error: 'Document not found' }, 404)
+            }
+
+            if (!docFileName) {
+              return sendJson(res, { error: 'Document not found' }, 404)
+            }
+
+            const filePath = path.join(docsPath, docFileName)
+            const content = await fs.readFile(filePath, 'utf-8')
+            const stats = await fs.stat(filePath)
+
+            // Extract title from first heading
+            const titleMatch = content.match(/^#\s+(.+)$/m)
+            const title = titleMatch ? titleMatch[1] : docId
+
+            return sendJson(res, {
+              id: docId,
+              title,
+              content,
+              metadata: {
+                path: `platforms/${platformId}/docs/${docFileName}`,
+                size: stats.size,
+                modified: stats.mtime.toISOString(),
+              }
+            })
+          }
+
+          return sendJson(res, { error: 'Invalid path' }, 400)
+        } catch (error: any) {
+          if (error.code === 'ENOENT') {
+            return sendJson(res, { error: 'Not found' }, 404)
+          }
+          console.error('Error loading platform data:', error)
+          sendJson(res, { error: 'Internal server error' }, 500)
+        }
+      })
+
       // API: Get interviews - index or specific platform
       server.middlewares.use('/api/interviews', async (req, res) => {
         try {
@@ -615,6 +789,9 @@ export function viteApiPlugin(): Plugin {
       console.log('  GET /api/prisma/schema       - Prisma schema file')
       console.log('  GET /api/mocks               - List all mocks')
       console.log('  GET /api/mocks/:name         - Specific mock data')
+      console.log('  GET /api/platforms           - List all platforms')
+      console.log('  GET /api/platforms/:id       - Platform index with docs list')
+      console.log('  GET /api/platforms/:id/:doc  - Specific platform doc content')
       console.log('  GET /api/interviews          - List all platform interviews')
       console.log('  GET /api/interviews/:id      - Specific platform interview\n')
     },
