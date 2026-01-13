@@ -1018,6 +1018,9 @@ export const renderConfig: RenderConfig = {
   'layers/modules': {
     toml: moduleRenderer,
   },
+  'layers/screens': {
+    toml: defaultTomlRenderer,
+  },
   'layers/platforms': {
     toml: platformRenderer,
   },

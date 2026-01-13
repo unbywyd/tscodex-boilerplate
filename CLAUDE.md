@@ -15,7 +15,7 @@
 | File | Purpose |
 |------|---------|
 | `rules/challenge.md` | Full interview workflow, phases, questions |
-| `rules/layers.md` | TOML structure for entities, roles, guards, use-cases |
+| `rules/layers.md` | TOML structure for entities, roles, guards, use-cases, screens |
 | `src/spec/platforms/{id}/status.toml` | Current phase, checklist, artifacts to create |
 | `src/spec/platforms/{id}/interview.toml` | Collected answers |
 
@@ -36,6 +36,7 @@ src/spec/                # ✅ LLM CREATES HERE
     ├── guards/          # Access control
     ├── use-cases/       # Features with flows
     ├── knowledge/       # Q&A facts
+    ├── screens/         # Screen definitions
     └── modules/         # Domain modules (complex only)
 ```
 

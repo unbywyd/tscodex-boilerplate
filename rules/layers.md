@@ -101,6 +101,26 @@ status = "verified"
 tags = ["auth", "security"]
 ```
 
+## screens/
+Screen definitions with purpose and description. One file per screen.
+
+```toml
+[screen]
+id = "login"
+name = "Login Screen"
+description = "Authentication entry point for users"
+route = "/login"
+
+[screen.purpose]
+goal = "Allow users to authenticate"
+audience = "All users"
+
+[relations]
+roles = ["guest"]
+guards = ["guest-only"]
+useCases = ["uc_login"]
+```
+
 ## platforms/
 
 Platform = an independent project with its own interview workflow. Each platform has configuration, interview tracking, and documentation.

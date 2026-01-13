@@ -160,7 +160,7 @@ User: "idea"
 - `docs/` - generated documentation
 
 **Shared layers:**
-- `src/spec/layers/` - entities, roles, guards, use-cases, knowledge
+- `src/spec/layers/` - entities, roles, guards, use-cases, knowledge, screens
 
 ---
 
@@ -756,6 +756,7 @@ src/spec/layers/           # Shared across platforms
 ├── guards/*.toml          # Access control
 ├── use-cases/*.toml       # Features with flows
 ├── knowledge/*.toml       # Q&A facts
+├── screens/*.toml         # Screen definitions
 └── modules/*.toml         # Domain modules (complex)
 
 src/prisma/
